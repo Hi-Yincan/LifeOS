@@ -1,0 +1,96 @@
+{
+  "commit": "f9860b036bc34b540e5ffc16fc230671c069141d",
+  "tests": 19,
+  "passed": 19,
+  "failed": 0,
+  "suites": [
+    {
+      "file": "src/backend/controllers/homepage/HomepageController.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "title": "HomepageController shell routes renders the live shell HTML on the root path",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController shell routes exposes disable_temp_users to the GUI when signups are disabled",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController shell routes keeps an operator-set gui_params.disable_temp_users when the flag is off",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController shell routes still serves the shell when an authenticated actor is present",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController shell routes serves the shell on /settings, /dashboard, /desktop, /action, /@:username",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController GET /app/:name returns 404 (still renders the shell) when the app is unknown",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController GET /app/:name renders the shell with the app row in scope when the app exists",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController GET /app/:name caps description, og:description and twitter:description at 150 chars",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController GET /app/:name does not leak a private app index_url or owner id to an anonymous visitor",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController GET /app/:name serves the same app shell under /desktop/app/:name",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController GET /app/:name returns 404 under /desktop/app/:name when the app is unknown",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController GET /app/:name omits index_url even for a public app — the shell is not the launch authority",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController app landing rate limit rate-limits /app/:name and /desktop/app/:name per network",
+          "status": "passed"
+        },
+        {
+          "title": "HomepageController GET /show/*splat emits a launch_app explorer call with the post-/show path",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "src/backend/services/apps/RecommendedAppsService.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "title": "RecommendedAppsService preserves default ordering without listeners",
+          "status": "passed"
+        },
+        {
+          "title": "RecommendedAppsService awaits extensions that replace the list and skips missing apps",
+          "status": "passed"
+        },
+        {
+          "title": "RecommendedAppsService isolates in-place mutations from subsequent calls",
+          "status": "passed"
+        },
+        {
+          "title": "RecommendedAppsService allows extensions to clear the list",
+          "status": "passed"
+        },
+        {
+          "title": "RecommendedAppsService resolves the whole list with one batched name lookup",
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}

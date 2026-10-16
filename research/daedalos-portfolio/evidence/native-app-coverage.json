@@ -1,0 +1,170 @@
+{
+  "scope": "Original registrations preserved; four representative startup checks, not full regression",
+  "apps": [
+    {
+      "id": "BoxedWine",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Browser",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Chess",
+      "preserved": true,
+      "runtime": "棋盘、棋子、模式菜单和 White to move 状态加载；未做完整对局"
+    },
+    {
+      "id": "ClassiCube",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "DevTools",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "DXBall",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Emulator",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "FileExplorer",
+      "preserved": true,
+      "runtime": "My PC 目录与原有文件入口加载；未做完整文件写入回归"
+    },
+    {
+      "id": "IRC",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "JSDOS",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Marked",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Messenger",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "MonacoEditor",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "OpenType",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "OpenWith",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Paint",
+      "preserved": true,
+      "runtime": "原生 iframe、菜单与画布加载；未验证绘图/导出"
+    },
+    {
+      "id": "PDF",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Photos",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Properties",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Quake3",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Ruffle",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Run",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "ScreenSaver",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "SpaceCadet",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "StableDiffusion",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Terminal",
+      "preserved": true,
+      "runtime": "终端窗口与初始提示符加载；不将命令发送等同已核验输出"
+    },
+    {
+      "id": "Tic80",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "TinyMCE",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Transfer",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "V86",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "VideoPlayer",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Vim",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    },
+    {
+      "id": "Webamp",
+      "preserved": true,
+      "runtime": "本轮未运行验证"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "portfolioIssue": 15,
+  "reports": [
+    {
+      "issue": 15,
+      "label": "C06｜个人作品集 v1 PRD",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6220288881",
+      "source": "specs/concept/PRD.md"
+    },
+    {
+      "issue": 15,
+      "label": "C07｜内容、权限与发布模型",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6220289505",
+      "source": "specs/concept/data-and-permissions.md"
+    },
+    {
+      "issue": 15,
+      "label": "C08｜用户流程与关键状态",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6220290184",
+      "source": "specs/concept/flows-and-states.md"
+    },
+    {
+      "issue": 15,
+      "label": "C09｜UI 规范与两套设计方案",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6220290975",
+      "source": "specs/concept/design-system.md"
+    }
+  ]
+}

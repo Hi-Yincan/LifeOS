@@ -1,0 +1,130 @@
+[p2 "博客 | 个人展示 OS 实验" | space "个人展示 OS 本地选型验证"(24): 3 managed, 0 untracked — p1 "Puter", p2* "博客 | 个人展示 OS 实验", p3 "个人展示 OS 实验 | 内容展示与管理"]
+root
+  image
+  container
+    paragraph
+      text "HI · YINCAN / 选型实验"
+    heading
+      text "内容，是这个桌面的主角。"
+    paragraph
+      text "两个应用，一套窗口。"
+      text "访客浏览公开内容，作者登录后管理。"
+    container "内容应用"
+      anchor [ref=62, url=http://127.0.0.1:4387/blog/validation-note]
+        image
+        text "博客"
+        text "阅读一篇文章"
+      anchor [ref=63, loc=href:/wardrobe, url=http://127.0.0.1:4387/wardrobe]
+        image
+        text "衣柜"
+        text "浏览与管理衣物"
+    container
+      text "visitor · 公开浏览"
+      button [ref=64]
+        text "管理员登录"
+    paragraph
+      text "本地研究原型 · 全部为合成内容 · 非正式产品"
+  container
+    container
+      image
+      paragraph
+        text "博客"
+      button "Minimize" [ref=90, loc=css:button[aria-label="Minimize"]]
+        image
+      button "Close" [ref=91, loc=css:button[aria-label="Close"]]
+        image
+    container "博客内容" [ref=92]
+      container
+        button [ref=93]
+          text "← 返回桌面"
+        text "visitor · 公开浏览"
+        button [ref=94]
+          text "管理员登录"
+      container
+        paragraph
+          text "合成内容 · 阅读验证"
+        heading
+          text "把生活整理成自己的桌面"
+        paragraph
+          text "一篇完整的合成测试文章，用来验证中文阅读、内容链接和窗口导航。"
+        anchor [ref=95, url=http://127.0.0.1:4387/blog/validation-note]
+          text "文章永久链接"
+        paragraph
+          text "这是用于选型验证的样例内容，不是作者的真实生活记录。这个桌面只承载博客和衣柜，让访客先看到内容，而不是学习一套复杂的操作系统。"
+        paragraph
+          text "博客可以记录思考，衣柜可以展示搭配。它们共享窗口、导航和登录状态，但每个应用保留自己的内容结构。管理员可以在同一界面维护内容，访客看�..."
+        paragraph
+          text "公开页面需要稳定链接。无论从桌面进入还是直接打开文章地址，都应读到同一篇文章。手机上则优先保证文字阅读、返回和应用切换。"
+        paragraph
+          text "这次实验关注这些具体流程是否成立。框架名称、图标数量和动画都不能代替实际验收；一条可靠的发布链路，比一个看起来功能繁多的桌面更有价值�..."
+  container
+    container
+      container
+        button [ref=76]
+          image
+        button [ref=96]
+          image
+          paragraph
+            text "Shut down"
+        image
+        heading
+          text "个人展示 OS 实验"
+        container
+          button [ref=77]
+            image
+            heading
+              text "博客"
+          button [ref=78]
+            image
+            heading
+              text "衣柜"
+      container
+        button [ref=79]
+          image
+        container
+          button [ref=80]
+            image
+            paragraph
+              text "博客"
+          button [ref=81]
+            image
+            paragraph
+              text "衣柜"
+        textbox "Search query" [ref=82, loc=css:input[placeholder="Search..."]]
+          text "Search..."
+    container
+      button [ref=83]
+        image
+      button [ref=84]
+        image
+    container
+      container
+        button [ref=85]
+          image
+        image
+        paragraph
+          text "95"
+          text "%"
+      container
+        button [ref=86]
+          image
+        image
+        paragraph
+          text "Connected"
+      container
+        button [ref=87]
+          image
+        image
+        paragraph
+          text "100%"
+      container
+        button [ref=88]
+          paragraph
+            text "05:32"
+          paragraph
+            text "16 Oct 2026"
+        paragraph
+          text "05:32:53"
+        paragraph
+          text "Friday, 16 October 2026"
+      button [ref=89]

@@ -1,0 +1,534 @@
+{
+  "url": "/wardrobe/blue-shirt",
+  "viewport": {
+    "width": 1512,
+    "height": 774
+  },
+  "navigation": [
+    {
+      "duration": 21.5,
+      "domContentLoaded": 20.69999999552965,
+      "load": 21.5
+    }
+  ],
+  "resources": [
+    {
+      "url": "/assets/index-BcxVOUar.js",
+      "type": "script",
+      "transferSize": 612253,
+      "encodedBodySize": 611953,
+      "duration": 2.3000000044703484
+    },
+    {
+      "url": "/assets/index-CKI_RCsM.css",
+      "type": "link",
+      "transferSize": 3914,
+      "encodedBodySize": 3614,
+      "duration": 1
+    },
+    {
+      "url": "/assets/less-wELkkcQx-uOTcg0fN.js",
+      "type": "script",
+      "transferSize": 2419,
+      "encodedBodySize": 2119,
+      "duration": 1.1000000014901161
+    },
+    {
+      "url": "/assets/terminalUIApp-Bmiaqvd9-C6yd-vNC.js",
+      "type": "script",
+      "transferSize": 1482,
+      "encodedBodySize": 1182,
+      "duration": 1.2000000029802322
+    },
+    {
+      "url": "/assets/nano-DsRjsQ-k-BUoPvDA2.js",
+      "type": "script",
+      "transferSize": 3174,
+      "encodedBodySize": 2874,
+      "duration": 1.8999999985098839
+    },
+    {
+      "url": "/assets/textEditorApp-BM3EiMoV-YMxEzu5G.js",
+      "type": "script",
+      "transferSize": 1615,
+      "encodedBodySize": 1315,
+      "duration": 2.100000001490116
+    },
+    {
+      "url": "/assets/vi-Cgo3qLR9-DNyY4VKM.js",
+      "type": "script",
+      "transferSize": 3680,
+      "encodedBodySize": 3380,
+      "duration": 5.799999997019768
+    },
+    {
+      "url": "/assets/afire-DlRwSfiJ-C3oTFPvk.js",
+      "type": "script",
+      "transferSize": 2435,
+      "encodedBodySize": 2135,
+      "duration": 4.899999998509884
+    },
+    {
+      "url": "/assets/cat-B_KOgu80-CNfkyqfF.js",
+      "type": "script",
+      "transferSize": 1104,
+      "encodedBodySize": 804,
+      "duration": 6.199999995529652
+    },
+    {
+      "url": "/assets/banner-jSvYkuqB-BwsiWl6N.js",
+      "type": "script",
+      "transferSize": 2890,
+      "encodedBodySize": 2590,
+      "duration": 6.0999999940395355
+    },
+    {
+      "url": "/assets/cmatrix-DvaWzvRn-DIxTb14U.js",
+      "type": "script",
+      "transferSize": 1622,
+      "encodedBodySize": 1322,
+      "duration": 5.300000004470348
+    },
+    {
+      "url": "/assets/cd-DGILEGTs-SOahUVib.js",
+      "type": "script",
+      "transferSize": 833,
+      "encodedBodySize": 533,
+      "duration": 6.200000002980232
+    },
+    {
+      "url": "/assets/clear-C8xhqHmC-BCuKQ7-b.js",
+      "type": "script",
+      "transferSize": 494,
+      "encodedBodySize": 194,
+      "duration": 7.700000002980232
+    },
+    {
+      "url": "/assets/compgen-2kLzA1wV-bZp2epgo.js",
+      "type": "script",
+      "transferSize": 599,
+      "encodedBodySize": 299,
+      "duration": 6.100000001490116
+    },
+    {
+      "url": "/assets/cowsay-CTLxUPtF-DU8GJOQy.js",
+      "type": "script",
+      "transferSize": 1487,
+      "encodedBodySize": 1187,
+      "duration": 7.200000002980232
+    },
+    {
+      "url": "/assets/echo-_hDVbupR-CsplWx4-.js",
+      "type": "script",
+      "transferSize": 730,
+      "encodedBodySize": 430,
+      "duration": 7.799999997019768
+    },
+    {
+      "url": "/assets/date-CA1ub92R-BAaJmGQq.js",
+      "type": "script",
+      "transferSize": 1307,
+      "encodedBodySize": 1007,
+      "duration": 8.5
+    },
+    {
+      "url": "/assets/dir-w2XNd6oI-CoZzLfOJ.js",
+      "type": "script",
+      "transferSize": 622,
+      "encodedBodySize": 322,
+      "duration": 8.5
+    },
+    {
+      "url": "/assets/doubleBracket-B5nqIccY-Cv5Y72my.js",
+      "type": "script",
+      "transferSize": 1928,
+      "encodedBodySize": 1628,
+      "duration": 9
+    },
+    {
+      "url": "/assets/eval-4uLqmhXl-CYTR1EIu.js",
+      "type": "script",
+      "transferSize": 893,
+      "encodedBodySize": 593,
+      "duration": 7.699999995529652
+    },
+    {
+      "url": "/assets/exit-w3PqRkwA-DrvH6k_2.js",
+      "type": "script",
+      "transferSize": 460,
+      "encodedBodySize": 160,
+      "duration": 10.199999995529652
+    },
+    {
+      "url": "/assets/false-D6AWAlcU-dNbMQVb4.js",
+      "type": "script",
+      "transferSize": 608,
+      "encodedBodySize": 308,
+      "duration": 8.799999997019768
+    },
+    {
+      "url": "/assets/fortune-D8ZK6xtX-DRl-rS_4.js",
+      "type": "script",
+      "transferSize": 2626,
+      "encodedBodySize": 2326,
+      "duration": 8.900000005960464
+    },
+    {
+      "url": "/assets/grep-DZO92KaH-V9F__5mU.js",
+      "type": "script",
+      "transferSize": 1447,
+      "encodedBodySize": 1147,
+      "duration": 10.100000001490116
+    },
+    {
+      "url": "/assets/head-C_bbNyUc-UuudxbdZ.js",
+      "type": "script",
+      "transferSize": 1421,
+      "encodedBodySize": 1121,
+      "duration": 11.600000001490116
+    },
+    {
+      "url": "/assets/help-OHTeCzgo-CfwB8RLm.js",
+      "type": "script",
+      "transferSize": 879,
+      "encodedBodySize": 579,
+      "duration": 11.800000004470348
+    },
+    {
+      "url": "/assets/history-DeQor0w1-DZF1-T_I.js",
+      "type": "script",
+      "transferSize": 831,
+      "encodedBodySize": 531,
+      "duration": 12.100000001490116
+    },
+    {
+      "url": "/assets/lolcat-xpDAXsIt-BynzCafk.js",
+      "type": "script",
+      "transferSize": 1509,
+      "encodedBodySize": 1209,
+      "duration": 11.600000001490116
+    },
+    {
+      "url": "/assets/hostname-B-lPyRps-DDO7zNdM.js",
+      "type": "script",
+      "transferSize": 504,
+      "encodedBodySize": 204,
+      "duration": 12.100000001490116
+    },
+    {
+      "url": "/assets/install-9Dikj7i2-DLlwxvso.js",
+      "type": "script",
+      "transferSize": 1289,
+      "encodedBodySize": 989,
+      "duration": 12.600000001490116
+    },
+    {
+      "url": "/assets/ls-D2Ln7mue-BbAOTDw0.js",
+      "type": "script",
+      "transferSize": 913,
+      "encodedBodySize": 613,
+      "duration": 13.299999997019768
+    },
+    {
+      "url": "/assets/man-E9nMmKZ1-BBaXHGO9.js",
+      "type": "script",
+      "transferSize": 1880,
+      "encodedBodySize": 1580,
+      "duration": 14
+    },
+    {
+      "url": "/assets/mkdir-BdEywO2H-D2lrcgEo.js",
+      "type": "script",
+      "transferSize": 534,
+      "encodedBodySize": 234,
+      "duration": 14
+    },
+    {
+      "url": "/assets/neofetch-Dyre2Ik0-oCwVGcfQ.js",
+      "type": "script",
+      "transferSize": 1703,
+      "encodedBodySize": 1403,
+      "duration": 14.399999998509884
+    },
+    {
+      "url": "/assets/printenv-Cq-skM9d-BqLIG3yQ.js",
+      "type": "script",
+      "transferSize": 892,
+      "encodedBodySize": 592,
+      "duration": 15
+    },
+    {
+      "url": "/assets/pwd-CZ9IWAfu-CdoDQMBv.js",
+      "type": "script",
+      "transferSize": 561,
+      "encodedBodySize": 261,
+      "duration": 15.299999997019768
+    },
+    {
+      "url": "/assets/rain-DT-V01dD-C0GbZj0H.js",
+      "type": "script",
+      "transferSize": 1872,
+      "encodedBodySize": 1572,
+      "duration": 15.399999998509884
+    },
+    {
+      "url": "/assets/pipes-CQ-pK6Kv-BbKoGuF0.js",
+      "type": "script",
+      "transferSize": 2745,
+      "encodedBodySize": 2445,
+      "duration": 15.899999998509884
+    },
+    {
+      "url": "/assets/reboot-nbAmZck6-ADU_B0S_.js",
+      "type": "script",
+      "transferSize": 453,
+      "encodedBodySize": 153,
+      "duration": 17
+    },
+    {
+      "url": "/assets/reload-CE3ZVq6O-BYe8KNBh.js",
+      "type": "script",
+      "transferSize": 480,
+      "encodedBodySize": 180,
+      "duration": 17.200000002980232
+    },
+    {
+      "url": "/assets/rev-C5m1qeoZ-e8XgnfyI.js",
+      "type": "script",
+      "transferSize": 616,
+      "encodedBodySize": 316,
+      "duration": 16.200000002980232
+    },
+    {
+      "url": "/assets/rm-Uxuv-dEz-MMtyTGZp.js",
+      "type": "script",
+      "transferSize": 634,
+      "encodedBodySize": 334,
+      "duration": 16.30000000447035
+    },
+    {
+      "url": "/assets/rmdir-BYWer3pb-Bw-ChYin.js",
+      "type": "script",
+      "transferSize": 609,
+      "encodedBodySize": 309,
+      "duration": 16.600000001490116
+    },
+    {
+      "url": "/assets/sl-CVLteJLH-5MqPfLSp.js",
+      "type": "script",
+      "transferSize": 5021,
+      "encodedBodySize": 4721,
+      "duration": 17.100000001490116
+    },
+    {
+      "url": "/assets/sleep-hEBW30R3-WAI_hib6.js",
+      "type": "script",
+      "transferSize": 675,
+      "encodedBodySize": 375,
+      "duration": 18.100000001490116
+    },
+    {
+      "url": "/assets/snow-DAlyPPxX-DrVTYXku.js",
+      "type": "script",
+      "transferSize": 1889,
+      "encodedBodySize": 1589,
+      "duration": 18.299999997019768
+    },
+    {
+      "url": "/assets/sh-CIyBHb8C-CeyxF7st.js",
+      "type": "script",
+      "transferSize": 665,
+      "encodedBodySize": 365,
+      "duration": 19.100000001490116
+    },
+    {
+      "url": "/assets/true-j1Uf2Nz9-BndBZBpc.js",
+      "type": "script",
+      "transferSize": 598,
+      "encodedBodySize": 298,
+      "duration": 19.69999999552965
+    },
+    {
+      "url": "/assets/uniq-LncLpnFY-CcTc_Nr3.js",
+      "type": "script",
+      "transferSize": 1693,
+      "encodedBodySize": 1393,
+      "duration": 20.299999997019768
+    },
+    {
+      "url": "/assets/tail-BLlaoTxA-BSGcb7cz.js",
+      "type": "script",
+      "transferSize": 1373,
+      "encodedBodySize": 1073,
+      "duration": 21.399999998509884
+    },
+    {
+      "url": "/assets/touch-BReUyL_z-DmDyuSdP.js",
+      "type": "script",
+      "transferSize": 750,
+      "encodedBodySize": 450,
+      "duration": 21.5
+    },
+    {
+      "url": "/assets/uptime-pYltXMOi-bSCZaQLR.js",
+      "type": "script",
+      "transferSize": 553,
+      "encodedBodySize": 253,
+      "duration": 20.5
+    },
+    {
+      "url": "/assets/whatis-BPKA-MNF-BcV479J7.js",
+      "type": "script",
+      "transferSize": 776,
+      "encodedBodySize": 476,
+      "duration": 21.700000002980232
+    },
+    {
+      "url": "/assets/watch-B4Tgzgbn-C47qS7Kb.js",
+      "type": "script",
+      "transferSize": 1483,
+      "encodedBodySize": 1183,
+      "duration": 24
+    },
+    {
+      "url": "/assets/whoami-BS3xdQEI-B_KTQcOj.js",
+      "type": "script",
+      "transferSize": 502,
+      "encodedBodySize": 202,
+      "duration": 22
+    },
+    {
+      "url": "/assets/yes-ilM2l2xq-BwQQoNMx.js",
+      "type": "script",
+      "transferSize": 687,
+      "encodedBodySize": 387,
+      "duration": 22
+    },
+    {
+      "url": "/icon.svg",
+      "type": "xmlhttprequest",
+      "transferSize": 0,
+      "encodedBodySize": 0,
+      "duration": 1.3999999985098839
+    },
+    {
+      "url": "/assets/fonts/outfit/Outfit-VariableFont_wght.ttf",
+      "type": "css",
+      "transferSize": 300,
+      "encodedBodySize": 0,
+      "duration": 0.3999999985098839
+    },
+    {
+      "url": "/blog.svg",
+      "type": "img",
+      "transferSize": 552,
+      "encodedBodySize": 252,
+      "duration": 20
+    },
+    {
+      "url": "/api/session",
+      "type": "fetch",
+      "transferSize": 352,
+      "encodedBodySize": 52,
+      "duration": 19.399999998509884
+    },
+    {
+      "url": "/wardrobe.svg",
+      "type": "img",
+      "transferSize": 562,
+      "encodedBodySize": 262,
+      "duration": 21.100000001490116
+    },
+    {
+      "url": "/wallpaper.svg",
+      "type": "img",
+      "transferSize": 757,
+      "encodedBodySize": 457,
+      "duration": 16.600000001490116
+    },
+    {
+      "url": "/wardrobe.svg",
+      "type": "xmlhttprequest",
+      "transferSize": 562,
+      "encodedBodySize": 262,
+      "duration": 15.100000001490116
+    },
+    {
+      "url": "/blog.svg",
+      "type": "xmlhttprequest",
+      "transferSize": 552,
+      "encodedBodySize": 252,
+      "duration": 13.099999994039536
+    },
+    {
+      "url": "/api/wardrobe",
+      "type": "fetch",
+      "transferSize": 446,
+      "encodedBodySize": 146,
+      "duration": 14.200000002980232
+    },
+    {
+      "url": "/blog.svg",
+      "type": "img",
+      "transferSize": 552,
+      "encodedBodySize": 252,
+      "duration": 14.299999997019768
+    },
+    {
+      "url": "/wardrobe.svg",
+      "type": "img",
+      "transferSize": 562,
+      "encodedBodySize": 262,
+      "duration": 15.199999995529652
+    },
+    {
+      "url": "/favicon.ico",
+      "type": "other",
+      "transferSize": 327,
+      "encodedBodySize": 27,
+      "duration": 4.899999998509884
+    },
+    {
+      "url": "/icon.svg",
+      "type": "other",
+      "transferSize": 0,
+      "encodedBodySize": 0,
+      "duration": 0.8999999985098839
+    },
+    {
+      "url": "/icon.svg",
+      "type": "other",
+      "transferSize": 0,
+      "encodedBodySize": 0,
+      "duration": 1.1000000014901161
+    },
+    {
+      "url": "/wardrobe.svg",
+      "type": "other",
+      "transferSize": 562,
+      "encodedBodySize": 262,
+      "duration": 4.899999998509884
+    },
+    {
+      "url": "/api/wardrobe",
+      "type": "fetch",
+      "transferSize": 446,
+      "encodedBodySize": 146,
+      "duration": 1.1000000014901161
+    }
+  ],
+  "images": [
+    {
+      "src": "/wallpaper.svg",
+      "loaded": true
+    },
+    {
+      "src": "/blog.svg",
+      "loaded": true
+    },
+    {
+      "src": "/wardrobe.svg",
+      "loaded": true
+    }
+  ]
+}

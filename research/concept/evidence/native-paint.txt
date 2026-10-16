@@ -1,0 +1,118 @@
+[p3 "Untitled - Paint - daedalOS" | space "daedalOS 作品集概念验证"(26): 3 managed, 0 untracked — p1 "Dhiraj Reddy — AI / Software Engineer", p2 "daedalOS", p3* "Untitled - Paint - daedalOS"]
+root
+  container
+    ordered_list "Desktop" [ref=169]
+      list_item
+        button "My PC" [ref=170, loc=css:button[aria-label="My PC"]]
+          heading
+            image
+            text "My PC"
+      list_item
+        button "Public" [ref=171, loc=css:button[aria-label="Public"]]
+          heading
+            image
+            text "Public"
+      list_item
+        button "Portfolio" [ref=172, loc=css:button[aria-label="Portfolio"]]
+          image
+          image
+          text "Portfolio"
+    container
+      dialog "Untitled - Paint" [ref=173, loc=role:dialog[name="Untitled - Paint"]]
+        container
+          button "Untitled - Paint" [ref=174, loc=css:button[aria-label="Untitled - Paint"]]
+            image
+            text "Untitled - Paint"
+          container
+            button "最小化" [ref=175, loc=css:button[aria-label="最小化"]]
+              svg_root
+            button "最大化" [ref=176, loc=css:button[aria-label="最大化"]]
+              svg_root
+            button "关闭" [ref=177, loc=css:button[aria-label="关闭"]]
+              svg_root
+        iframe [ref=178]
+          root
+            container
+              menubar "Application Menu"
+                menuitem [ref=179]
+                  text "F"
+                  text "ile"
+                menuitem [ref=180]
+                  text "E"
+                  text "dit"
+                menuitem [ref=181]
+                  text "V"
+                  text "iew"
+                menuitem [ref=182]
+                  text "I"
+                  text "mage"
+                menuitem [ref=183]
+                  text "C"
+                  text "olors"
+                menuitem [ref=184]
+                  text "H"
+                  text "elp"
+              container
+                canvas
+                canvas
+              container
+                container
+                  canvas
+                  canvas
+                  canvas
+                container
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+                  canvas
+              text "For Help, click Help Topics on the Help Menu."
+      container [ref=185]
+      container [ref=186]
+      container [ref=187]
+      container [ref=188]
+      container [ref=189]
+      container [ref=190]
+      container [ref=191]
+      container [ref=192]
+    container
+      text "16:50"
+      paragraph
+        text "熟悉的桌面，持续生长的作品。"
+      button [ref=193]
+        svg_root
+        text "个人作品集"
+        text "Yincan Huang"
+    container "OS navigation"
+      button "所有应用" [ref=194, loc=css:button[aria-label="所有应用"]]
+        svg_root
+      button "桌面" [ref=195, loc=css:button[aria-label="桌面"]]
+        svg_root
+      button "运行中的应用" [ref=196, loc=css:button[aria-label="运行中的应用"]]
+        svg_root
+      button "设置" [ref=197, loc=css:button[aria-label="设置"]]
+        svg_root
+    canvas

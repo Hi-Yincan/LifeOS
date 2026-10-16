@@ -1,0 +1,64 @@
+[p3 "Terminal - daedalOS" | space "daedalOS 作品集概念验证"(26): 3 managed, 0 untracked — p1 "Dhiraj Reddy — AI / Software Engineer", p2 "daedalOS", p3* "Terminal - daedalOS"]
+root
+  container
+    ordered_list "Desktop" [ref=198]
+      list_item
+        button "My PC" [ref=199, loc=css:button[aria-label="My PC"]]
+          heading
+            image
+            text "My PC"
+      list_item
+        button "Public" [ref=200, loc=css:button[aria-label="Public"]]
+          heading
+            image
+            text "Public"
+      list_item
+        button "Portfolio" [ref=201, loc=css:button[aria-label="Portfolio"]]
+          image
+          image
+          text "Portfolio"
+    container
+      dialog "Terminal" [ref=202, loc=role:dialog[name="Terminal"]]
+        container
+          button "Terminal" [ref=203, loc=css:button[aria-label="Terminal"]]
+            image
+            text "Terminal"
+          container
+            button "最小化" [ref=204, loc=css:button[aria-label="最小化"]]
+              svg_root
+            button "最大化" [ref=205, loc=css:button[aria-label="最大化"]]
+              svg_root
+            button "关闭" [ref=206, loc=css:button[aria-label="关闭"]]
+              svg_root
+        container
+          textbox "Terminal input" [ref=207, loc=css:textarea[aria-label="Terminal input"]]
+          container
+            text "daedalOS [Version 2.0.0-f017b39]"
+            text "By Dustin Brett. MIT License."
+            text "/Users/Public>"
+      container [ref=208]
+      container [ref=209]
+      container [ref=210]
+      container [ref=211]
+      container [ref=212]
+      container [ref=213]
+      container [ref=214]
+      container [ref=215]
+    container
+      text "16:50"
+      paragraph
+        text "熟悉的桌面，持续生长的作品。"
+      button [ref=216]
+        svg_root
+        text "个人作品集"
+        text "Yincan Huang"
+    container "OS navigation"
+      button "所有应用" [ref=217, loc=css:button[aria-label="所有应用"]]
+        svg_root
+      button "桌面" [ref=218, loc=css:button[aria-label="桌面"]]
+        svg_root
+      button "运行中的应用" [ref=219, loc=css:button[aria-label="运行中的应用"]]
+        svg_root
+      button "设置" [ref=220, loc=css:button[aria-label="设置"]]
+        svg_root
+    canvas

@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: visitor sees four bilingual published works with contribution attribution, no management fields
+ok 1 - visitor sees four bilingual published works with contribution attribution, no management fields
+  ---
+  duration_ms: 73.278875
+  type: 'test'
+  ...
+# Subtest: single-key session has no account requirement; anonymous role spoofing cannot write
+ok 2 - single-key session has no account requirement; anonymous role spoofing cannot write
+  ---
+  duration_ms: 153.949708
+  type: 'test'
+  ...
+# Subtest: draft, bilingual edit, publish snapshot, concurrent edit and unpublish behave independently
+ok 3 - draft, bilingual edit, publish snapshot, concurrent edit and unpublish behave independently
+  ---
+  duration_ms: 107.005792
+  type: 'test'
+  ...
+# Subtest: draft media is private, becomes public on publish and is revoked on unpublish
+ok 4 - draft media is private, becomes public on publish and is revoked on unpublish
+  ---
+  duration_ms: 98.48125
+  type: 'test'
+  ...
+# Subtest: missing CSRF and foreign origins cannot change content or authenticate
+ok 5 - missing CSRF and foreign origins cannot change content or authenticate
+  ---
+  duration_ms: 95.982584
+  type: 'test'
+  ...
+# Subtest: logout revokes a copied session cookie; restart preserves content but not sessions
+ok 6 - logout revokes a copied session cookie; restart preserves content but not sessions
+  ---
+  duration_ms: 240.923
+  type: 'test'
+  ...
+# Subtest: unsafe URLs, unknown fields and unsupported images are rejected
+ok 7 - unsafe URLs, unknown fields and unsupported images are rejected
+  ---
+  duration_ms: 95.562042
+  type: 'test'
+  ...
+# Subtest: repeated invalid keys are rate limited
+ok 8 - repeated invalid keys are rate limited
+  ---
+  duration_ms: 598.175666
+  type: 'test'
+  ...
+# Subtest: integration manifest retains every upstream process entry
+ok 9 - integration manifest retains every upstream process entry
+  ---
+  duration_ms: 0.369833
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1552.693458

@@ -1,0 +1,471 @@
+[p1 "Dhiraj Reddy — AI / Software Engineer" | space "daedalOS 作品集概念验证"(26): 1 managed, 0 untracked — p1* "Dhiraj Reddy — AI / Software Engineer"]
+root
+  region "DhirajOS desktop"
+    container
+      svg_root
+      container "Desktop applications"
+        anchor [ref=1, url=https://dhiraj-os-rho.vercel.app/playground]
+          svg_root
+          text "RUN MY PROJECTS.exe"
+        anchor [ref=2, url=https://dhiraj-os-rho.vercel.app/projects]
+          svg_root
+          text "Projects"
+        anchor [ref=3, url=https://dhiraj-os-rho.vercel.app/about]
+          svg_root
+          text "About Me"
+        anchor [ref=4, url=https://dhiraj-os-rho.vercel.app/skills]
+          svg_root
+          text "Skills"
+        anchor [ref=5, url=https://dhiraj-os-rho.vercel.app/resume]
+          svg_root
+          text "Resume"
+        anchor [ref=6, url=https://dhiraj-os-rho.vercel.app/github]
+          svg_root
+          text "GitHub"
+        anchor [ref=7, url=https://dhiraj-os-rho.vercel.app/contact]
+          svg_root
+          text "Contact"
+        anchor [ref=8, url=https://dhiraj-os-rho.vercel.app/terminal]
+          svg_root
+          text "Terminal"
+        anchor [ref=9, url=https://dhiraj-os-rho.vercel.app/blog]
+          svg_root
+          text "My Blog"
+      container "What I'm building"
+        container
+          svg_root
+          text "NOW BUILDING"
+        container
+          paragraph
+            text "Currently exploring — each opens the matching projects."
+          unordered_list
+            list_item
+              button [ref=10]
+                text "AI Agents"
+            list_item
+              button [ref=11]
+                text "Backend Systems"
+            list_item
+              button [ref=12]
+                text "RAG"
+            list_item
+              button [ref=13]
+                text "Computer Vision"
+            list_item
+              button [ref=14]
+                text "Developer Tools"
+          paragraph
+            text "27"
+            text "public repos on GitHub"
+    dialog "Welcome.exe" [ref=15, loc=role:dialog[name="Welcome.exe"]]
+      container
+        svg_root
+        text "Welcome.exe"
+        container
+          button "Minimize Welcome.exe" [ref=16, loc=css:button[aria-label="Minimize Welcome.exe"]]
+            svg_root
+          button "Maximize Welcome.exe" [ref=17, loc=css:button[aria-label="Maximize Welcome.exe"]]
+            svg_root
+          button "Close Welcome.exe" [ref=18, loc=css:button[aria-label="Close Welcome.exe"]]
+            svg_root
+      region "Welcome" [ref=25, loc=role:region[name="Welcome"]]
+        container
+          image "Dhiraj Reddy monogram"
+            text "DR"
+          container
+            paragraph
+              text "WELCOME TO DHIRAJOS"
+            heading
+              text "Dhiraj Reddy"
+            paragraph
+              text "AI / Software Engineer"
+              text "·"
+              text "Hyderabad"
+              text ", India"
+            paragraph
+              text "Computer Science undergraduate building practical AI systems, backend applications and developer tools."
+        container
+          button [ref=26]
+            svg_root
+            text "RUN MY PROJECTS"
+          button [ref=27]
+            svg_root
+            text "Projects"
+          button [ref=28]
+            svg_root
+            text "About me"
+          button [ref=29]
+            svg_root
+            text "Terminal"
+        list "At a glance"
+          listitem
+            paragraph
+              text "27"
+            paragraph
+              text "public repositories"
+            paragraph
+              text "counted from the GitHub API"
+          listitem
+            paragraph
+              text "10"
+            paragraph
+              text "projects written up"
+            paragraph
+              text "from reading the source"
+          listitem
+            paragraph
+              text "11"
+            paragraph
+              text "demos you can try"
+            paragraph
+              text "running in your browser"
+          listitem
+            paragraph
+              text "5"
+            paragraph
+              text "primary languages"
+            paragraph
+              text "across those repositories"
+        heading
+          text "Currently exploring"
+        unordered_list
+          list_item
+            button [ref=30]
+              text "AI Agents"
+          list_item
+            button [ref=31]
+              text "Backend Systems"
+          list_item
+            button [ref=32]
+              text "RAG"
+          list_item
+            button [ref=33]
+              text "Computer Vision"
+          list_item
+            button [ref=34]
+              text "Developer Tools"
+        note
+          text "How to read this site"
+          unordered_list
+            list_item
+              text "Click any desktop icon. Drag windows by their title bars; resize from the edges."
+            list_item
+              text "Every project has a status:"
+              text "LIVE"
+              text ","
+              text "DEMO"
+              text ","
+              text "LOCAL ONLY"
+              text ","
+              text "HARDWARE"
+              text ","
+              text "EXPERIMENTAL"
+              text "or"
+              text "ARCHIVED"
+              text ". LIVE and DEMO are only used for deployments I opened and tested."
+            list_item
+              text "Three of my projects — ScoutLens, SCARFLOW and Verascope — were built with AI coding tools (mainly Claude Code) and are labelled AI-ASSISTED. I wrote the others myself, asking an LLM for help only..."
+            list_item
+              text "Try the"
+              text "Terminal"
+              text "— type"
+              text "help"
+              text ", then"
+              text "neofetch"
+              text "."
+    toolbar "Taskbar"
+      button [ref=19]
+        svg_root
+        text "Start"
+      group "Quick launch"
+        button "Show desktop" [ref=20, loc=css:button[aria-label="Show desktop"]]
+          svg_root
+        button "Open Projects" [ref=21, loc=css:button[aria-label="Open Projects"]]
+          svg_root
+        button "Open Terminal" [ref=22, loc=css:button[aria-label="Open Terminal"]]
+          svg_root
+      group "Open windows"
+        button [ref=23]
+          svg_root
+          text "Welcome.exe"
+      group "System tray"
+        button "Sound off — click to enable UI sounds" [ref=24, loc=css:button[aria-label="Sound off — click to enable UI sounds"]]
+          svg_root
+        text "15:11"
+  container "Portfolio outline"
+    heading
+      text "Dhiraj Reddy"
+      text "—"
+      text "AI / Software Engineer"
+    paragraph
+      text "Computer Science undergraduate building practical AI systems, backend applications and developer tools."
+      text "Based in"
+      text "Hyderabad, Telangana, India"
+      text "."
+      text "4th-year B.Tech Computer Science undergraduate"
+      text "."
+    heading
+      text "Featured and selected projects"
+    unordered_list
+      list_item
+        anchor [ref=35, loc=href:/projects/verascope, url=https://dhiraj-os-rho.vercel.app/projects/verascope]
+          text "Verascope"
+        text "—"
+        text "Ask a codebase questions. Agents investigate bugs with cited evidence, test fixes in a Docker sandbox, and wait for your approval."
+        text "Status:"
+        text "LOCAL ONLY"
+        text ". Stack:"
+        text "Python, FastAPI, PostgreSQL, SQLAlchemy, ChromaDB, React, TypeScript, Docker, Ollama"
+        text "."
+      list_item
+        anchor [ref=36, loc=href:/projects/scoutlens, url=https://dhiraj-os-rho.vercel.app/projects/scoutlens]
+          text "ScoutLens"
+        text "—"
+        text "Investigate a job or internship before you invest your time — live SerpApi searches, an evidence store, and a report where every claim links to a real source."
+        text "Status:"
+        text "DEMO"
+        text ". Stack:"
+        text "Python, Streamlit, Pydantic v2, SerpApi, SQLite, BeautifulSoup, Ollama (optional)"
+        text "."
+      list_item
+        anchor [ref=37, loc=href:/projects/scarflow, url=https://dhiraj-os-rho.vercel.app/projects/scarflow]
+          text "SCARFLOW"
+        text "—"
+        text "Supplier corrective-action (SCAR) and 8D workflow for manufacturing quality teams — replacing Excel sheets and email threads."
+        text "Status:"
+        text "LOCAL ONLY"
+        text ". Stack:"
+        text "Next.js 16, React 19, TypeScript, Tailwind CSS 4, Supabase (Postgres + RLS), Inngest, Resend, Playwright"
+        text "."
+      list_item
+        anchor [ref=38, loc=href:/projects/smartride, url=https://dhiraj-os-rho.vercel.app/projects/smartride]
+          text "SmartRide AI"
+        text "—"
+        text "Edge-AI rider-safety assistant for two-wheelers: a camera watches for a missing helmet, phone use and hands off the handlebar, and raises an immediate alert."
+        text "Status:"
+        text "HARDWARE"
+        text ". Stack:"
+        text "Python, Raspberry Pi, YOLOv8, TensorFlow Lite, OpenCV, MediaPipe, MPU6050"
+        text "."
+      list_item
+        anchor [ref=39, loc=href:/projects/rainfoghaze, url=https://dhiraj-os-rho.vercel.app/projects/rainfoghaze]
+          text "RainFogHaze"
+        text "—"
+        text "Haze and fog removal with OpenCV's dark-channel prior, where a local vision model (LLaVA) chooses the dehazing strength."
+        text "Status:"
+        text "DEMO"
+        text ". Stack:"
+        text "Python, Django, OpenCV, NumPy, Ollama, LLaVA"
+        text "."
+      list_item
+        anchor [ref=40, loc=href:/projects/study-buddy, url=https://dhiraj-os-rho.vercel.app/projects/study-buddy]
+          text "Study Buddy"
+        text "—"
+        text "A study assistant that answers only from the PDFs you uploaded for the selected subject."
+        text "Status:"
+        text "LOCAL ONLY"
+        text ". Stack:"
+        text "Python, Streamlit, LangChain, ChromaDB, Ollama, llama3.1:8b"
+        text "."
+      list_item
+        anchor [ref=41, loc=href:/projects/fake-news-predictor, url=https://dhiraj-os-rho.vercel.app/projects/fake-news-predictor]
+          text "Fake News Predictor"
+        text "—"
+        text "Paste a news-article URL; a TF-IDF + logistic-regression model trained on an Indian fake-news dataset labels it FAKE or REAL with a confidence score."
+        text "Status:"
+        text "DEMO"
+        text ". Stack:"
+        text "Python, scikit-learn, TF-IDF, Newspaper3k, Streamlit"
+        text "."
+      list_item
+        anchor [ref=42, loc=href:/projects/interview-coach, url=https://dhiraj-os-rho.vercel.app/projects/interview-coach]
+          text "AI Interview Coach"
+        text "—"
+        text "A fully local interview-prep chatbot: Streamlit + LangChain + Ollama running DeepSeek-R1:8B, with four answer styles and conversation memory."
+        text "Status:"
+        text "LOCAL ONLY"
+        text ". Stack:"
+        text "Python, Streamlit, LangChain, Ollama, DeepSeek-R1:8B"
+        text "."
+      list_item
+        anchor [ref=43, loc=href:/projects/job-application-tracker, url=https://dhiraj-os-rho.vercel.app/projects/job-application-tracker]
+          text "Job Application Tracker"
+        text "—"
+        text "Full-stack tracker for job applications: FastAPI + SQLAlchemy + MySQL behind a Streamlit dashboard, with an end-to-end API test script."
+        text "Status:"
+        text "LOCAL ONLY"
+        text ". Stack:"
+        text "Python, FastAPI, SQLAlchemy, MySQL, Pydantic, Streamlit"
+        text "."
+      list_item
+        anchor [ref=44, loc=href:/projects/ai-analytics, url=https://dhiraj-os-rho.vercel.app/projects/ai-analytics]
+          text "AI Analytics"
+        text "—"
+        text "Upload a CSV or Excel file and ask questions: a LangChain agent answers by calling 12 tools for statistics and charts, with Qwen3 running locally."
+        text "Status:"
+        text "LOCAL ONLY"
+        text ". Stack:"
+        text "Python, Streamlit, LangChain, Pandas, Plotly, Ollama (qwen3:4b)"
+        text "."
+    heading
+      text "Other projects"
+    unordered_list
+      list_item
+        text "Student Management System"
+        text "—"
+        text "Add, view and delete students — a web app in plain Java (JDK HttpServer + JDBC), MySQL, HTML and CSS with no frameworks."
+      list_item
+        text "Scraper Chatbot"
+        text "—"
+        text "Streamlit scraper that extracts a page's title, same-site links and text. The RAG modules (chromadb / embedding / retrieval) are empty placeholders, so there is no chatbot yet."
+      list_item
+        text "PDF Reader (Ollama)"
+        text "—"
+        text "Streamlit chatbot that answers questions from an uploaded PDF using pypdf and DeepSeek-R1:8B through LangChain-Ollama."
+      list_item
+        text "Movie Recommender"
+        text "—"
+        text "TMDB 5000 movie recommender: notebook builds the similarity assets, a Streamlit app serves recommendations."
+      list_item
+        text "Iris Predictor"
+        text "—"
+        text "Streamlit app that predicts iris species from four measurements using a pickled model and label encoder."
+      list_item
+        text "House Price Prediction (XGBoost)"
+        text "—"
+        text "Kaggle “House Prices” workflow: EDA, preprocessing, feature engineering and an XGBoost regressor with cross-validation."
+      list_item
+        text "Spam Mail Classifier"
+        text "—"
+        text "Text-classification notebook on a Kaggle email-spam dataset with vectorisation and classical models."
+      list_item
+        text "Heart Disease Predictor"
+        text "—"
+        text "End-to-end ML notebook on the UCI heart-disease data: imputation, scaling, encoding, model training and evaluation."
+      list_item
+        text "Titanic Survival Analysis"
+        text "—"
+        text "EDA, feature engineering and survival prediction, ending in a YData Profiling HTML report."
+      list_item
+        text "Netflix Content EDA"
+        text "—"
+        text "Exploratory analysis of the Netflix catalogue: release year vs year added, movies vs TV shows, genres."
+      list_item
+        text "House Price · Linear Regression"
+        text "—"
+        text "Task 01 of the SkillCraft Technology internship program: linear regression on square footage, bedrooms and bathrooms."
+      list_item
+        text "Linear Regression from Scratch"
+        text "—"
+        text "Gradient-descent linear regression derived by hand and implemented with NumPy only, with a fitted-line plot."
+      list_item
+        text "Logistic Regression from Scratch"
+        text "—"
+        text "Logistic regression implemented from the formulas up and tested on the diabetes dataset."
+      list_item
+        text "Smart Insights of Customer Patterns"
+        text "—"
+        text "A customer-segmentation project: the README describes Gender vs Spending Score analysis and clustering with feature engineering and the elbow method. The notebook and dataset currently in the reposito..."
+      list_item
+        text "GenAI Basics"
+        text "—"
+        text "Notebooks on calling LLMs and on prompting types."
+    heading
+      text "Sections"
+    unordered_list
+      list_item
+        anchor [ref=45, url=https://dhiraj-os-rho.vercel.app/playground]
+          text "RUN MY PROJECTS.exe"
+        text "—"
+        text "Project Playground — try the demos"
+      list_item
+        anchor [ref=46, url=https://dhiraj-os-rho.vercel.app/projects]
+          text "Projects.exe"
+        text "—"
+        text "Featured, built and important projects"
+      list_item
+        anchor [ref=47, url=https://dhiraj-os-rho.vercel.app/about]
+          text "About Me.exe"
+        text "—"
+        text "Who I am and what I build"
+      list_item
+        anchor [ref=48, url=https://dhiraj-os-rho.vercel.app/skills]
+          text "Skills.exe"
+        text "—"
+        text "Skills, with the projects that prove them"
+      list_item
+        anchor [ref=49, url=https://dhiraj-os-rho.vercel.app/resume]
+          text "Resume.exe"
+        text "—"
+        text "View or download my resume"
+      list_item
+        anchor [ref=50, url=https://dhiraj-os-rho.vercel.app/github]
+          text "GitHub.exe"
+        text "—"
+        text "Repositories, languages and recent activity"
+      list_item
+        anchor [ref=51, url=https://dhiraj-os-rho.vercel.app/contact]
+          text "Contact.exe"
+        text "—"
+        text "Email, GitHub, LinkedIn"
+      list_item
+        anchor [ref=52, url=https://dhiraj-os-rho.vercel.app/terminal]
+          text "Terminal — C:\DHIRAJ"
+        text "—"
+        text "A portfolio terminal: try help, neofetch"
+      list_item
+        anchor [ref=53, loc=href:/system, url=https://dhiraj-os-rho.vercel.app/system]
+          text "System Info"
+        text "—"
+        text "System information and what I'm exploring"
+      list_item
+        anchor [ref=54, url=https://dhiraj-os-rho.vercel.app/blog]
+          text "DHIRAJ.LOG"
+        text "—"
+        text "My blog, embedded"
+      list_item
+        anchor [ref=55, loc=href:/stack, url=https://dhiraj-os-rho.vercel.app/stack]
+          text "STACK.exe"
+        text "—"
+        text "How my technologies relate"
+      list_item
+        anchor [ref=56, loc=href:/journey, url=https://dhiraj-os-rho.vercel.app/journey]
+          text "JOURNEY.exe"
+        text "—"
+        text "Timeline of projects and milestones"
+      list_item
+        anchor [ref=57, loc=href:/how-i-build, url=https://dhiraj-os-rho.vercel.app/how-i-build]
+          text "HOW I BUILD.exe"
+        text "—"
+        text "My build workflow"
+      list_item
+        anchor [ref=58, loc=href:/welcome, url=https://dhiraj-os-rho.vercel.app/welcome]
+          text "Welcome.exe"
+        text "—"
+        text "Start here"
+      list_item
+        anchor [ref=59, loc=href:/built, url=https://dhiraj-os-rho.vercel.app/built]
+          text "Built Projects.exe"
+        text "—"
+        text "Projects I engineered"
+      list_item
+        anchor [ref=60, loc=href:/important, url=https://dhiraj-os-rho.vercel.app/important]
+          text "Important Projects.exe"
+        text "—"
+        text "Projects that matter to me, including AI-assisted ones"
+      list_item
+        anchor [ref=61, loc=href:/recycle-bin, url=https://dhiraj-os-rho.vercel.app/recycle-bin]
+          text "Recycle Bin"
+        text "—"
+        text "Nothing to see here. Probably."
+    heading
+      text "Contact"
+    paragraph
+      text "Email"
+      text "iamdhirajreddy@gmail.com"
+      text ". GitHub"
+      text "https://github.com/uppadadhiraj"
+      text ". LinkedIn"
+      text "https://www.linkedin.com/in/venkata-dhiraj-reddy-uppada-277bb828a/"
+      text "."
+  alert
