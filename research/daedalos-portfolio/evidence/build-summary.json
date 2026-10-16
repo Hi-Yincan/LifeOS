@@ -1,7 +1,7 @@
 {
   "scope": "Full static export, NOT first-load transfer size",
   "files": 1831,
-  "totalBytes": 327772694,
+  "totalBytes": 327772504,
   "largest": [
     {
       "path": "Program Files/BoxedWine/fullWine1.7.55-v8.zip",

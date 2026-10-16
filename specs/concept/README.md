@@ -4,6 +4,8 @@
 
 第一版只新增一个业务 App：**个人作品集**。全部 daedalOS 原生 App 保留；作品集建立后续 App 的 UI 参考。设置、多语言、三端导航属于系统支撑能力。
 
+协作入口：[概念阶段 #2](https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2) · [作品集 #15](https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15) · [草稿 PR #16](https://github.com/Hi-Yincan/Hi-Yincan.github.io/pull/16)。详细报告在 Issue 评论，主体保留目录；完整发布记录见 [issue-record.json](../../research/concept/issue-record.json)。
+
 | 交付 | 内容 |
 | --- | --- |
 | [PRD](PRD.md) | 产品范围、12 个用户故事、成功标准和阶段边界 |
