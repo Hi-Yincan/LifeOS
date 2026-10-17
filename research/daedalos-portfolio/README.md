@@ -36,7 +36,7 @@ node --test research/daedalos-portfolio/test/*.test.mjs
 
 没有全局 Yarn 时，可用 `npm exec --yes --package=yarn@1.22.22 -- yarn <参数>` 执行对应命令。锁文件来自固定上游提交，不随研究原型修改。
 
-`prepare.mjs` 检查 SHA，复制自有 overlay，并修改 7 个明确列出的上游文件；识别不了的已有改动会拒绝覆盖。这是实验构建工具，**不等于生产 submodule 接入契约**。应用保留和补丁清单见 `evidence/integration-manifest.json`。
+`prepare.mjs` 检查 SHA，复制自有 overlay，并修改 8 个明确列出的上游文件；识别不了的已有改动会拒绝覆盖。这是实验构建工具，**不等于生产 submodule 接入契约**。应用保留和补丁清单见 `evidence/integration-manifest.json`。
 
 ## 验证与限制
 
@@ -55,3 +55,5 @@ node --test research/daedalos-portfolio/test/*.test.mjs
 运行状态、会话、口令、上传测试数据、依赖与完整上游 checkout 均不归档。服务停止后，可按上面命令重新启动；会话失效、内容保留。请勿把本地夹具直接暴露到公网。
 
 概念阶段收尾后的复用策略见 [原型交接](../../specs/concept/prototype-handoff.md)。已验证的 UI、交互与业务规则进入正式工程；本地夹具和临时接入方式按计划逐项生产化。
+
+作品集与站点图标复用 blog 内容子模块中的圆形头像。`portfolio.svg` 嵌入同一 PNG，保留已有快捷方式 URL；网站 favicon 固定指向 `avatar.png`，窗口标题仍沿用原生前台应用标题。

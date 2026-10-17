@@ -50,6 +50,7 @@
     "pages/_app.tsx",
     "pages/index.tsx",
     "components/system/Window/Titlebar/index.tsx",
+    "components/pages/hooks/useFaviconAndTitle.tsx",
     "components/pages/Metadata.tsx",
     "contexts/process/useProcessContextState.ts",
     "components/system/StartMenu/Sidebar/index.tsx"

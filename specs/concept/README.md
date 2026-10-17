@@ -16,6 +16,7 @@
 | [UI 规范](design-system.md) | daedalOS 一致的应用视觉、复用控件与内容规则 |
 | [架构决策](architecture-decisions.md) | 上游接入、仓库、部署、权限和设备策略 |
 | [验收矩阵](acceptance.md) | A01–A21，区分要求与实测证据 |
+| [头像与网站图标](../../research/concept/avatar-icons.md) | 复用 blog 圆形头像、作品集入口与固定 favicon |
 | [桌面商店入口与交接验证](../../research/concept/desktop-store-and-handoff.md) | 桌面快捷方式、单实例恢复及阶段收尾记录 |
 | [原型复用与阶段交接](prototype-handoff.md) | 可复用资产、生产化替换项及下一阶段顺序 |
 | [计划输入](implementation-plan.md) | T01–T16、M0–M4，供 Issue #3 拆解 |

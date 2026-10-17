@@ -1,0 +1,46 @@
+{
+  "initial": {
+    "href": "/System/PersonalOS/avatar.png",
+    "type": "image/png",
+    "count": 1,
+    "title": "个人作品集 - daedalOS"
+  },
+  "avatar": {
+    "width": 940,
+    "height": 940,
+    "corners": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "centerAlpha": 255
+  },
+  "portfolioSurfaces": [
+    {
+      "src": "/System/PersonalOS/portfolio.svg",
+      "loaded": true
+    },
+    {
+      "src": "/System/PersonalOS/portfolio.svg",
+      "loaded": true
+    },
+    {
+      "src": "/System/PersonalOS/portfolio.svg",
+      "loaded": true
+    },
+    {
+      "src": "/System/PersonalOS/portfolio.svg",
+      "loaded": true
+    }
+  ],
+  "store": {
+    "favicon": "/System/PersonalOS/avatar.png",
+    "title": "应用商店 - daedalOS",
+    "portfolioCatalogIcon": "/System/PersonalOS/portfolio.svg"
+  },
+  "desktop": {
+    "favicon": "/System/PersonalOS/avatar.png",
+    "title": "daedalOS"
+  }
+}

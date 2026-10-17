@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-17",
+  "build": {
+    "exitCode": 0,
+    "durationSeconds": 164.96
+  },
+  "typecheck": "passed in Next build",
+  "lint": {
+    "scope": "components/pages/hooks/useFaviconAndTitle.tsx",
+    "exitCode": 0
+  },
+  "prepareIdempotent": true,
+  "pngMatchesSource": true,
+  "svgEmbeddedPngMatches": true,
+  "upstreamPatchCount": 8,
+  "upstreamProcessesRetained": 33,
+  "browserStates": [
+    "Portfolio",
+    "AppStore",
+    "Desktop"
+  ],
+  "browserTaskSpace": 9,
+  "visualEvidence": "DOM-render capture, not native screenshot",
+  "productionDeployed": false,
+  "browserTaskFinished": true
+}
