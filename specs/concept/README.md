@@ -20,6 +20,7 @@
 | [旧站点资源与缓存清理](../../research/concept/site-cleanup.md) | 身份配置、旧资源退役、干净构建与残留检查 |
 | [头像与网站图标](../../research/concept/avatar-icons.md) | 复用 blog 圆形头像、作品集入口与固定 favicon |
 | [桌面商店入口与交接验证](../../research/concept/desktop-store-and-handoff.md) | 桌面快捷方式、单实例恢复及阶段收尾记录 |
+| [Messenger 联系能力核验](../../research/concept/messenger-review.md) | Nostr 身份、收信条件与提醒边界；站长联系人待公开公钥 |
 | [原型复用与阶段交接](prototype-handoff.md) | 可复用资产、生产化替换项及下一阶段顺序 |
 | [计划输入](implementation-plan.md) | T01–T16、M0–M4，供 Issue #3 拆解 |
 | [资料来源](sources.md) | 个人资料、项目归属、参考与上游基线 |

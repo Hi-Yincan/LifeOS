@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-17",
+  "upstreamCommit": "f017b393d4175eb396a741a7562299423843f1b1",
+  "sourceFiles": {
+    "components/apps/Messenger/functions.ts": "d88f3212b460b03372fad0c3096818783ca95959c0f3cb8e4584080cd91c3047",
+    "components/apps/Messenger/index.tsx": "d10d25a6a8a3a5f246e304327995cdcbd44bcd86c29b9f75e2d7690dba4e7087",
+    "components/apps/Messenger/hooks.ts": "c6f274f8b70487eaf3bf1a1bb5a51cb9a324ce20c6a6512244400287632a21aa",
+    "components/apps/Messenger/NostrContext.tsx": "3b9fcd51a09c7e330cf19bca54687a21c38acf683b765f16ec59bf28cbe48038",
+    "components/apps/Messenger/MessageContext.tsx": "bc6a39d16c16febf71af59ab685d20fd42f3c75ac8508058d8034b387f01f105",
+    "components/apps/Messenger/HistoryContext.tsx": "79ad4d3adc1bb6fcdeb2f808d4d9ddce17b76c22d6b0f604b8ca9e9dfcb1584a",
+    "components/apps/Messenger/constants.ts": "b443808170b5b7d799f68515b2e91825298339e8417d30104d603732b9edacde"
+  },
+  "protocolSources": [
+    {
+      "url": "https://github.com/nostr-protocol/nips/blob/master/17.md",
+      "sha256": "7aa9c3a9c0458a9552c4be2f3bf17f7ec60a4afe88bce7977f03500a7873a64c"
+    },
+    {
+      "url": "https://github.com/nostr-protocol/nips/blob/master/05.md",
+      "sha256": "6eee88e6848aafc825995d8a85ab648c0195eb267af8e6c8540e4e8b2d10f450"
+    }
+  ],
+  "ownerContactStatus": "awaiting user-controlled public Nostr key or NIP-05 address",
+  "messagesSent": false,
+  "chinaConnectivityTested": false,
+  "endToEndDeliveryTested": false
+}

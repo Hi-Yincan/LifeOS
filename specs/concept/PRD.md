@@ -12,7 +12,7 @@
 
 **Proposed Solution**
 
-第一版以“个人作品集”为首个业务 App：进入网站后自动打开，包含概览、作品列表/详情、个人介绍与联系。保留现有 React Web 应用，使用 daedalOS 原生窗口与一致的应用视觉，提供中英双语内容及单密钥管理；保留全部原生 App，桌面、手机与平板全部沿用 daedalOS 原项目的响应式、窗口和任务栏行为，不再设计额外设备模式。
+第一版以“个人作品集”为首个业务 App：由桌面、开始菜单或显式链接打开，普通访问默认进入桌面，包含概览、作品列表/详情、个人介绍与联系。保留现有 React Web 应用，使用 daedalOS 原生窗口与一致的应用视觉，提供中英双语内容及单密钥管理；保留全部原生 App，桌面、手机与平板全部沿用 daedalOS 原项目的响应式、窗口和任务栏行为，不再设计额外设备模式。
 
 **Success Criteria（发布验收目标，不冒充当前测量结果）**
 
@@ -48,7 +48,7 @@
 
 | ID | User Story | Acceptance Criteria |
 | --- | --- | --- |
-| P01 | As a visitor, I want to see the portfolio immediately so that I understand the site without learning the desktop first. | 默认只自动打开一个作品集窗口；保留显式原生 App 深链接行为；关闭后可回桌面并重新打开 |
+| P01 | As a visitor, I want to enter the desktop and choose which app to open. | 无参数访问不自动打开应用；保留作品集与原生 App 的显式深链接；可从桌面重新打开作品集 |
 | P02 | As a visitor, I want to distinguish personal projects from contributions so that I understand the author's role. | 分类明确；具体贡献有证据才写；列表、详情和语言版本保持同一归属 |
 | P03 | As a visitor, I want a stable project link so that I can revisit or share the work. | 直接打开、刷新、前进后退定位一致；未发布/下架返回明确不可用状态；不破坏既有项目路径 |
 | P04 | As a visitor, I want clear source and trial links so that I can explore the project. | HTTPS 外链、新标签打开、链接性质明确；项目官网不冒充已经验证的在线 Demo；无官网时仅显示源码 |

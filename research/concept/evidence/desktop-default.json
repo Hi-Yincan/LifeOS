@@ -1,0 +1,73 @@
+{
+  "first": {
+    "title": "Yincan Huang",
+    "url": "http://127.0.0.1:4391/",
+    "windows": [],
+    "desktop": [
+      "My PC",
+      "App Store",
+      "Portfolio",
+      "Public"
+    ]
+  },
+  "manual": {
+    "title": "个人作品集 - Yincan Huang",
+    "url": "http://127.0.0.1:4391/",
+    "windows": [
+      "个人作品集"
+    ],
+    "desktop": [
+      "My PC",
+      "App Store",
+      "Portfolio",
+      "Public"
+    ]
+  },
+  "revisit": {
+    "title": "Yincan Huang",
+    "url": "http://127.0.0.1:4391/",
+    "windows": [],
+    "desktop": [
+      "My PC",
+      "App Store",
+      "Portfolio",
+      "Public"
+    ]
+  },
+  "deepLink": {
+    "title": "个人作品集 - Yincan Huang",
+    "url": "http://127.0.0.1:4391/?app=Portfolio&project=aipm",
+    "windows": [
+      "个人作品集"
+    ],
+    "desktop": [
+      "My PC",
+      "App Store",
+      "Portfolio",
+      "Public"
+    ]
+  },
+  "explicitApp": {
+    "title": "应用商店 - Yincan Huang",
+    "url": "http://127.0.0.1:4391/?app=AppStore",
+    "windows": [
+      "应用商店"
+    ],
+    "desktop": [
+      "My PC",
+      "App Store",
+      "Portfolio",
+      "Public"
+    ]
+  },
+  "date": "2026-10-17",
+  "build": {
+    "exitCode": 0,
+    "durationSeconds": 90.84
+  },
+  "lint": "passed: PersonalOS Shell",
+  "siteAudit": "passed",
+  "browserTaskSpace": 14,
+  "browserTaskFinished": true,
+  "productionDeployed": false
+}
