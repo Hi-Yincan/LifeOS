@@ -76,11 +76,13 @@ if (existsSync(oldSettingsShortcut)) {
 }
 for (const [name, app, icon] of [['Portfolio', 'Portfolio', 'portfolio'], ['App Store', 'AppStore', 'store']]) {
   const path = resolve(checkout, `public/Users/Public/Start Menu/${name}.url`); mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, `[InternetShortcut]\nBaseURL=${app}\nComment=${name}\nIconFile=/System/PersonalOS/${icon}.svg\n`);
-  if (app === 'Portfolio') writeFileSync(resolve(checkout, 'public/Users/Public/Desktop/Portfolio.url'), readFileSync(path));
+  const desktop = resolve(checkout, `public/Users/Public/Desktop/${name}.url`);
+  if (existsSync(desktop) && readFileSync(desktop, 'utf8').replace(/\r\n/g, '\n') !== readFileSync(path, 'utf8')) throw new Error(`Unrecognized desktop shortcut: ${name}`);
+  writeFileSync(desktop, readFileSync(path));
 }
 // A DOM-render capture helper for this research environment; not a production dependency.
 const helper = resolve(checkout, 'node_modules/html-to-image/dist/html-to-image.js');
 if (existsSync(helper)) cpSync(helper, resolve(checkout, 'public/System/PersonalOS/capture.js'));
-const result = { upstreamSHA: sha, originalAppCount: originalIds.length, originalApps: originalIds, addedProcesses: ['Portfolio', 'SystemSettings', 'AppStore'], modifiedUpstreamFiles: modified, originalAppEntriesRemoved: 0, checkout };
+const result = { upstreamSHA: sha, originalAppCount: originalIds.length, originalApps: originalIds, addedProcesses: ['Portfolio', 'SystemSettings', 'AppStore'], desktopShortcuts: ['Portfolio', 'App Store'], modifiedUpstreamFiles: modified, originalAppEntriesRemoved: 0, checkout };
 mkdirSync(resolve(root, 'evidence'), { recursive: true }); writeFileSync(resolve(root, 'evidence/integration-manifest.json'), JSON.stringify(result, null, 2));
 console.log(JSON.stringify(result, null, 2));

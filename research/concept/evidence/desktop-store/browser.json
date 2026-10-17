@@ -1,0 +1,18 @@
+{
+  "desktop": [
+    "My PC",
+    "Public",
+    "Portfolio",
+    "App Store"
+  ],
+  "storeWindowsBefore": 0,
+  "open": {
+    "windows": 1,
+    "catalog": 29
+  },
+  "restore": {
+    "sameWindow": true,
+    "count": 1,
+    "visible": true
+  }
+}

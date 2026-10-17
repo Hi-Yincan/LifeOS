@@ -41,6 +41,10 @@
     "SystemSettings",
     "AppStore"
   ],
+  "desktopShortcuts": [
+    "Portfolio",
+    "App Store"
+  ],
   "modifiedUpstreamFiles": [
     "contexts/process/directory.ts",
     "pages/_app.tsx",

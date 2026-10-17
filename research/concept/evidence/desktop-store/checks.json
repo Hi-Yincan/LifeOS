@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-17",
+  "build": {
+    "exitCode": 0,
+    "durationSeconds": 82.77
+  },
+  "prepareRuns": 2,
+  "shortcutCacheVerified": true,
+  "browserTaskSpace": 8,
+  "browserTaskFinished": true,
+  "retainedPage": "p1",
+  "productionDeployed": false
+}
