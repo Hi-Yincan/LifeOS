@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-17",
+  "issue": 23,
+  "baseCommit": "8f809facff8d34f053f5f7eaac58c5641045e86a",
+  "mode": "visitor",
+  "localChecks": {
+    "build": true,
+    "lint": true,
+    "unitPassed": 30,
+    "serverPassed": 13,
+    "publicE2E": {
+      "passed": 8,
+      "skipped": 1,
+      "skippedReason": "Admin workflow is only for full API mode"
+    }
+  },
+  "paintStaticServerDiagnosis": {
+    "before": {
+      "failed": 2,
+      "passed": 3
+    },
+    "cause": "Python static server connection backlog 5 led to Chromium ERR_CONNECTION_RESET for script resources; missing jQuery then caused app initialization failure.",
+    "change": "Test-only ThreadingHTTPServer backlog 128; no Paint source changes.",
+    "after": {
+      "passed": 10,
+      "failed": 0,
+      "debugErrors": 0
+    }
+  },
+  "preDeployRoutes": [
+    {
+      "path": "/",
+      "status": 200,
+      "url": "https://hyc.ac/",
+      "bytes": 126,
+      "sha256": "e5da068dbf36fd6feb3321d95f6d4b32f2d6b922f266a1da6381c933fe82529c"
+    },
+    {
+      "path": "/blog/",
+      "status": 200,
+      "url": "https://hyc.ac/blog/",
+      "bytes": 5505,
+      "sha256": "fb5d4e8570a5f941f4dce6e10f00a642decb931713722ccf72c7a5d63a4110f4"
+    },
+    {
+      "path": "/gallery/",
+      "status": 200,
+      "url": "https://hyc.ac/gallery/",
+      "bytes": 5104,
+      "sha256": "3ff9275dfabc2eaf0870f95370a12291b307c8361ac26a175a64d7742ddbf15a"
+    }
+  ],
+  "productionAdminAvailable": false
+}

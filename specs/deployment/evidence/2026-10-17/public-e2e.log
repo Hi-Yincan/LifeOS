@@ -1,0 +1,17 @@
+
+Running 9 tests using 1 worker
+
+(node:81481) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › e2e/product.spec.ts:4:5 › plain visits show the desktop; portfolio remains opt-in (2.5s)
+  ✓  2 [chromium] › e2e/product.spec.ts:22:5 › portfolio project links load public content (249ms)
+  ✓  3 [chromium] › e2e/product.spec.ts:33:5 › store defaults to all and toggles its three categories (6.5s)
+  ✓  4 [chromium] › e2e/product.spec.ts:65:5 › Start keeps settings and Power without folder shortcuts (5.9s)
+  ✓  5 [chromium] › e2e/product.spec.ts:85:5 › native Paint and file browser still load (6.2s)
+  ✓  6 [chromium] › e2e/product.spec.ts:95:5 › site metadata uses the owner identity and old assets stay absent (170ms)
+  -  7 [chromium] › e2e/product.spec.ts:120:5 › author can save a private draft, publish it and unpublish it
+  ✓  8 [chromium] › e2e/public.spec.ts:3:5 › public snapshot excludes management fields and local service data (16ms)
+  ✓  9 [chromium] › e2e/public.spec.ts:44:5 › public settings explain management availability without calling an API (6.4s)
+
+  1 skipped
+  8 passed (31.4s)

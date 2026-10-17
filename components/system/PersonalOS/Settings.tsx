@@ -4,6 +4,7 @@ import {
   type Session,
   usePersonalOS,
 } from "components/system/PersonalOS/context";
+import { STATIC_CONTENT } from "components/system/PersonalOS/deployment";
 import Icon from "components/system/PersonalOS/Icon";
 import Surface from "components/system/PersonalOS/Surface";
 import useLaunch from "components/system/PersonalOS/useLaunch";
@@ -78,7 +79,9 @@ const Settings = ({ id }: ComponentProcessProps): React.ReactNode => {
           {t("manageSection")}
         </summary>
         <p>{t("privateHint")}</p>
-        {session.role === "admin" ? (
+        {STATIC_CONTENT ? (
+          <p>{t("readOnly")}</p>
+        ) : session.role === "admin" ? (
           <div className="hyc-actions">
             <button
               className="hyc-primary"

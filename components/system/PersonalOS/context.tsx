@@ -5,6 +5,10 @@ import {
   useEffect,
   useState,
 } from "react";
+import {
+  publicContentPath,
+  STATIC_CONTENT,
+} from "components/system/PersonalOS/deployment";
 
 export type Locale = "en" | "zh";
 export type ProjectText = {
@@ -108,6 +112,7 @@ export const messages = {
     publishDirty: "Save your changes before publishing.",
     published: "Published",
     publishedNotice: "Published. Visitors can now view it.",
+    readOnly: "Online content management is not available yet.",
     repository: "Source URL",
     restore: "Open",
     retry: "Try again",
@@ -198,6 +203,7 @@ export const messages = {
     publishDirty: "请先保存修改，再发布。",
     published: "已发布",
     publishedNotice: "已发布，访客现在可以查看",
+    readOnly: "在线内容管理暂未开放。",
     repository: "源码链接",
     restore: "打开",
     retry: "重试",
@@ -296,25 +302,27 @@ export const PersonalOSProvider: FC = ({ children }) => {
     updateRoute();
     addEventListener("popstate", updateRoute);
     addEventListener("languagechange", updateLocale);
-    fetch("/api/session")
-      .then((response) => response.json())
-      .then((value: unknown) => {
-        if (
-          value &&
-          typeof value === "object" &&
-          "role" in value &&
-          (value.role === "visitor" || value.role === "admin")
-        ) {
-          const csrf =
-            "csrf" in value && typeof value.csrf === "string"
-              ? value.csrf
-              : undefined;
-          applySession({ csrf, role: value.role });
-        }
-      })
-      .catch(() => {
-        /* A static-only preview remains in visitor mode. */
-      });
+    if (!STATIC_CONTENT) {
+      fetch("/api/session")
+        .then((response) => response.json())
+        .then((value: unknown) => {
+          if (
+            value &&
+            typeof value === "object" &&
+            "role" in value &&
+            (value.role === "visitor" || value.role === "admin")
+          ) {
+            const csrf =
+              "csrf" in value && typeof value.csrf === "string"
+                ? value.csrf
+                : undefined;
+            applySession({ csrf, role: value.role });
+          }
+        })
+        .catch(() => {
+          /* A static-only preview remains in visitor mode. */
+        });
+    }
     return () => {
       removeEventListener("popstate", updateRoute);
       removeEventListener("languagechange", updateLocale);
@@ -337,19 +345,26 @@ export const PersonalOSProvider: FC = ({ children }) => {
     });
   const request = useCallback(
     async <T,>(path: string, options: RequestInit = {}): Promise<T> => {
-      const response = await fetch(path, {
-        credentials: "same-origin",
-        ...options,
-        headers: {
-          "Content-Type": "application/json",
-          ...(session.csrf ? { "X-CSRF-Token": session.csrf } : {}),
-          ...options.headers,
-        },
-      });
+      if (STATIC_CONTENT && (options.method || "GET").toUpperCase() !== "GET") {
+        throw new Error("READ_ONLY_DEPLOYMENT");
+      }
+      const response = await fetch(
+        STATIC_CONTENT ? publicContentPath(path) : path,
+        {
+          credentials: "same-origin",
+          ...options,
+          headers: {
+            "Content-Type": "application/json",
+            ...(session.csrf ? { "X-CSRF-Token": session.csrf } : {}),
+            ...options.headers,
+          },
+        }
+      );
       const result: unknown = await response.json();
       if (!response.ok) {
-        if (response.status === 401 && session.role === "admin")
-          {applySession({ csrf: undefined, role: "visitor" });}
+        if (response.status === 401 && session.role === "admin") {
+          applySession({ csrf: undefined, role: "visitor" });
+        }
         const code =
           result &&
           typeof result === "object" &&
@@ -387,6 +402,7 @@ export const PersonalOSProvider: FC = ({ children }) => {
         INVALID_IMAGE: "invalidImage",
         INVALID_KEY: "keyError",
         PUBLICATION_INCOMPLETE: "incomplete",
+        READ_ONLY_DEPLOYMENT: "readOnly",
         TRY_LATER: "limit",
         VERSION_CONFLICT: "conflict",
       };

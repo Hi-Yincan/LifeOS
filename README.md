@@ -35,7 +35,15 @@ yarn e2e:product
 yarn upstream:check
 ```
 
-构建从当前仓库直接生成 `out/`，不会覆盖上游源码、下载移动分支或调用研究 overlay。CI 只检查，不部署；生产数据库、媒体、会话、多节点及域名发布仍待相应 Issue 验收。Messenger #20 保持暂缓。
+构建从当前仓库直接生成 `out/`，不会覆盖上游源码、下载移动分支或调用研究 overlay。Product checks 只检查；手动工作流 Publish visitor OS 发布通过验收的访客版产物。生产数据库、媒体、会话与多节点仍待后续验收。Messenger #20 保持暂缓。
+
+## 访客版发布
+
+`node scripts/product/build.mjs --public` 生成 Pages 访客版，作品集读取公开快照；它不会读取 server/.runtime，在线内容管理暂未开放。默认 `yarn build` 继续提供本地完整 API 模式。
+
+上线由 main 的手动工作流 `Publish visitor OS` 执行：构建、测试、上传包含 `.index` 的产物，再部署到 hyc.ac。推送代码不会自动上线。内容更新目前需修改已提交的 `server/content/seed.json` 中明确 published=true 的内容并重新发布，本地管理界面的改动不会自动同步到线上。
+
+发布步骤、限制与回退见 [Pages 发布手册](specs/deployment/pages.md)。
 
 ## 上游与维护
 

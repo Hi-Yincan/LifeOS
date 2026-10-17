@@ -1,0 +1,51 @@
+name: Publish visitor OS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-production
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+      - run: npm install --global yarn@1.22.22
+      - run: yarn install --frozen-lockfile --ignore-scripts --non-interactive
+      - run: yarn lint
+      - run: yarn test:unit
+      - run: yarn test:server
+      - run: node scripts/product/build.mjs --public
+      - run: yarn playwright install --with-deps chromium
+      - run: yarn playwright test --config=playwright.public.config.ts
+        env:
+          PUBLIC_DEPLOYMENT: '1'
+      - uses: actions/upload-pages-artifact@v5.0.0
+        with:
+          path: out
+          include-hidden-files: true
+          retention-days: 30
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy validated artifact
+        id: deployment
+        uses: actions/deploy-pages@v5.0.1
