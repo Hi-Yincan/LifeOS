@@ -16,7 +16,7 @@ GitHub Pages 使用 Actions 发布模式，自定义域名继续为 hyc.ac，DNS
 
 1. 源码进入 main，Product checks 通过。
 2. 手动运行 Publish visitor OS（pages.yml）；仅接受 main，不自动发布普通 push 或 PR。
-3. 锁定 Node/Yarn 安装，lint、单元和服务测试通过后执行 `node scripts/product/build.mjs --public`。
+3. 锁定 Node/Yarn 安装后执行 `node scripts/product/build.mjs --public`，先生成文件系统/图标索引与产物，再执行依赖这些索引的 lint、单元和服务测试。
 4. 对真实静态文件服务器执行浏览器验收（需要 Python 3）：
 
 ```sh

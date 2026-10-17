@@ -22,10 +22,11 @@ jobs:
           node-version-file: .node-version
       - run: npm install --global yarn@1.22.22
       - run: yarn install --frozen-lockfile --ignore-scripts --non-interactive
+      # Type-aware lint and tests import generated filesystem/icon indexes.
+      - run: node scripts/product/build.mjs --public
       - run: yarn lint
       - run: yarn test:unit
       - run: yarn test:server
-      - run: node scripts/product/build.mjs --public
       - run: yarn playwright install --with-deps chromium
       - run: yarn playwright test --config=playwright.public.config.ts
         env:
