@@ -1,0 +1,34 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif; }
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+.welcome-panel { position: absolute; inset: 9% 8% auto 13%; max-width: 720px; color: #f0f5f8; pointer-events: auto; }
+.welcome-panel h1 { font-size: clamp(26px, 4vw, 46px); letter-spacing: -.04em; }
+.welcome-panel > p { line-height: 1.9; color: #c8d4e0; }
+.welcome-panel nav { display: flex; gap: 20px; margin: 34px 0; }
+.welcome-panel nav a { width: 184px; display: flex; flex-direction: column; padding: 24px; gap: 8px; border: 1px solid #ffffff26; border-radius: 20px; background: #122536dd; color: white; text-decoration: none; }
+.welcome-panel nav img { width: 48px; height: 48px; margin-bottom: 8px; }
+.welcome-panel nav strong { font-size: 21px; }.welcome-panel nav span { font-size: 13px; color: #b8c7d1; }
+.eyebrow { font-size: 12px; letter-spacing: .08em; color: #728fa1; text-transform: uppercase; }
+.footnote { font-size: 12px; }
+.content-panel { width: 100%; height: 100%; overflow: auto; background: #f4f5f3; color: #20302f; padding: 24px 32px 48px; line-height: 1.75; }
+.content-panel h1 { font-size: 28px; line-height: 1.3; margin: 10px 0 18px; }.content-panel h2 { font-size: 19px; }
+.content-panel article { max-width: 690px; margin: 28px auto; }.content-panel article > p { margin: 24px 0; }.lede { color: #62736c; }
+.content-panel a { color: #17685a; }.content-panel input,.content-panel textarea { background: white; color: #20302f; border: 1px solid #bbc8c1; }
+.session-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.session-area button,.actions button,.heading-row button,.content-panel > button,.login-form button { border: 1px solid #b4c4bd; border-radius: 8px; padding: 8px 12px; background: #fff; color: #254138; min-height: 40px; }
+.role-badge { border-radius: 20px; padding: 5px 12px; font-size: 12px; background: #dbe8df; color: #28533d; }
+.login-form { padding: 18px; border-radius: 12px; margin-top: 12px; color: #20302f; background: #e3ece6; display: grid; gap: 12px; max-width: 440px; }
+.login-form label,.editor label { display: grid; gap: 6px; font-size: 14px; }
+input,textarea { width: 100%; padding: 10px; border: 1px solid #abbeb2; border-radius: 6px; min-width: 0; }textarea { min-height: 90px; resize: vertical; }
+.heading-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; }
+.wardrobe-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 18px; margin: 24px 0; }
+.garment-card { display: block; text-decoration: none; background: white; padding: 20px; border-radius: 12px; border: 1px solid #d6e0d8; }
+.garment-card p { font-size: 14px; color: #66776d; }.garment-card h2 { margin: 8px 0; }.garment-card img { width: 100%; height: 125px; object-fit: contain; }
+.card-emoji { display: grid; place-items: center; height: 100px; font-size: 56px; background: #e7edf2; border-radius: 10px; }
+.garment-placeholder { height: 150px; background: #e7edf2; display: grid; place-items: center; font-size: 75px; border-radius: 12px; margin: 20px 0; }
+.garment-image { width: 100%; max-height: 220px; object-fit: contain; margin-top: 20px; background: #e7edf2; border-radius: 12px; }
+.editor { display: grid; gap: 18px; margin-top: 20px; }.actions { display: flex; flex-wrap: wrap; gap: 9px; }.actions .primary,.heading-row .primary { background: #245a48; color: white; }
+[role=alert] { background: #ffe4de; color: #8b2e1a; padding: 10px; border-radius: 6px; }[role=status] { color: #1a654b; font-size: 14px; }
+a:focus-visible,button:focus-visible { outline: 3px solid #df8f22; outline-offset: 3px; }
+@media(max-width:700px) { .welcome-panel { inset: 5% 20px auto; }.welcome-panel nav { gap: 12px; }.welcome-panel nav a { width: 50%; padding: 16px; }.content-panel { padding: 14px 16px 70px; }.heading-row { align-items: flex-start; }.session-row { gap: 5px; }.session-row button { font-size: 12px; padding: 7px; }.wardrobe-grid { grid-template-columns: 1fr; }.content-panel h1 { font-size: 25px; } }

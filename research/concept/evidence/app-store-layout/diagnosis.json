@@ -1,0 +1,203 @@
+{
+  "before": {
+    "width": 820,
+    "iconTextGap": -7,
+    "controlTopPadding": 8,
+    "controlBottomPadding": -17,
+    "mainBelowControls": true,
+    "controlsHeight": 17,
+    "items": [
+      {
+        "label": "全部应用",
+        "top": 140,
+        "bottom": 166,
+        "left": 358,
+        "right": 420,
+        "height": 26
+      },
+      {
+        "label": "原生应用",
+        "top": 140,
+        "bottom": 166,
+        "left": 422,
+        "right": 484,
+        "height": 26
+      },
+      {
+        "label": "本站二开",
+        "top": 140,
+        "bottom": 166,
+        "left": 486,
+        "right": 548,
+        "height": 26
+      },
+      {
+        "label": "第三方",
+        "top": 140,
+        "bottom": 166,
+        "left": 550,
+        "right": 600,
+        "height": 26
+      },
+      {
+        "label": "我的应用",
+        "top": 140,
+        "bottom": 166,
+        "left": 602,
+        "right": 664,
+        "height": 26
+      },
+      {
+        "label": "搜索应用",
+        "top": 141,
+        "bottom": 165,
+        "left": 701,
+        "right": 891,
+        "height": 24
+      },
+      {
+        "label": "添加网页应用",
+        "top": 140,
+        "bottom": 166,
+        "left": 1060,
+        "right": 1154,
+        "height": 26
+      }
+    ],
+    "pass": false
+  },
+  "iconOnly": {
+    "width": 820,
+    "iconTextGap": 6,
+    "controlTopPadding": 8,
+    "controlBottomPadding": -17,
+    "mainBelowControls": true,
+    "controlsHeight": 17,
+    "items": [
+      {
+        "label": "全部应用",
+        "top": 140,
+        "bottom": 166,
+        "left": 358,
+        "right": 420,
+        "height": 26
+      },
+      {
+        "label": "原生应用",
+        "top": 140,
+        "bottom": 166,
+        "left": 422,
+        "right": 484,
+        "height": 26
+      },
+      {
+        "label": "本站二开",
+        "top": 140,
+        "bottom": 166,
+        "left": 486,
+        "right": 548,
+        "height": 26
+      },
+      {
+        "label": "第三方",
+        "top": 140,
+        "bottom": 166,
+        "left": 550,
+        "right": 600,
+        "height": 26
+      },
+      {
+        "label": "我的应用",
+        "top": 140,
+        "bottom": 166,
+        "left": 602,
+        "right": 664,
+        "height": 26
+      },
+      {
+        "label": "搜索应用",
+        "top": 141,
+        "bottom": 165,
+        "left": 701,
+        "right": 891,
+        "height": 24
+      },
+      {
+        "label": "添加网页应用",
+        "top": 140,
+        "bottom": 166,
+        "left": 1060,
+        "right": 1154,
+        "height": 26
+      }
+    ],
+    "pass": false
+  },
+  "both": {
+    "width": 820,
+    "iconTextGap": 6,
+    "controlTopPadding": 8,
+    "controlBottomPadding": 9,
+    "mainBelowControls": true,
+    "controlsHeight": 43,
+    "items": [
+      {
+        "label": "全部应用",
+        "top": 140,
+        "bottom": 166,
+        "left": 358,
+        "right": 420,
+        "height": 26
+      },
+      {
+        "label": "原生应用",
+        "top": 140,
+        "bottom": 166,
+        "left": 422,
+        "right": 484,
+        "height": 26
+      },
+      {
+        "label": "本站二开",
+        "top": 140,
+        "bottom": 166,
+        "left": 486,
+        "right": 548,
+        "height": 26
+      },
+      {
+        "label": "第三方",
+        "top": 140,
+        "bottom": 166,
+        "left": 550,
+        "right": 600,
+        "height": 26
+      },
+      {
+        "label": "我的应用",
+        "top": 140,
+        "bottom": 166,
+        "left": 602,
+        "right": 664,
+        "height": 26
+      },
+      {
+        "label": "搜索应用",
+        "top": 141,
+        "bottom": 165,
+        "left": 701,
+        "right": 891,
+        "height": 24
+      },
+      {
+        "label": "添加网页应用",
+        "top": 140,
+        "bottom": 166,
+        "left": 1060,
+        "right": 1154,
+        "height": 26
+      }
+    ],
+    "pass": true
+  }
+}

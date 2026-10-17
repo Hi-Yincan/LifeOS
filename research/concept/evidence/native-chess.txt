@@ -1,0 +1,129 @@
+[p3 "Chess - daedalOS" | space "daedalOS 作品集概念验证"(26): 3 managed, 0 untracked — p1 "Dhiraj Reddy — AI / Software Engineer", p2 "daedalOS", p3* "Chess - daedalOS"]
+root
+  container
+    ordered_list "Desktop" [ref=221]
+      list_item
+        button "My PC" [ref=222, loc=css:button[aria-label="My PC"]]
+          heading
+            image
+            text "My PC"
+      list_item
+        button "Public" [ref=223, loc=css:button[aria-label="Public"]]
+          heading
+            image
+            text "Public"
+      list_item
+        button "Portfolio" [ref=224, loc=css:button[aria-label="Portfolio"]]
+          image
+          image
+          text "Portfolio"
+    container
+      dialog "Chess" [ref=225, loc=role:dialog[name="Chess"]]
+        container
+          button "Chess" [ref=226, loc=css:button[aria-label="Chess"]]
+            image
+            text "Chess"
+          container
+            button "最小化" [ref=227, loc=css:button[aria-label="最小化"]]
+              svg_root
+            button "最大化" [ref=228, loc=css:button[aria-label="最大化"]]
+              svg_root
+            button "关闭" [ref=229, loc=css:button[aria-label="关闭"]]
+              svg_root
+        container
+          container
+            text "MODE"
+            combobox [ref=230]
+              text "Human vs Computer"
+            text "SIDE"
+            combobox [ref=231]
+              text "White"
+            text "DIFFICULTY"
+            combobox [ref=232]
+              text "5"
+            container
+              button [ref=233]
+                text "NEW GAME"
+              button [ref=234]
+                text "FLIP BOARD"
+          application "Chess board" [ref=235, loc=role:application[name="Chess board"]]
+            container
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+              image
+            container
+              text "8"
+              text "7"
+              text "6"
+              text "5"
+              text "4"
+              text "3"
+              text "2"
+              container
+                text "a"
+                text "b"
+                text "c"
+                text "d"
+                text "e"
+                text "f"
+                text "g"
+                container
+                  text "1"
+                  text "h"
+          status
+            text "White to move"
+      container [ref=236]
+      container [ref=237]
+      container [ref=238]
+      container [ref=239]
+      container [ref=240]
+      container [ref=241]
+      container [ref=242]
+      container [ref=243]
+    container
+      text "16:50"
+      paragraph
+        text "熟悉的桌面，持续生长的作品。"
+      button [ref=244]
+        svg_root
+        text "个人作品集"
+        text "Yincan Huang"
+    container "OS navigation"
+      button "所有应用" [ref=245, loc=css:button[aria-label="所有应用"]]
+        svg_root
+      button "桌面" [ref=246, loc=css:button[aria-label="桌面"]]
+        svg_root
+      button "运行中的应用" [ref=247, loc=css:button[aria-label="运行中的应用"]]
+        svg_root
+      button "设置" [ref=248, loc=css:button[aria-label="设置"]]
+        svg_root
+    canvas

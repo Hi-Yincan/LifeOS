@@ -1,0 +1,26 @@
+{
+  "portfolio": {
+    "title": "个人作品集 - Yincan Huang",
+    "ogTitle": "Yincan Huang",
+    "siteName": "Yincan Huang",
+    "favicon": "/System/PersonalOS/avatar.png"
+  },
+  "desktop": {
+    "title": "Yincan Huang",
+    "ogTitle": "Yincan Huang",
+    "siteName": "Yincan Huang",
+    "favicon": "/System/PersonalOS/avatar.png"
+  },
+  "browserTaskSpace": 10,
+  "date": "2026-10-17",
+  "build": {
+    "exitCode": 0,
+    "durationSeconds": 89.17
+  },
+  "lint": "passed for both head components and shared site config",
+  "prepareIdempotent": true,
+  "browserTaskFinished": true,
+  "productionDeployed": false,
+  "implementationCommit": "6585ce0",
+  "issueComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2#issuecomment-6230184755"
+}

@@ -1,0 +1,143 @@
+{
+  "observedOn": "2026-10-16",
+  "windowStartUTC": "2026-07-18T00:00:00Z",
+  "scope": "GitHub official metadata, default-branch commits, fixed-SHA source audit and upstream CI. No new local daedalOS integration/build/E2E performed.",
+  "projects": {
+    "daedal": {
+      "full_name": "DustinBrett/daedalOS",
+      "html_url": "https://github.com/DustinBrett/daedalOS",
+      "stargazers_count": 13056,
+      "forks_count": 1201,
+      "subscribers_count": 117,
+      "created_at": "2020-08-09T06:23:28Z",
+      "pushed_at": "2026-10-10T16:08:57Z",
+      "archived": false,
+      "defaultBranchSHA": "f017b393d4175eb396a741a7562299423843f1b1",
+      "latestCommitDate": "2026-10-10T16:08:48Z",
+      "commitsInWindow": 107,
+      "commitAuthorsInWindow": {
+        "DustinBrett": 107
+      },
+      "apiContributorsCount": 1,
+      "latestWorkflow": {
+        "name": "Tests",
+        "html_url": "https://github.com/DustinBrett/daedalOS/actions/runs/38066476386",
+        "head_sha": "f017b393d4175eb396a741a7562299423843f1b1",
+        "created_at": "2026-10-10T16:08:59Z",
+        "conclusion": "success"
+      },
+      "recentReleases": [],
+      "sources": {
+        "repo": "https://api.github.com/repos/DustinBrett/daedalOS",
+        "commits": "https://api.github.com/repos/DustinBrett/daedalOS/commits?since=2026-07-18T00:00:00Z&per_page=100"
+      },
+      "verifiedLatestCISteps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install Dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run Jest Unit Tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build App",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run Oxlint",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install Playwright Browsers",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run Playwright E2E Tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@v6",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    "prozilla": {
+      "full_name": "prozilla-os/ProzillaOS",
+      "html_url": "https://github.com/prozilla-os/ProzillaOS",
+      "stargazers_count": 359,
+      "forks_count": 75,
+      "subscribers_count": 6,
+      "created_at": "2023-07-13T19:51:39Z",
+      "pushed_at": "2026-06-20T11:19:36Z",
+      "archived": false,
+      "defaultBranchSHA": "c94470a868054b21acf9a8bb0b39fedc9a718591",
+      "latestCommitDate": "2026-06-20T11:19:30Z",
+      "commitsInWindow": 0,
+      "commitAuthorsInWindow": {},
+      "apiContributorsCount": 8,
+      "latestWorkflow": {
+        "name": "Run checks",
+        "html_url": "https://github.com/prozilla-os/ProzillaOS/actions/runs/27869581973",
+        "head_sha": "c94470a868054b21acf9a8bb0b39fedc9a718591",
+        "created_at": "2026-06-20T11:19:38Z",
+        "conclusion": "success"
+      },
+      "recentReleases": [
+        {
+          "tag": "prozilla-os@2.0.5",
+          "published_at": "2026-05-25T18:30:14Z",
+          "url": "https://github.com/prozilla-os/ProzillaOS/releases/tag/prozilla-os%402.0.5"
+        },
+        {
+          "tag": "prozilla-os@2.0.1",
+          "published_at": "2026-04-17T22:45:15Z",
+          "url": "https://github.com/prozilla-os/ProzillaOS/releases/tag/prozilla-os%402.0.1"
+        },
+        {
+          "tag": "prozilla-os@2.0.0",
+          "published_at": "2026-04-13T17:38:26Z",
+          "url": "https://github.com/prozilla-os/ProzillaOS/releases/tag/prozilla-os%402.0.0"
+        },
+        {
+          "tag": "prozilla-os@1.3.19",
+          "published_at": "2026-04-13T17:35:55Z",
+          "url": "https://github.com/prozilla-os/ProzillaOS/releases/tag/prozilla-os%401.3.19"
+        },
+        {
+          "tag": "prozilla-os@1.3.18",
+          "published_at": "2026-04-13T16:41:33Z",
+          "url": "https://github.com/prozilla-os/ProzillaOS/releases/tag/prozilla-os%401.3.18"
+        }
+      ],
+      "sources": {
+        "repo": "https://api.github.com/repos/prozilla-os/ProzillaOS",
+        "commits": "https://api.github.com/repos/prozilla-os/ProzillaOS/commits?since=2026-07-18T00:00:00Z&per_page=100"
+      }
+    }
+  }
+}

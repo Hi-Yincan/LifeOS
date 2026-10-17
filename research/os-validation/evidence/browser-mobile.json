@@ -1,0 +1,20 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "mobile": true
+  },
+  "physicalDevice": false,
+  "adminSaved": "合成样例：390px 管理界面保存验证。",
+  "geometry": {
+    "viewport": 390,
+    "documentWidth": 390,
+    "panelWidth": 379,
+    "contentWidth": 379,
+    "panelHeight": 756,
+    "contentHeight": 1181
+  },
+  "toolLimitation": "Automatic scroll before click timed out; DOM scrollIntoView then real click succeeded",
+  "returnedHome": true,
+  "blogReadable": true
+}

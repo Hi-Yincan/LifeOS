@@ -1,0 +1,12 @@
+{
+  "name": "hyc-daedalos-concept",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:prototype": "node tools/prepare.mjs",
+    "start": "node tools/start.mjs",
+    "test": "node --test test/*.test.mjs",
+    "build:prototype": "node tools/build.mjs",
+    "audit:prototype": "node tools/audit-site.mjs"
+  }
+}

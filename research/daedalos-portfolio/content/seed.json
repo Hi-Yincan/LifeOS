@@ -1,0 +1,157 @@
+{
+  "profile": {
+    "name": "Yincan Huang",
+    "headline": {
+      "zh": "把想法，做成可以使用的项目。",
+      "en": "Ideas, made usable."
+    },
+    "bio": {
+      "zh": "浙江大学 2023 级本科生，目前关注 AI Efficiency。这里收录我的开源项目和参与贡献的作品。",
+      "en": "Undergraduate at Zhejiang University, class of 2023, currently interested in AI Efficiency. A selection of my open-source projects and contributions."
+    },
+    "email": "Yincan_Huang@zju.edu.cn",
+    "github": "https://github.com/HuangYincan",
+    "education": {
+      "zh": "浙江大学 · 2023 级本科",
+      "en": "Zhejiang University · Undergraduate, 2023 cohort"
+    },
+    "source": "https://github.com/HuangYincan/HuangYincan"
+  },
+  "projects": [
+    {
+      "id": "aipm",
+      "kind": "project",
+      "order": 0,
+      "accent": "blue",
+      "technology": [
+        "MkDocs",
+        "Python",
+        "JavaScript"
+      ],
+      "repository": "https://github.com/AI-PM-Wiki/AIPM",
+      "website": "https://aipm.ac/",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "AIPM",
+          "summary": "面向 AI 产品经理的现代知识 Wiki。",
+          "background": "以结构化知识整理 AI 产品管理相关的学习内容，为学习和查阅提供入口。",
+          "contribution": "",
+          "detail": "从公开知识出发，连接产品思考与 AI 实践。可以直接访问项目网站阅读，也可以在 GitHub 查看项目。"
+        },
+        "en": {
+          "title": "AIPM",
+          "summary": "A modern knowledge wiki for AI product management.",
+          "background": "Organizes AI product management learning material into a structured resource for reading and reference.",
+          "contribution": "",
+          "detail": "Connect product thinking with AI practice. Explore the project website or view the source on GitHub."
+        }
+      },
+      "source": "https://github.com/AI-PM-Wiki/AIPM"
+    },
+    {
+      "id": "videonote",
+      "kind": "project",
+      "order": 1,
+      "accent": "violet",
+      "technology": [
+        "Python",
+        "MCP",
+        "Video Processing"
+      ],
+      "repository": "https://github.com/HuangYincan/VideoNote-MCP",
+      "website": "",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "VideoNote-MCP",
+          "summary": "把视频整理成文字与笔记的 MCP 工具。",
+          "background": "将视频内容转化为更方便检索、整理和继续使用的文字资料。",
+          "contribution": "",
+          "detail": "项目公开说明覆盖画面、弹幕与评论理解，支持主流平台、解耦工具以及多格式导出。运行方式与依赖请参见项目文档。"
+        },
+        "en": {
+          "title": "VideoNote-MCP",
+          "summary": "A practical MCP server for turning videos into notes.",
+          "background": "Turns video content into text that can be searched, organized and reused.",
+          "contribution": "",
+          "detail": "The project describes support for video frames, on-screen comments and discussion, multiple platforms, decoupled tools and export formats. See its repository for setup and dependencies."
+        }
+      },
+      "source": "https://github.com/HuangYincan/VideoNote-MCP"
+    },
+    {
+      "id": "agentero",
+      "kind": "contribution",
+      "order": 2,
+      "accent": "teal",
+      "technology": [
+        "TypeScript",
+        "Research Tools"
+      ],
+      "repository": "https://github.com/poco-ai/Agentero",
+      "website": "https://agentero.app",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "Agentero",
+          "summary": "为人与 Agent 协作而生的科研工作台。",
+          "background": "围绕研究与论文管理，让人与 Agent 在同一个工作空间协作。",
+          "contribution": "",
+          "detail": "我的公开个人主页将其列为参与贡献的项目。项目详情与使用方式可在官网和源码仓库查看。"
+        },
+        "en": {
+          "title": "Agentero",
+          "summary": "A research workspace built for human–agent collaboration.",
+          "background": "Brings research and paper management into a shared workspace for people and agents.",
+          "contribution": "",
+          "detail": "Listed under contributions on my public profile. Visit the project website and repository for details and usage."
+        }
+      },
+      "source": "https://github.com/HuangYincan/HuangYincan"
+    },
+    {
+      "id": "multica",
+      "kind": "contribution",
+      "order": 3,
+      "accent": "amber",
+      "technology": [
+        "Go",
+        "AI Agents",
+        "Collaboration"
+      ],
+      "repository": "https://github.com/multica-ai/multica",
+      "website": "https://multica.ai",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "Multica",
+          "summary": "让人与 AI Agent 像团队成员一样共同工作。",
+          "background": "以开源、可自托管的工作空间组织人与 AI 编程 Agent 的协作。",
+          "contribution": "",
+          "detail": "我的公开个人主页将其列为参与贡献的项目。可以从官网了解产品，并在 GitHub 查看开源实现。"
+        },
+        "en": {
+          "title": "Multica",
+          "summary": "An open-source workspace for humans and AI agents.",
+          "background": "A self-hostable workspace that organizes collaboration with AI coding agents as teammates.",
+          "contribution": "",
+          "detail": "Listed under contributions on my public profile. Explore the product website and its open-source implementation on GitHub."
+        }
+      },
+      "source": "https://github.com/HuangYincan/HuangYincan"
+    }
+  ]
+}

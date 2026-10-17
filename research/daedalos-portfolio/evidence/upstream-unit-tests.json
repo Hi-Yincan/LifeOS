@@ -1,0 +1,8 @@
+{
+  "upstreamSHA": "f017b393d4175eb396a741a7562299423843f1b1",
+  "suites": 2,
+  "tests": 30,
+  "passed": 30,
+  "failed": 0,
+  "scope": "Upstream Jest tests run locally against the research integration; not full Playwright matrix."
+}

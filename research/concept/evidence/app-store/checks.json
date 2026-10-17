@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-17",
+  "build": {
+    "exitCode": 0,
+    "durationSeconds": 86.08,
+    "node": "26.7.0",
+    "yarn": "1.22.22"
+  },
+  "typecheck": {
+    "exitCode": 0
+  },
+  "oxlint": {
+    "scope": "components/apps/AppStore",
+    "exitCode": 0
+  },
+  "tests": {
+    "pass": 12,
+    "fail": 0,
+    "durationMs": 6818.308084,
+    "newStoreModelTests": 3
+  },
+  "manualBrowserChecks": {
+    "startMenuLaunch": true,
+    "nativeFilterCount": 28,
+    "siteFilterCount": 1,
+    "searchPaintCount": 1,
+    "searchEmptyState": true,
+    "nativeLaunch": "Untitled - Paint",
+    "adaptedLaunch": "Portfolio",
+    "favoritesAddRemove": true,
+    "formAdd": true,
+    "jsonImport": true,
+    "invalidProtocolRejected": true,
+    "duplicateURLRejected": true,
+    "disabledStateSurvivedReload": true,
+    "disabledOpenLinkCount": 0,
+    "reenable": true,
+    "externalPopupOpenerNull": true,
+    "externalLinkRel": "noopener noreferrer",
+    "removeWithConfirmation": true,
+    "languageSwitchThroughOSSettings": true
+  },
+  "limitations": [
+    "DOM-render images, not native screenshots",
+    "390px browser emulation, not physical-device testing",
+    "URL manifests and local library remain research assumptions",
+    "No production package distribution or catalog publication"
+  ]
+}

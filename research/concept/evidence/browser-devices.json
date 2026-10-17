@@ -1,0 +1,122 @@
+{
+  "note": "Phone automatic by width; tablet manual override. Touch pointer emulation did not persist, actual iPad auto detection unverified.",
+  "results": [
+    {
+      "name": "phone390",
+      "setting": "auto",
+      "width": 390,
+      "height": 844,
+      "mode": "phone",
+      "coarse": false,
+      "main": {
+        "client": 390,
+        "scroll": 390
+      },
+      "dialog": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 786,
+        "top": 0,
+        "right": 390,
+        "bottom": 786,
+        "left": 0
+      },
+      "detail": {
+        "title": "AIPM",
+        "overflow": false
+      }
+    },
+    {
+      "name": "phone360",
+      "setting": "auto",
+      "width": 360,
+      "height": 800,
+      "mode": "phone",
+      "coarse": false,
+      "main": {
+        "client": 360,
+        "scroll": 360
+      },
+      "dialog": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 742,
+        "top": 0,
+        "right": 360,
+        "bottom": 742,
+        "left": 0
+      },
+      "detail": {
+        "title": "AIPM",
+        "overflow": false
+      }
+    },
+    {
+      "name": "tablet-portrait",
+      "setting": "tablet",
+      "width": 820,
+      "height": 1180,
+      "mode": "tablet",
+      "coarse": false,
+      "main": {
+        "client": 660,
+        "scroll": 660
+      },
+      "dialog": {
+        "x": 0,
+        "y": 0,
+        "width": 820,
+        "height": 1122,
+        "top": 0,
+        "right": 820,
+        "bottom": 1122,
+        "left": 0
+      },
+      "detail": {
+        "title": "AIPM",
+        "overflow": false
+      }
+    },
+    {
+      "name": "tablet-landscape",
+      "setting": "tablet",
+      "width": 1180,
+      "height": 820,
+      "mode": "tablet",
+      "coarse": false,
+      "main": {
+        "client": 1020,
+        "scroll": 1020
+      },
+      "dialog": {
+        "x": 0,
+        "y": 0,
+        "width": 1180,
+        "height": 762,
+        "top": 0,
+        "right": 1180,
+        "bottom": 762,
+        "left": 0
+      },
+      "detail": {
+        "title": "AIPM",
+        "overflow": false
+      }
+    }
+  ],
+  "tabletToDesktop": {
+    "mode": "desktop",
+    "dialog": {
+      "x": 80,
+      "y": 20,
+      "width": 1100,
+      "height": 770,
+      "top": 20,
+      "right": 1180,
+      "bottom": 790,
+      "left": 80
+    }
+  }
+}
