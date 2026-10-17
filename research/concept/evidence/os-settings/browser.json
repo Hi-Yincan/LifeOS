@@ -1,0 +1,44 @@
+{
+  "before": {
+    "timeOrigin": 1792196873824.67,
+    "portfolioSettingsButtons": 0,
+    "appNames": [
+      "Emulators",
+      "Games",
+      "Browser",
+      "DevTools",
+      "IRC",
+      "Marked",
+      "Messenger",
+      "Monaco Editor",
+      "Paint",
+      "PDF",
+      "Photo Viewer",
+      "Portfolio",
+      "Stable Diffusion",
+      "Terminal",
+      "TinyMCE",
+      "Video Player",
+      "Vim",
+      "Webamp"
+    ]
+  },
+  "open": {
+    "sameDocument": 1792196873824.67,
+    "settingsCount": 1,
+    "startMenuClosed": true
+  },
+  "restore": {
+    "sameInstance": true,
+    "count": 1
+  },
+  "escapeCloses": true,
+  "keyboardOpens": true,
+  "englishMenu": [
+    "System settings",
+    "Clear session and reload"
+  ],
+  "login": true,
+  "logout": 401,
+  "noReset": true
+}

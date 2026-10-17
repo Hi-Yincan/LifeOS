@@ -46,7 +46,8 @@
     "pages/index.tsx",
     "components/system/Window/Titlebar/index.tsx",
     "components/pages/Metadata.tsx",
-    "contexts/process/useProcessContextState.ts"
+    "contexts/process/useProcessContextState.ts",
+    "components/system/StartMenu/Sidebar/index.tsx"
   ],
   "originalAppEntriesRemoved": 0,
   "checkout": "/tmp/hi-yincan-daedalos-concept"

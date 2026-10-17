@@ -1,6 +1,6 @@
 # Personal OS v1 — 个人作品集 PRD
 
-版本：1.1 概念修订稿 · 2026-10-17。来源：负责人本轮 11 项回答；关联 #2、#9–#14。已确认的底座是 daedalOS，本文不重新选型。验收目标与实测结果分开记录，后者见研究原型的验证报告。
+版本：1.2 概念修订稿 · 2026-10-17。来源：负责人本轮 11 项回答；关联 #2、#9–#14。已确认的底座是 daedalOS，本文不重新选型。验收目标与实测结果分开记录，后者见研究原型的验证报告。
 
 2026-10-17 变更依据：负责人确认取消额外手机/平板适配；作品集保留 Web 应用实现，只改视觉。旧 A/B 风格和三模式方案作废，历史证据留档。
 
@@ -34,7 +34,8 @@
 
 **范围及信息架构**
 
-- OS：保留原桌面与 App 布局，增加作品集入口、系统设置能力、默认打开行为与适配导航。设置属于系统增强，不增加第二个业务 App。
+- OS：保留原桌面与 App 布局，增加作品集入口、系统设置能力、默认打开行为；系统设置入口位于开始菜单的电源菜单内。设置属于系统增强，不增加第二个业务 App。
+- 应用设置规则：应用默认不带设置按钮；仅当负责人明确要求应用专属设置时另行设计。系统设置独立于作品集，详见 `system-settings.md`。
 - 作品集概览：简短介绍、精选作品、源码入口；项目和参与贡献明确区分。
 - 作品列表：分类、关键词筛选、排序；不使用未经核实的“活跃用户”“影响人数”等展示指标。
 - 作品详情：双语标题/摘要/背景/个人贡献/介绍、图片/视频、技术栈、源码与项目网站。无内容的可选区块不占位冒充事实。
@@ -52,7 +53,7 @@
 | P03 | As a visitor, I want a stable project link so that I can revisit or share the work. | 直接打开、刷新、前进后退定位一致；未发布/下架返回明确不可用状态；不破坏既有项目路径 |
 | P04 | As a visitor, I want clear source and trial links so that I can explore the project. | HTTPS 外链、新标签打开、链接性质明确；项目官网不冒充已经验证的在线 Demo；无官网时仅显示源码 |
 | P05 | As a visitor, I want to explore existing apps so that this still feels like a useful OS. | 原有 App 注册与资源保留；新增应用不替换原应用；浏览器内文件操作与服务器内容管理隔离 |
-| P06 | As the owner, I want to enter management from Settings without an account system. | 不要求用户名；管理密钥不进前端包或 URL；隐藏入口只是入口设计，API 必须独立验证会话 |
+| P06 | As the owner, I want to enter management from Settings without an account system. | 从开始→电源→系统设置→站点维护进入；作品集不带设置按钮；不要求用户名，密钥不进前端包或 URL，API 独立验证会话 |
 | P07 | As the owner, I want to revise drafts before publishing so that visitors never see unfinished edits. | 两种语言可分别编辑；草稿保存不改变公开快照；发布校验必填字段；已发布内容编辑后需再次发布 |
 | P08 | As the owner, I want controlled media and ordering so that the portfolio stays curated. | 上传校验、私有/公开访问随发布状态变化；排序可预览并随发布生效；未用媒体与删除策略有记录 |
 | P09 | As the owner, I want safe editing so that I do not silently lose changes. | 未保存状态可见；语言切换保留编辑；关闭/离开有提示；服务器版本变化返回冲突而非覆盖 |
