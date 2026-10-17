@@ -4,7 +4,7 @@
 
 第一版只新增一个业务 App：**个人作品集**。全部 daedalOS 原生 App 保留；作品集建立后续 App 的 UI 参考。设置和多语言属于系统支撑能力；响应式完全沿用 daedalOS。
 
-协作入口：[概念阶段 #2](https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2) · [作品集 #15](https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15) · [草稿 PR #16](https://github.com/Hi-Yincan/Hi-Yincan.github.io/pull/16)。详细报告在 Issue 评论，主体保留目录；完整发布记录见 [issue-record.json](../../research/concept/issue-record.json)。
+协作入口：[概念阶段 #2](https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2) · [作品集 #15](https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15) · [系统设置 #17](https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/17) · [草稿 PR #16](https://github.com/Hi-Yincan/Hi-Yincan.github.io/pull/16)。详细报告在 Issue 评论，主体保留目录；完整发布记录见 [issue-record.json](../../research/concept/issue-record.json)。
 
 | 交付 | 内容 |
 | --- | --- |
