@@ -14,7 +14,7 @@ export async function captureDOM(page, selector, filename, { normalizePosition =
     return true;
   }, selector, { timeout: 10000 });
   const data = await page.evaluate(async ({ selector, normalizePosition }) => {
-    if (!window.htmlToImage) await new Promise((resolve, reject) => { const script = document.createElement('script'); script.src = '/System/PersonalOS/capture.js'; script.onload = resolve; script.onerror = reject; document.head.append(script); });
+    if (!window.htmlToImage) await new Promise((resolve, reject) => { const script = document.createElement('script'); script.src = '/System/html-to-image/html-to-image.js'; script.onload = resolve; script.onerror = reject; document.head.append(script); });
     const element = document.querySelector(selector);
     if (!element) throw new Error('Capture target not found');
     const rect = element.getBoundingClientRect();

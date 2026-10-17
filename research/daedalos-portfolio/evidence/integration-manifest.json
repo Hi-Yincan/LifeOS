@@ -50,10 +50,26 @@
     "pages/_app.tsx",
     "pages/index.tsx",
     "components/system/Window/Titlebar/index.tsx",
+    "utils/constants.ts",
     "components/pages/hooks/useFaviconAndTitle.tsx",
     "components/pages/Metadata.tsx",
+    "package.json",
+    "components/apps/Browser/config.ts",
+    "components/apps/Browser/index.tsx",
+    "components/apps/Messenger/hooks.ts",
+    "components/apps/Webamp/functions.ts",
     "contexts/process/useProcessContextState.ts",
     "components/system/StartMenu/Sidebar/index.tsx"
+  ],
+  "removedFiles": [
+    "public/favicon.ico",
+    "public/screenshot.png",
+    "scripts/robots.js",
+    "scripts/rssBuilder.js",
+    "public/System/PersonalOS/settings.svg",
+    "public/System/PersonalOS/capture.js",
+    "components/system/PersonalOS/site.ts",
+    "public/rss.xml"
   ],
   "originalAppEntriesRemoved": 0,
   "checkout": "/tmp/hi-yincan-daedalos-concept"

@@ -1,0 +1,113 @@
+{
+  "settings": {
+    "title": "系统设置 - Yincan Huang",
+    "iconLoaded": true,
+    "head": [
+      {
+        "property": "icon",
+        "value": "/System/PersonalOS/avatar.png"
+      },
+      {
+        "property": "og:title",
+        "value": "Yincan Huang"
+      },
+      {
+        "property": "og:site_name",
+        "value": "Yincan Huang"
+      },
+      {
+        "property": "canonical",
+        "value": "https://hyc.ac"
+      },
+      {
+        "property": "og:type",
+        "value": "website"
+      },
+      {
+        "property": "og:url",
+        "value": "https://hyc.ac"
+      },
+      {
+        "property": "og:image",
+        "value": "https://hyc.ac/System/PersonalOS/avatar.png"
+      },
+      {
+        "property": "og:description",
+        "value": "Yincan Huang — open-source projects and contributions."
+      }
+    ]
+  },
+  "resources": [
+    {
+      "path": "/favicon.ico",
+      "status": 404
+    },
+    {
+      "path": "/screenshot.png",
+      "status": 404
+    },
+    {
+      "path": "/rss.xml",
+      "status": 404
+    },
+    {
+      "path": "/System/PersonalOS/settings.svg",
+      "status": 404
+    },
+    {
+      "path": "/System/PersonalOS/capture.js",
+      "status": 404
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200
+    },
+    {
+      "path": "/.index/fs.9p.json",
+      "status": 200
+    },
+    {
+      "path": "/.index/shortcutCache.json",
+      "status": 200
+    },
+    {
+      "path": "/System/PersonalOS/avatar.png",
+      "status": 200
+    }
+  ],
+  "menu": {
+    "settings": true,
+    "power": true
+  },
+  "store": {
+    "count": 30,
+    "categories": [
+      "系统软件",
+      "应用软件",
+      "第三方"
+    ]
+  },
+  "paint": {
+    "title": "Untitled - Paint - Yincan Huang",
+    "iframeLoaded": true
+  },
+  "browser": {
+    "title": "chrome://dino/ - Browser - Yincan Huang",
+    "bookmarks": [
+      "Yincan Huang",
+      "Index of /",
+      "T-Rex Chrome Dino Game",
+      "Google",
+      "Wikipedia",
+      "Internet Archive",
+      "Winamp Skin Museum",
+      "AaronOS"
+    ],
+    "legacyRequests": []
+  },
+  "finalTitle": "个人作品集 - Yincan Huang"
+}

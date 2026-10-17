@@ -12,6 +12,8 @@ if (sha !== expected) throw new Error(`Expected reviewed upstream ${expected}, r
 const directory = execFileSync('git', ['show', 'HEAD:contexts/process/directory.ts'], { cwd: checkout, encoding: 'utf8' });
 const originalIds = [...directory.matchAll(/^  (\w+): \{/gm)].map(x => x[1]);
 const modified = [];
+const removed = [];
+const site = JSON.parse(readFileSync(resolve(root, 'overlay/personal-site.json'), 'utf8'));
 function modify(file, apply) {
   const baseline = execFileSync('git', ['show', `HEAD:${file}`], { cwd: checkout, encoding: 'utf8' });
   const lf = baseline.replace(/\r\n/g, '\n'), next = apply(lf);
@@ -22,37 +24,65 @@ function modify(file, apply) {
   writeFileSync(target, baseline.includes('\r\n') ? next.replace(/\n/g, '\r\n') : next); modified.push(file);
 }
 cpSync(resolve(root, 'overlay'), checkout, { recursive: true });
-modify('contexts/process/directory.ts', text => text.replace('const directory: Processes = {', `const directory: Processes = {
+modify('contexts/process/directory.ts', text => text
+  .replace('import dynamic from "next/dynamic";', 'import dynamic from "next/dynamic";\nimport { SETTINGS_ICON } from "components/system/PersonalOS/settingsIcon";')
+  .replace('const directory: Processes = {', `const directory: Processes = {
   AppStore: {
+    backgroundColor: "#202020",
     Component: dynamic(() => import("components/apps/AppStore")),
-    defaultSize: { width: 820, height: 580 },
-    icon: "/System/PersonalOS/store.svg", title: "App Store", singleton: true, backgroundColor: "#202020",
-  },
-  Portfolio: {
+    defaultSize: { height: 580, width: 820 },
+    icon: "/System/PersonalOS/store.svg", singleton: true, title: "App Store",
+  },`)
+  .replace('  Properties: {', `  Portfolio: {
+    backgroundColor: "#202020",
     Component: dynamic(() => import("components/apps/Portfolio")),
-    defaultSize: { width: 960, height: 640 },
-    icon: "/System/PersonalOS/portfolio.svg", title: "Portfolio", singleton: true, backgroundColor: "#202020",
+    defaultSize: { height: 640, width: 960 },
+    icon: "/System/PersonalOS/portfolio.svg", singleton: true, title: "Portfolio",
   },
-  SystemSettings: {
+  Properties: {`)
+  .replace('  Terminal: {', `  SystemSettings: {
+    backgroundColor: "#202020",
     Component: dynamic(() => import("components/system/PersonalOS/Settings")),
-    defaultSize: { width: 500, height: 420 },
-    icon: "/System/PersonalOS/settings.svg", title: "Settings", singleton: true, backgroundColor: "#202020",
-  },`));
+    defaultSize: { height: 420, width: 500 },
+    icon: SETTINGS_ICON, singleton: true, title: "Settings",
+  },
+  Terminal: {`));
 modify('pages/_app.tsx', text => text.replace('import "utils/polyfills";', 'import "utils/polyfills";\nimport "components/system/PersonalOS/personal.css";\nimport { PersonalOSProvider } from "components/system/PersonalOS/context";').replace('<MenuProvider>', '<PersonalOSProvider><MenuProvider>').replace('</MenuProvider>', '</MenuProvider></PersonalOSProvider>'));
 modify('pages/index.tsx', text => text.replace('import AppsLoader', 'import PersonalShell from "components/system/PersonalOS/Shell";\nimport AppsLoader').replace('<AppsLoader />', '<AppsLoader />\n      <PersonalShell />'));
 modify('components/system/Window/Titlebar/index.tsx', text => text.replace('import { useRef }', 'import { usePersonalOS } from "components/system/PersonalOS/context";\nimport { useRef }').replace('const Titlebar: FC<TitlebarProps> = ({ id }) => {', 'const Titlebar: FC<TitlebarProps> = ({ id }) => {\n  const { locale } = usePersonalOS();').replace('label("Minimize")', 'label(locale === "zh" ? "最小化" : "Minimize")').replace('label("Maximize")', 'label(locale === "zh" ? "最大化" : "Maximize")').replace('label("Close")', 'label(locale === "zh" ? "关闭" : "Close")').replace('label("Restore Down", "Restore")', 'label(locale === "zh" ? "还原" : "Restore Down", locale === "zh" ? "还原" : "Restore")'));
-// Keep site identity stable while upstream continues to update the page title.
+// The shared site configuration owns identity; upstream licenses remain intact.
+modify('utils/constants.ts', text => text
+  .replace('import { type AsyncZipOptions } from "fflate";', 'import { type AsyncZipOptions } from "fflate";\nimport site from "personal-site.json";')
+  .replace('export const FAVICON_BASE_PATH = "/favicon.ico";', 'export const FAVICON_BASE_PATH = site.icon;')
+  .replace(/  alias: "daedalOS",\n  author: \{[\s\S]*?\n  \},\n  description: "Desktop environment in the browser",/, '  alias: site.name,\n  author: { name: site.name, url: site.url },\n  description: site.description,'));
 modify('components/pages/hooks/useFaviconAndTitle.tsx', text => text
-  .replace('  PACKAGE_DATA,\n', '')
-  .replace('import { useProcess }', 'import { SITE_NAME as alias } from "components/system/PersonalOS/site";\nimport { useProcess }')
-  .replace('const { alias } = PACKAGE_DATA;\n\n', '')
-  .replace('const Favicon = createFavicon(favIcon);', 'const Favicon = createFavicon("/System/PersonalOS/avatar.png");')
-  .replace('faviconLinkElement.href = FAVICON_BASE_PATH;', 'faviconLinkElement.href = "/System/PersonalOS/avatar.png";'));
+  .replace('const Favicon = createFavicon(favIcon);', 'const Favicon = createFavicon(FAVICON_BASE_PATH);'));
 modify('components/pages/Metadata.tsx', text => text
-  .replace('import desktopIcons', 'import { SITE_NAME as alias } from "components/system/PersonalOS/site";\nimport desktopIcons')
-  .replace('const { alias, author, description } = PACKAGE_DATA;', 'const { author, description } = PACKAGE_DATA;')
-  .replace('<meta content={alias} property="og:title" />', '<meta content={alias} property="og:title" />\n      <meta content={alias} property="og:site_name" />')
-  .replace('<meta content={description} name="description" />', '<meta content="Yincan Huang — open-source projects and contributions." name="description" />'));
+  .replace('import Head from "next/head";', 'import Head from "next/head";\nimport site from "personal-site.json";')
+  .replace('<meta content={alias} property="og:title" />', '<meta content={alias} property="og:title" />\n      <meta content={alias} property="og:site_name" />\n      <link href={author.url} rel="canonical" />')
+  .replace('`${author.url}/screenshot.png`', '`${author.url}${site.icon}`')
+  .replace(/      <link\n        href=\{`\$\{author.url\}\/rss.xml`\}[\s\S]*?      \/>\n/, ''));
+modify('package.json', text => text
+  .replace('"name": "daedalos"', '"name": "yincan-personal-os"')
+  .replace('"description": "Desktop environment in the browser"', `"description": ${JSON.stringify(site.description)}`)
+  .replace(/  "author": \{[\s\S]*?\n  \},/, `  "author": ${JSON.stringify({ name: site.name, url: site.url })},`)
+  .replace('node scripts/robots.js && node scripts/rssBuilder.js', 'node scripts/personalSite.cjs'));
+modify('components/apps/Browser/config.ts', text => text
+  .replace('import { get9pModifiedTime } from "contexts/fileSystem/core";\n', '')
+  .replace('import { FAVICON_BASE_PATH }', 'import { FAVICON_BASE_PATH, PACKAGE_DATA }')
+  .replace(/export const SURF_TO_MISC = \{[\s\S]*?\};\n\n/, '')
+  .replace('    name: "daedalOS",\n    url: "https://dustinbrett.com/",', '    name: PACKAGE_DATA.alias,\n    url: PACKAGE_DATA.author.url,')
+  .replace('  ...(get9pModifiedTime(SURF_TO_MISC.path) === -1 ? [] : [SURF_TO_MISC]),\n', ''));
+modify('components/apps/Browser/index.tsx', text => text
+  .replace('  SURF_TO_MISC,\n', '')
+  .replace('      if (lowerAddressInput.startsWith(SURF_TO_MISC.url)) {\n        loadLocalSite(SURF_TO_MISC.path, SURF_TO_MISC.name);\n      } else if (lowerAddressInput.startsWith(DINO_GAME.url)) {', '      if (lowerAddressInput.startsWith(DINO_GAME.url)) {'));
+modify('components/apps/Messenger/hooks.ts', text => text
+  .replace('import { PACKAGE_DATA, PROCESS_DELIMITER }', 'import { PROCESS_DELIMITER }')
+  .replace('[PACKAGE_DATA.author.npub, ...Object.values(wellKnownNames)]', 'Object.values(wellKnownNames)'));
+// Do not assume a newly configured domain is on a third-party CORS allowlist.
+modify('components/apps/Webamp/functions.ts', text => text
+  .replace('  PACKAGE_DATA,\n', '')
+  .replace('["localhost", PACKAGE_DATA.author.url.replace("https://", "")].includes(\n    window.location.hostname\n  )', 'window.location.hostname === "localhost"'));
 modify('contexts/process/useProcessContextState.ts', text => text.replace('import { useRef, useState }', 'import { canClosePersonalApp } from "components/system/PersonalOS/closeGuards";\nimport { useRef, useState }').replace('const closeWithTransition = (id: string): void => {', 'const closeWithTransition = (id: string): void => {\n    if (!canClosePersonalApp(id)) return;'));
 modify('components/system/StartMenu/Sidebar/index.tsx', text => text
   .replace('import { useEffect, useRef, useState } from "react";', 'import { useEffect, useRef, useState } from "react";\nimport { usePersonalOS } from "components/system/PersonalOS/context";\nimport useLaunch from "components/system/PersonalOS/useLaunch";\nimport StartSettingsIcon from "components/system/PersonalOS/StartSettingsIcon";')
@@ -91,9 +121,24 @@ for (const [name, app, icon] of [['Portfolio', 'Portfolio', 'portfolio'], ['App 
   if (existsSync(desktop) && readFileSync(desktop, 'utf8').replace(/\r\n/g, '\n') !== readFileSync(path, 'utf8')) throw new Error(`Unrecognized desktop shortcut: ${name}`);
   writeFileSync(desktop, readFileSync(path));
 }
-// A DOM-render capture helper for this research environment; not a production dependency.
-const helper = resolve(checkout, 'node_modules/html-to-image/dist/html-to-image.js');
-if (existsSync(helper)) cpSync(helper, resolve(checkout, 'public/System/PersonalOS/capture.js'));
-const result = { upstreamSHA: sha, originalAppCount: originalIds.length, originalApps: originalIds, addedProcesses: ['Portfolio', 'SystemSettings', 'AppStore'], desktopShortcuts: ['Portfolio', 'App Store'], modifiedUpstreamFiles: modified, originalAppEntriesRemoved: 0, checkout };
+// Remove only reviewed upstream bytes or a known previous prototype artifact.
+function retire(file, expectedHash) {
+  const target = resolve(checkout, file);
+  if (existsSync(target)) {
+    const expectedBytes = expectedHash ? undefined : execFileSync('git', ['show', `HEAD:${file}`], { cwd: checkout });
+    const hash = data => createHash('sha256').update(file.startsWith('scripts/') ? data.toString('utf8').replace(/\r\n/g, '\n') : data).digest('hex');
+    if (!(Array.isArray(expectedHash) ? expectedHash : [expectedHash || hash(expectedBytes)]).includes(hash(readFileSync(target)))) throw new Error(`Unrecognized retired file: ${file}`);
+    rmSync(target);
+  }
+  removed.push(file);
+}
+for (const file of ['public/favicon.ico', 'public/screenshot.png', 'scripts/robots.js', 'scripts/rssBuilder.js']) retire(file);
+retire('public/System/PersonalOS/settings.svg', 'eb83f8fb8832150bd3ca7523bd87710cb4134614addedb979b688280060cda5c');
+retire('public/System/PersonalOS/capture.js', 'a90b42909d80964269ef6d5f3d1e4a5a7e2a4c263a5d2a76a9e7151901343262');
+retire('components/system/PersonalOS/site.ts', ['28eb040de3441c4312d6a4c43d4ecd9d30029aba49e5eb35500925b6bb9021e5', '58aba5bf509b34403a7483d720eeff078729febf3dc9b0e02e8a74aa4416b392']);
+// rss.xml is a generated, ignored artifact. This product has no blog feed yet.
+rmSync(resolve(checkout, 'public/rss.xml'), { force: true });
+removed.push('public/rss.xml');
+const result = { upstreamSHA: sha, originalAppCount: originalIds.length, originalApps: originalIds, addedProcesses: ['Portfolio', 'SystemSettings', 'AppStore'], desktopShortcuts: ['Portfolio', 'App Store'], modifiedUpstreamFiles: modified, removedFiles: removed, originalAppEntriesRemoved: 0, checkout };
 mkdirSync(resolve(root, 'evidence'), { recursive: true }); writeFileSync(resolve(root, 'evidence/integration-manifest.json'), JSON.stringify(result, null, 2));
 console.log(JSON.stringify(result, null, 2));

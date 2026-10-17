@@ -1,0 +1,7 @@
+{
+  "name": "Yincan Huang",
+  "url": "https://hyc.ac",
+  "description": "Yincan Huang — open-source projects and contributions.",
+  "icon": "/System/PersonalOS/avatar.png",
+  "entryPoints": ["/", "/?app=Portfolio", "/?app=AppStore"]
+}

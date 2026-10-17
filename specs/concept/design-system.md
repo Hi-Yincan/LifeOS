@@ -59,3 +59,5 @@ DOM 渲染图属于视觉研究证据，不替代原生截图或真机验收。�
 站点名称统一为 `Yincan Huang`，中英文界面保持一致。桌面浏览器标题使用站点名称，应用前台标题沿用 `应用标题 - Yincan Huang`；Open Graph 站点名和标题使用同一配置。
 
 作品集 App 与网站 favicon 统一使用负责人指定的 blog 圆形头像：源自 `Hi-Yincan/content@5fe34ffcdecf12c70a295c7d96bf6c971b35200a` 的 `assets/images/favicon.png`。保持原图和透明圆形裁剪，不重新生成图像。桌面、开始菜单、任务栏、窗口与商店目录中的作品集图标共用注册图标资源；网站标签页固定显示头像，前台应用切换仍更新标题。
+
+站点身份统一配置于 `personal-site.json`：公开地址为 `https://hyc.ac`，分享图片复用圆形头像，canonical / Open Graph / robots / sitemap 均由该配置提供。系统设置窗口与开始菜单齿轮共用矢量路径，旧 `settings.svg` 不再保留。未实现博客订阅前不声明 RSS。
