@@ -12,5 +12,12 @@
   "browserTaskSpace": 31,
   "browserTaskSpaceFinished": true,
   "retainedResultPage": "p1",
-  "productionDeployed": false
+  "productionDeployed": false,
+  "layoutFix": {
+    "commit": "6cce0f9",
+    "comment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/19#issuecomment-6228875744",
+    "report": "research/concept/app-store-layout.md",
+    "browserCasesPassed": 5,
+    "buildSeconds": 265.97
+  }
 }
