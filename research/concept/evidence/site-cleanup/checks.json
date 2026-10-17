@@ -22,5 +22,7 @@
   "upstreamLicenseUnchanged": true,
   "productionDeployed": false,
   "browserTaskSpace": 12,
-  "browserTaskFinished": true
+  "browserTaskFinished": true,
+  "implementationCommit": "4088ad2",
+  "issueComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2#issuecomment-6231569375"
 }
