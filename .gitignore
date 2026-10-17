@@ -53,3 +53,7 @@ server/.runtime/
 
 # Generated public snapshots for visitor-only releases
 public/content/
+
+# Local parallel workflow state and Python caches
+.parallel/
+__pycache__/
