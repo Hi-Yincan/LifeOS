@@ -1,12 +1,12 @@
 {
   "date": "2026-10-16",
   "parentIssue": 2,
-  "originalComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2#issuecomment-6209412394",
+  "originalComment": "https://github.com/Hi-Yincan/LifeOS/issues/2#issuecomment-6209412394",
   "originalBodySHA256": "1ac726da8a42b059f44cd0d67ffe87503800fd97bf8cd3f3c0705f87a047854b",
-  "upgradeIssue": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/10",
-  "upgradeComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/10#issuecomment-6209599159",
-  "organizationIssue": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/11",
-  "organizationComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/11#issuecomment-6209599913",
+  "upgradeIssue": "https://github.com/Hi-Yincan/LifeOS/issues/10",
+  "upgradeComment": "https://github.com/Hi-Yincan/LifeOS/issues/10#issuecomment-6209599159",
+  "organizationIssue": "https://github.com/Hi-Yincan/LifeOS/issues/11",
+  "organizationComment": "https://github.com/Hi-Yincan/LifeOS/issues/11#issuecomment-6209599913",
   "nativeSubissueRelationVerified": true,
   "preservedPriorSubissues": [
     7,

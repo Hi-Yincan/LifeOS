@@ -1,6 +1,6 @@
 ## C01｜产品调研交接：以 daedalOS 为已确认底座
 
-日期：2026-10-16。来源：#1 的 [R15 / D-001](https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6209307900)，项目负责人已明确选择 daedalOS 并结束产品调研。
+日期：2026-10-16。来源：#1 的 [R15 / D-001](https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6209307900)，项目负责人已明确选择 daedalOS 并结束产品调研。
 
 ### 已确定的输入
 

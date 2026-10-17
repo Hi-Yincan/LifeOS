@@ -1,4 +1,4 @@
-# Yincan Huang · Personal OS
+# LifeOS · Yincan Huang
 
 基于 daedalOS 的个人站。正式前端源码直接位于此仓库；`research/` 是冻结研究归档，不参与产品构建。默认进入桌面，保留原生 App，增加作品集、应用商店及系统设置。
 
@@ -35,13 +35,13 @@ yarn e2e:product
 yarn upstream:check
 ```
 
-构建从当前仓库直接生成 `out/`，不会覆盖上游源码、下载移动分支或调用研究 overlay。Product checks 只检查；手动工作流 Publish visitor OS 发布通过验收的访客版产物。生产数据库、媒体、会话与多节点仍待后续验收。Messenger #20 保持暂缓。
+构建从当前仓库直接生成 `out/`，不会覆盖上游源码、下载移动分支或调用研究 overlay。Product checks 只检查；独立发布仓库的手动工作流 Publish visitor OS 发布通过验收的访客版产物。生产数据库、媒体、会话与多节点仍待后续验收。Messenger #20 保持暂缓。
 
 ## 访客版发布
 
 `node scripts/product/build.mjs --public` 生成 Pages 访客版，作品集读取公开快照；它不会读取 server/.runtime，在线内容管理暂未开放。默认 `yarn build` 继续提供本地完整 API 模式。
 
-上线由 main 的手动工作流 `Publish visitor OS` 执行：构建、测试、上传包含 `.index` 的产物，再部署到 hyc.ac。推送代码不会自动上线。内容更新目前需修改已提交的 `server/content/seed.json` 中明确 published=true 的内容并重新发布，本地管理界面的改动不会自动同步到线上。
+源码、Issues 和 PR 统一在 `Hi-Yincan/LifeOS` 维护；`Hi-Yincan/Hi-Yincan.github.io` 仅保存发布配置和工作流，不使用模板或 Git submodule。发布仓库的 `deployment.json` 固定 LifeOS 的完整提交 SHA；在该仓库 main 手动执行 `Publish visitor OS`，临时检出指定源码、构建、测试、上传包含 `.index` 的产物，再部署到 hyc.ac。推送代码不会自动上线。内容更新目前需修改已提交的 `server/content/seed.json` 中明确 published=true 的内容并重新发布，本地管理界面的改动不会自动同步到线上。
 
 发布步骤、限制与回退见 [Pages 发布手册](specs/deployment/pages.md)。
 

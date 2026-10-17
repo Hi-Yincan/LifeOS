@@ -1,6 +1,6 @@
 # 展示型个人 OS：选型实验
 
-2026-10-16，关联 Issue #1 的 R12 / [R13 实测报告](https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6208862064)。这里是隔离的研究原型，不是已批准的生产实现。根目录站点未改动，全部内容为合成样例。
+2026-10-16，关联 Issue #1 的 R12 / [R13 实测报告](https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6208862064)。这里是隔离的研究原型，不是已批准的生产实现。根目录站点未改动，全部内容为合成样例。
 
 当前决议：[R15 / D-001](../closeout/decision.md) 已由项目负责人确认使用 daedalOS，产品调研已结束。本原型归档为展示/管理分层的可行性证据，不作为正式产品底座继续扩展；实验服务已停止，可按下文重新启动。[R14 成熟度复核](../framework-comparison/README.md) 保留当时的比较记录。
 

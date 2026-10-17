@@ -7,7 +7,7 @@
 | 引用 | 职责 |
 | --- | --- |
 | main | 唯一正式源码分支 |
-| origin/pages-live | 首次 OS 上线前的旧首页，供发布手册中的紧急回退使用；不能作为开发分支 |
+| origin/pages-live | 首次 OS 上线前的旧首页历史备份；位于 LifeOS，不能作为开发分支或新发布仓库的 branch source |
 | upstream/main | daedalOS 上游跟踪引用，供升级检查；不是本项目的工作分支 |
 | archive/upstream-rehearsal-2026-10-17 | 保存真实升级与回退演练的全部提交，最终为 d5672945 |
 | deploy/visitor-2026-10-17 | 首次公开 OS 发布版本 86620989 |
@@ -26,3 +26,9 @@
 日常从 main 开发。需要并行开发时使用项目 parallel-development 技能建立有明确任务和所有者的临时 worktree。任务合并后先检查状态和独有提交，再移除 worktree 和临时分支；不能仅凭分支名删除。
 
 未合并但需要保留的实验先归档到明确标签，并确认远端保存成功。pages-live、main 和 upstream 不参与通用批量删除。部署版本保留单独标识，源码清理不改变线上版本或 DNS。
+
+## LifeOS 与发布仓库
+
+原仓库改名为 `Hi-Yincan/LifeOS`，本地 origin 随之更新。源码目录保留现有路径，避免活动原型与运行数据迁移；目录名不决定远程仓库名。
+
+`Hi-Yincan/Hi-Yincan.github.io` 是独立的轻量发布仓库，仅维护版本锁定、发布流程和说明，不是源码 worktree，也不使用 submodule。临时检出位于 `/private/tmp/lifeos-publisher`，日常开发仍只操作 LifeOS。详见 [职责与验收](../specs/deployment/repository-split.md)。

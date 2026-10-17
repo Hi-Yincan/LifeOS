@@ -1,11 +1,11 @@
 # 产品调研 Issue #1 评论归档
 
-来源：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1
+来源：https://github.com/Hi-Yincan/LifeOS/issues/1
 采集日期：2026-10-16。最终状态：CLOSED / completed。最终决策以 R15 为准；历史报告保留当时措辞。
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6197932999
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6197932999
 
 ## R01｜调研结论、产品定位与研究边界
 
@@ -15,7 +15,7 @@
 
 **建议将本项目定位为“以操作系统交互组织个人知识、作品与生活内容的个人 OS”。** 桌面是入口，App 是领域组织单位，窗口提供探索和切换能力；文章、照片、项目等仍应能被直接打开、阅读和分享。这是本轮研究建议，尚未形成冻结的 PRD 或技术选型。
 
-用户已经明确“个人博客也是操作系统”，并提出博客、相册、健康数据、项目展示。[概念阶段现有记录](https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2#issuecomment-6181132923)进一步覆盖系统化 Wiki、衣柜、日常／技术博客，以及位置、日程、状态和健康组成的 ContextOS。调研保留这一完整愿景，不擅自缩减成求职作品集。
+用户已经明确“个人博客也是操作系统”，并提出博客、相册、健康数据、项目展示。[概念阶段现有记录](https://github.com/Hi-Yincan/LifeOS/issues/2#issuecomment-6181132923)进一步覆盖系统化 Wiki、衣柜、日常／技术博客，以及位置、日程、状态和健康组成的 ContextOS。调研保留这一完整愿景，不擅自缩减成求职作品集。
 
 ### 为什么选这两个参考对象
 
@@ -52,7 +52,7 @@
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6197933659
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6197933659
 
 ## R02｜参考产品对照与实测发现
 
@@ -96,7 +96,7 @@ O01—O09 的可复现操作及限制见 R06；公开部署与上述源码提交
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6197934325
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6197934325
 
 ## R03｜访客任务、App 版图与首版范围建议
 
@@ -115,7 +115,7 @@ O01—O09 的可复现操作及限制见 R06；公开部署与上述源码提交
 
 ### App 版图：完整愿景保留，发布顺序单独决策
 
-来源：[用户已有 App 清单](https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2#issuecomment-6181132923)与本轮会话。下表优先级是建议，未使用缺乏数据支撑的精确评分。
+来源：[用户已有 App 清单](https://github.com/Hi-Yincan/LifeOS/issues/2#issuecomment-6181132923)与本轮会话。下表优先级是建议，未使用缺乏数据支撑的精确评分。
 
 | App／系统能力 | 核心内容与任务 | 建议批次 | 进入开发前必须澄清 |
 | --- | --- | --- | --- |
@@ -155,7 +155,7 @@ P0/P1/P2 仅表示先后候选，不承诺工期。若首版主要目标是展�
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6197935032
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6197935032
 
 ## R04｜可行性、产品约束与风险处置建议
 
@@ -210,7 +210,7 @@ GitHub 官方将 Pages 定义为发布 HTML、CSS、JavaScript 的静态托管�
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6197935771
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6197935771
 
 ## R05｜阶段交付、验证方案与决策留痕
 
@@ -275,7 +275,7 @@ GitHub 官方将 Pages 定义为发布 HTML、CSS、JavaScript 的静态托管�
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6197936506
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6197936506
 
 ## R06｜研究方法、证据登记与局限
 
@@ -334,7 +334,7 @@ GitHub 官方将 Pages 定义为发布 HTML、CSS、JavaScript 的静态托管�
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6198424281
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6198424281
 
 ## R07｜扩大候选池：16 个 Web OS 的人气与维护筛选
 
@@ -400,7 +400,7 @@ Star、Fork、订阅者取仓库 API；订阅者使用 `subscribers_count`，不
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6198425016
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6198425016
 
 ## R08｜社区人气与社媒讨论：可核验信号
 
@@ -457,7 +457,7 @@ R07 的 Star／Fork／订阅者反映 GitHub 关注积累，近期提交／PR �
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6198425785
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6198425785
 
 ## R09｜二开底座短名单与推荐结论
 
@@ -511,7 +511,7 @@ Puter 在本次候选中 Star/Fork 与多人近期维护信号最强，并有正
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6198426463
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6198426463
 
 ## R10｜二开落地范围、验证门槛与研究修订记录
 
@@ -585,7 +585,7 @@ R07—R09 提供数据和原始链接；动态指标仅对采集日期有效。�
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6199533220
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6199533220
 
 ## R11｜visitor／admin 与在线内容管理：Puter 优先级上调
 
@@ -655,7 +655,7 @@ flowchart LR
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6208431738
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6208431738
 
 ## R12｜本地部署反馈：展示型个人 OS 与完整云电脑的边界
 
@@ -730,7 +730,7 @@ flowchart TB
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6208862064
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6208862064
 
 ## R13｜本地实测：展示型 OS 的权限闭环与 Puter 适配边界
 
@@ -820,7 +820,7 @@ npm test
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6209201748
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6209201748
 
 ## R14｜daedalOS 与 ProzillaOS：成熟度复核及验证优先级修正
 
@@ -894,7 +894,7 @@ daedalOS 下一轮验收门槛是实际构建运行、同 App 管理闭环、公
 
 ---
 
-原始评论：https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6209307900
+原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6209307900
 
 ## R15｜产品调研收口与 daedalOS 选型决议
 
