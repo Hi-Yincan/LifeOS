@@ -69,5 +69,7 @@
   "siteAudit": "passed",
   "browserTaskSpace": 14,
   "browserTaskFinished": true,
-  "productionDeployed": false
+  "productionDeployed": false,
+  "implementationCommit": "6c00fea",
+  "issueComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6231717417"
 }

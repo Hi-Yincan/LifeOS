@@ -23,5 +23,6 @@
   "ownerContactStatus": "awaiting user-controlled public Nostr key or NIP-05 address",
   "messagesSent": false,
   "chinaConnectivityTested": false,
-  "endToEndDeliveryTested": false
+  "endToEndDeliveryTested": false,
+  "issueComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/9#issuecomment-6231717676"
 }
