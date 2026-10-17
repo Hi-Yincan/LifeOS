@@ -1,0 +1,5 @@
+validate	Run yarn test:unit	2026-10-17T09:38:39.7709491Z Test Suites: 2 passed, 2 total
+validate	Run yarn test:unit	2026-10-17T09:38:39.7710092Z Tests:       30 passed, 30 total
+validate	Run yarn test:server	2026-10-17T09:38:41.4554062Z # pass 11
+validate	Run yarn test:server	2026-10-17T09:38:41.4554512Z # fail 0
+validate	Run yarn e2e:product	2026-10-17T09:39:25.2627506Z   7 passed (18.5s)

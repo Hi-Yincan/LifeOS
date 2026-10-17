@@ -51,4 +51,4 @@ A 产物包含 1,828 个文件，清单 SHA256 为 `fa584c86b2fe9fdd1a405785c813
 
 静态导出会提示 next.config headers 不会自动生效；安全头和跨域隔离要求必须在最终托管层配置。server 当前是 loopback 本地开发服务，不能作为生产后端验收。
 
-GitHub Actions 的工作流文件已提交且无部署步骤。截至本次验收，PR 无远端检查结果；手动 dispatch 返回 404（默认分支尚无该工作流），所以本报告只认定本地及干净克隆检查通过。定时上游检查需工作流进入默认分支后才启用。没有为运行 CI 合并主分支、修改仓库设置或触发 Pages 发布。
+GitHub Actions 的 Product checks 已通过：[运行 39021641079](https://github.com/Hi-Yincan/Hi-Yincan.github.io/actions/runs/39021641079)，检验提交 `6c9a4f58e0405c2c997eb3af89b739d48d865a19`。Ubuntu 锁定安装、构建、lint、30 项单元、11 项服务、7 项 Chromium 浏览器回归全部通过，未使用浏览器重试；步骤结果与测试摘要见 `remote-ci.json` / `remote-ci-tests.log`。此后仅归档报告，无产品代码变化。工作流无部署步骤；定时上游检查需进入默认分支后才启用。没有为运行 CI 合并主分支、修改仓库设置或触发 Pages 发布。
