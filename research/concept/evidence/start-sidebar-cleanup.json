@@ -37,5 +37,7 @@
   ],
   "browserTaskSpace": 13,
   "browserTaskFinished": true,
-  "productionDeployed": false
+  "productionDeployed": false,
+  "implementationCommit": "3f00e06",
+  "issueComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/17#issuecomment-6231636455"
 }
