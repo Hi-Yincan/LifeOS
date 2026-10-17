@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import VisuallyHidden from "styles/common/VisuallyHidden";
 
 const StyledColumnRow = styled.div`
   display: flex;
@@ -7,10 +6,6 @@ const StyledColumnRow = styled.div`
   height: ${({ theme }) => theme.sizes.fileManager.detailsRowHeight};
   margin-left: 2px;
   place-items: center;
-
-  .label {
-    ${VisuallyHidden};
-  }
 
   div {
     color: rgb(222 222 222);

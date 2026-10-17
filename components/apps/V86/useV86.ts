@@ -43,7 +43,7 @@ const useV86 = ({
 }: ContainerHookProps): void => {
   const process = useProcess(id);
   const foregroundId = useForegroundId();
-  const { closing, libs = [], minimized } = process;
+  const { closing, libs = [] } = process;
   const { appendFileToTitle } = useTitle(id);
   const shutdown = useRef(false);
   const [emulator, setEmulator] = useState<
@@ -182,13 +182,12 @@ const useV86 = ({
   }, [libs, loading, setLoading]);
 
   useEffect(() => {
-    // Minimized from the keyboard it stays in front, but has no keyboard
-    const isActiveInstance = foregroundId === id && !minimized;
+    const isActiveInstance = foregroundId === id;
 
     Object.values(emulator).forEach((emulatorInstance) =>
       emulatorInstance?.keyboard_set_status(isActiveInstance)
     );
-  }, [emulator, foregroundId, id, minimized]);
+  }, [emulator, foregroundId, id]);
 
   useEffect(() => {
     if (hasProcess(process) && !closing && !loading && !(url in emulator)) {

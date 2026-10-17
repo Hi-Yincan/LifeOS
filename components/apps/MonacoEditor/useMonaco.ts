@@ -63,13 +63,8 @@ const useMonaco = ({
   };
   const loadFile = async (): Promise<void> => {
     if (monaco && editor && url.startsWith("/")) {
-      const hadFocus = editor.hasTextFocus();
-
       editor.getModel()?.dispose();
       editor.setModel(await createModel());
-      // Disposing the focused model drops focus to the page, unless the user
-      // went elsewhere while the file loaded
-      if (hadFocus && document.activeElement === document.body) editor.focus();
     }
 
     prependFileToTitle(basename(url || DEFAULT_TEXT_FILE_SAVE_PATH));
@@ -105,6 +100,8 @@ const useMonaco = ({
 
   useEffect(() => {
     const containerElement = containerRef.current;
+    const sectionElement = containerElement?.closest("section");
+    let onFocus: (() => void) | undefined;
 
     if (monaco && !editor && containerElement) {
       const currentEditor = monaco.editor.create(containerElement, {
@@ -113,6 +110,9 @@ const useMonaco = ({
         theme,
       });
 
+      onFocus = () => currentEditor.focus();
+
+      sectionElement?.addEventListener("focus", onFocus, { passive: true });
       containerElement.addEventListener("blur", relocateShadowRoot, {
         capture: true,
         passive: true,
@@ -124,6 +124,7 @@ const useMonaco = ({
     }
 
     return () => {
+      if (onFocus) sectionElement?.removeEventListener("focus", onFocus);
       containerElement?.removeEventListener("blur", relocateShadowRoot, {
         capture: true,
       });
@@ -133,18 +134,6 @@ const useMonaco = ({
       }
     };
   }, [containerRef, editor, id, monaco, setArgument, setLoading]);
-
-  useEffect(() => {
-    const sectionElement = containerRef.current?.closest("section");
-    const onFocus = (): void => editor?.focus();
-
-    // The window's focus goes to the editor, even focus it got before the
-    // editor was created
-    if (editor && document.activeElement === sectionElement) onFocus();
-    sectionElement?.addEventListener("focus", onFocus, { passive: true });
-
-    return () => sectionElement?.removeEventListener("focus", onFocus);
-  }, [containerRef, editor]);
 
   useEffect(() => {
     if (monaco && editor && url) {

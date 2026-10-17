@@ -12,8 +12,7 @@ const Marked: FC<ComponentProcessProps> = ({ id }) => {
 
   return (
     <AppContainer {...containerProps} StyledComponent={StyledMarked}>
-      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- Like a scrolling page, as it may not have a link to Tab to */}
-      <article tabIndex={0} />
+      <article />
     </AppContainer>
   );
 };

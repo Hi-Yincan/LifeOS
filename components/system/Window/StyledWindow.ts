@@ -6,7 +6,6 @@ type StyledWindowProps = {
   $backgroundBlur?: string;
   $backgroundColor?: string;
   $isForeground: boolean;
-  $isLightBg?: boolean;
 };
 
 const StyledWindow = styled(motion.section)<StyledWindowProps>`
@@ -27,14 +26,6 @@ const StyledWindow = styled(motion.section)<StyledWindowProps>`
   overflow: hidden;
   position: absolute;
   width: 100%;
-
-  /* Like the Windows light theme, focus visuals invert on light content */
-  ${({ $isLightBg }) =>
-    $isLightBg &&
-    `> div > :not(header) {
-      --focus-inner: rgb(255 255 255);
-      --focus-outer: rgb(0 0 0);
-    }`}
 
   header + * {
     height: ${({ theme }) => `calc(100% - ${theme.sizes.titleBar.height}px)`};

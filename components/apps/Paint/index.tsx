@@ -41,11 +41,7 @@ type JsPaint = {
 
 const Paint: FC<ComponentProcessProps> = ({ id }) => {
   const { closeWithTransition } = useProcessesActions();
-  const {
-    libs: [paintSrc = ""] = [],
-    title: windowTitle,
-    url = "",
-  } = useProcess(id);
+  const { libs: [paintSrc = ""] = [], url = "" } = useProcess(id);
   const { createPath, exists, readFile, updateFolder, writeFile } =
     useFileSystemActions();
   const { setForegroundId, setWallpaper } = useSessionActions();
@@ -196,7 +192,7 @@ const Paint: FC<ComponentProcessProps> = ({ id }) => {
           id={`jspaint-${id}`}
           onLoad={() => setLoaded(true)}
           src={paintSrc}
-          title={windowTitle}
+          title={id}
           width="100%"
           {...IFRAME_CONFIG}
         />

@@ -27,14 +27,12 @@ import {
   omitEntry,
   saveUnpositionedDesktopIcons,
 } from "utils/functions";
-import { isComposingKey } from "utils/keyboard";
 
 type TabProps = {
   icon: string;
   id: string;
   isShortcut: boolean;
   pid: string;
-  tabPanel: React.HTMLAttributes<HTMLElement>;
   url: string;
 };
 
@@ -46,14 +44,7 @@ const dateTimeString = (date?: Date): string =>
     })
     .replace(" at ", ", ") || "";
 
-const GeneralTab: FC<TabProps> = ({
-  icon,
-  id,
-  isShortcut,
-  pid,
-  tabPanel,
-  url,
-}) => {
+const GeneralTab: FC<TabProps> = ({ icon, id, isShortcut, pid, url }) => {
   const { closeWithTransition, icon: setIcon } = useProcessesActions();
   const { setIconPositions } = useSessionActions();
   const extension = getExtension(url || "");
@@ -164,111 +155,105 @@ const GeneralTab: FC<TabProps> = ({
 
   return (
     <>
-      <div className="general" {...tabPanel}>
-        <table>
-          <tbody>
-            <tr className="header">
-              <th aria-hidden="true">
-                <Icon imgSize={32} src={isDirectory ? folderIcon : icon} />
-                {isShortcut && <Icon imgSize={48} src={SHORTCUT_ICON} />}
-              </th>
+      <table className="general">
+        <tbody>
+          <tr className="header">
+            <th aria-hidden="true">
+              <Icon imgSize={32} src={isDirectory ? folderIcon : icon} />
+              {isShortcut && <Icon imgSize={48} src={SHORTCUT_ICON} />}
+            </th>
+            <td>
+              <input
+                ref={inputRef}
+                aria-label="Name"
+                defaultValue={basename(
+                  url,
+                  isShortcut ? extname(url) : undefined
+                )}
+                enterKeyHint="done"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    haltEvent(event);
+                    okAction();
+                  }
+                }}
+                type="text"
+                {...DISBALE_AUTO_INPUT_FEATURES}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="spacer" colSpan={2} />
+          </tr>
+          <tr>
+            <th scope="row">{isDirectory ? "Type:" : "Type of file:"}</th>
+            <td>
+              {isDirectory
+                ? "File folder"
+                : isShortcut || extType
+                  ? `${isShortcut ? "Shortcut" : extType} (${extension})`
+                  : "File"}
+            </td>
+          </tr>
+          {!isDirectory && (
+            <tr>
+              <th scope="row">{pid ? "Opens with:" : "Description:"}</th>
               <td>
-                <input
-                  ref={inputRef}
-                  aria-label="Name"
-                  defaultValue={basename(
-                    url,
-                    isShortcut ? extname(url) : undefined
-                  )}
-                  enterKeyHint="done"
-                  onKeyDown={(event) => {
-                    if (
-                      event.key === "Enter" &&
-                      !isComposingKey(event.nativeEvent)
-                    ) {
-                      haltEvent(event);
-                      okAction();
-                    }
-                  }}
-                  type="text"
-                  {...DISBALE_AUTO_INPUT_FEATURES}
-                />
+                {pid && directory[pid]?.icon && (
+                  <Icon imgSize={16} src={directory[pid].icon} />
+                )}
+                {pid ? directory[pid]?.title || pid : basename(url || "")}
               </td>
             </tr>
+          )}
+          {!isDirectory && (
             <tr>
               <td className="spacer" colSpan={2} />
             </tr>
+          )}
+          <tr>
+            <th scope="row">Location:</th>
+            <td>{dirname(url)}</td>
+          </tr>
+          <tr>
+            <th scope="row">Size</th>
+            <td>
+              {entrySize
+                ? `${getFormattedSize(
+                    entrySize
+                  )} (${entrySize.toLocaleString()} byte${
+                    entrySize === 1 ? "" : "s"
+                  })`
+                : "0 bytes"}
+            </td>
+          </tr>
+          {isDirectory && (
             <tr>
-              <th scope="row">{isDirectory ? "Type:" : "Type of file:"}</th>
+              <th scope="row">Contains</th>
+              <td>{`${fileCount.toLocaleString()} Files, ${folderCount.toLocaleString()} Folders`}</td>
+            </tr>
+          )}
+          <tr>
+            <td className="spacer" colSpan={2} />
+          </tr>
+          <tr>
+            <th scope="row">Created:</th>
+            <td>{dateTimeString(stats?.ctime)}</td>
+          </tr>
+          {!stats?.isDirectory() && (
+            <tr>
+              <th scope="row">Modified:</th>
               <td>
-                {isDirectory
-                  ? "File folder"
-                  : isShortcut || extType
-                    ? `${isShortcut ? "Shortcut" : extType} (${extension})`
-                    : "File"}
+                {stats && dateTimeString(new Date(getModifiedTime(url, stats)))}
               </td>
             </tr>
-            {!isDirectory && (
-              <tr>
-                <th scope="row">{pid ? "Opens with:" : "Description:"}</th>
-                <td>
-                  {pid && directory[pid]?.icon && (
-                    <Icon imgSize={16} src={directory[pid].icon} />
-                  )}
-                  {pid ? directory[pid]?.title || pid : basename(url || "")}
-                </td>
-              </tr>
-            )}
-            {!isDirectory && (
-              <tr>
-                <td className="spacer" colSpan={2} />
-              </tr>
-            )}
-            <tr>
-              <th scope="row">Location:</th>
-              <td>{dirname(url)}</td>
-            </tr>
-            <tr>
-              <th scope="row">Size</th>
-              <td>
-                {entrySize
-                  ? `${getFormattedSize(
-                      entrySize
-                    )} (${entrySize.toLocaleString()} byte${
-                      entrySize === 1 ? "" : "s"
-                    })`
-                  : "0 bytes"}
-              </td>
-            </tr>
-            {isDirectory && (
-              <tr>
-                <th scope="row">Contains</th>
-                <td>{`${fileCount.toLocaleString()} Files, ${folderCount.toLocaleString()} Folders`}</td>
-              </tr>
-            )}
-            <tr>
-              <td className="spacer" colSpan={2} />
-            </tr>
-            <tr>
-              <th scope="row">Created:</th>
-              <td>{dateTimeString(stats?.ctime)}</td>
-            </tr>
-            {!stats?.isDirectory() && (
-              <tr>
-                <th scope="row">Modified:</th>
-                <td>
-                  {stats &&
-                    dateTimeString(new Date(getModifiedTime(url, stats)))}
-                </td>
-              </tr>
-            )}
-            <tr>
-              <th scope="row">Accessed:</th>
-              <td>{dateTimeString(stats?.atime)}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          )}
+          <tr>
+            <th scope="row">Accessed:</th>
+            <td>{dateTimeString(stats?.atime)}</td>
+          </tr>
+        </tbody>
+      </table>
       <Buttons id={id} onClick={okAction} />
     </>
   );

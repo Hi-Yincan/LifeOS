@@ -15,7 +15,6 @@ import { useRootFs } from "contexts/fileSystem";
 import { resetStorageAndReload } from "contexts/fileSystem/useAsyncFs";
 import { useSessionActions } from "contexts/session";
 import { haltEvent } from "utils/functions";
-import { isKeyboardNavigating } from "utils/keyboard";
 
 type SidebarGroupProps = {
   sidebarButtons: SidebarButtons;
@@ -49,7 +48,6 @@ const Sidebar: FC<SidebarProps> = ({ height }) => {
   };
   const topButtons: SidebarButtons = [
     {
-      expanded: !collapsed,
       heading: true,
       icon: <SideMenu />,
       name: "START",
@@ -88,15 +86,6 @@ const Sidebar: FC<SidebarProps> = ({ height }) => {
       ref={sidebarRef}
       aria-label="Start"
       className={collapsed ? "collapsed" : undefined}
-      onBlur={({ relatedTarget }) => {
-        // Like moving the pointer away, though clicks in it keep it open
-        if (
-          isKeyboardNavigating() &&
-          !sidebarRef.current?.contains(relatedTarget)
-        ) {
-          setCollapsed(true);
-        }
-      }}
       onClick={({ target }) => {
         clearTimer();
 

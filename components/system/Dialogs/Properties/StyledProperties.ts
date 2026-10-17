@@ -18,12 +18,7 @@ const cellWidth =
 const StyledProperties = styled.div`
   padding: 0 ${rightPadding}px 0 ${leftPadding}px;
 
-  /* The tab panel around the table, leaving its layout & role as they are */
-  .general {
-    display: contents;
-  }
-
-  .general > table {
+  table.general {
     background-color: #fff;
     border: 1px solid rgb(217 217 217);
     height: calc(100% - 36px - 28px);
@@ -94,48 +89,48 @@ const StyledProperties = styled.div`
     }
   }
 
-  .tabs {
-    display: flex;
-    height: 28px;
-    padding-top: 7px;
-    position: relative;
-    z-index: 1;
-
-    button {
-      background-color: #fff;
-      border: 1px solid rgb(217 217 217);
-      border-bottom-width: 0;
+  nav {
+    &.tabs {
       display: flex;
-      font-size: 11.5px;
-      height: 21px;
-      letter-spacing: -0.25px;
-      line-height: 16px;
-      padding: 1px 6px;
-      place-content: center;
-      width: auto;
-      z-index: 2;
+      height: 28px;
+      padding-top: 7px;
+      position: relative;
+      z-index: 1;
 
-      &.inactive {
-        background-color: rgb(240 240 240);
-        border-bottom: 1px solid rgb(217 217 217);
-        height: 19px;
-        left: -1px;
-        position: relative;
-        top: 2px;
-        z-index: 1;
+      button {
+        background-color: #fff;
+        border: 1px solid rgb(217 217 217);
+        border-bottom-width: 0;
+        display: flex;
+        font-size: 11.5px;
+        height: 21px;
+        letter-spacing: -0.25px;
+        line-height: 16px;
+        padding: 1px 6px;
+        place-content: center;
+        width: auto;
+        z-index: 2;
 
-        &:first-child {
-          left: 2px;
-        }
+        &.inactive {
+          background-color: rgb(240 240 240);
+          border-bottom: 1px solid rgb(217 217 217);
+          height: 19px;
+          left: -1px;
+          position: relative;
+          top: 2px;
+          z-index: 1;
 
-        &:hover {
-          background-color: rgb(216 234 249);
+          &:first-child {
+            left: 2px;
+          }
+
+          &:hover {
+            background-color: rgb(216 234 249);
+          }
         }
       }
     }
-  }
 
-  nav {
     &.buttons {
       display: flex;
       gap: 8px;

@@ -18,7 +18,6 @@ export type MenuItem = {
 
 export type MenuState = {
   items?: MenuItem[];
-  label?: string;
   staticX?: number;
   staticY?: number;
   x?: number;
@@ -49,8 +48,7 @@ type MenuContextState = {
 
 type MenuContextActions = {
   contextMenu: (
-    getItems: (event?: CaptureTriggerEvent) => MenuItem[],
-    label?: string
+    getItems: (event?: CaptureTriggerEvent) => MenuItem[]
   ) => ContextMenuCapture;
   setMenu: React.Dispatch<React.SetStateAction<MenuState>>;
 };
@@ -63,8 +61,7 @@ const useMenuContextState = (): {
   const touchTimer = useRef<number>(0);
   const touchEvent = useRef<React.TouchEvent>(undefined);
   const contextMenu = (
-    getItems: (event?: CaptureTriggerEvent) => MenuItem[],
-    label?: string
+    getItems: (event?: CaptureTriggerEvent) => MenuItem[]
   ): ContextMenuCapture => {
     const onContextMenuCapture = (
       event?: CaptureTriggerEvent,
@@ -75,19 +72,13 @@ const useMenuContextState = (): {
       let x = 0;
       let y = 0;
 
-      // Clicks from the keyboard have no position, so open below the button
-      const keyboardClick = event?.type === "click" && event.detail === 0;
-      const menuRect = keyboardClick
-        ? event.currentTarget.getBoundingClientRect()
-        : domRect;
-
-      if (event && !keyboardClick) {
+      if (event) {
         if (event.cancelable) event.preventDefault();
 
         ({ pageX: x, pageY: y } =
           "touches" in event ? event.touches.item?.(0) || event : event);
-      } else if (menuRect) {
-        const { height, x: inputX, y: inputY } = menuRect;
+      } else if (domRect) {
+        const { height, x: inputX, y: inputY } = domRect;
 
         x = inputX;
         y = inputY + height;
@@ -97,7 +88,6 @@ const useMenuContextState = (): {
 
       setMenu({
         items: items.length > 0 ? items : undefined,
-        label: items.length > 0 ? label : undefined,
         staticX,
         staticY,
         x,

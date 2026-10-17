@@ -16,10 +16,6 @@ const StyledTo = styled.div`
     font-size: 12px;
     padding: 0 15px 12px;
     user-select: text;
-
-    &:empty {
-      padding: 0;
-    }
   }
 
   ol {

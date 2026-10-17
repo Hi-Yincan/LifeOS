@@ -15,8 +15,7 @@ import {
 } from "contexts/menu/useMenuContextState";
 import { useProcess } from "contexts/process";
 import { useSessionActions } from "contexts/session";
-import { MENU_SEPERATOR, SYSTEM_MENU } from "utils/constants";
-import { isKeyboardNavigating } from "utils/keyboard";
+import { MENU_SEPERATOR } from "utils/constants";
 
 const useTitlebarContextMenu = (id: string): ContextMenuCapture => {
   const { contextMenu } = useMenuActions();
@@ -39,13 +38,12 @@ const useTitlebarContextMenu = (id: string): ContextMenuCapture => {
     const showMaxOrMin = !hideMaximizeButton || !hideMinimizeButton;
     const canMute = typeof mute === "function" && typeof unmute === "function";
 
-    // Like Windows, a menu from the keyboard leaves focus where it opened from
-    if (!isKeyboardNavigating()) focusWindow();
+    focusWindow();
 
     return [
       showMaxOrMin && {
         action: () => {
-          if (minimized) onMinimize(true);
+          if (minimized) onMinimize();
           else onMaximize();
 
           focusWindow();
@@ -83,7 +81,7 @@ const useTitlebarContextMenu = (id: string): ContextMenuCapture => {
         primary: true,
       },
     ].filter(Boolean) as MenuItem[];
-  }, SYSTEM_MENU);
+  });
 };
 
 export default useTitlebarContextMenu;

@@ -11,7 +11,6 @@ type TabProps = {
   id: string;
   metaData: PropertiesMetaData;
   setMetaData: React.Dispatch<React.SetStateAction<PropertiesMetaData>>;
-  tabPanel: React.HTMLAttributes<HTMLElement>;
   url?: string;
 };
 
@@ -20,7 +19,6 @@ const DetailsTab: FC<TabProps> = ({
   id,
   metaData,
   setMetaData,
-  tabPanel,
   url,
 }) => {
   const loading = !(metaData.exif || metaData.mediaType);
@@ -36,9 +34,8 @@ const DetailsTab: FC<TabProps> = ({
 
   return (
     <>
-      <StyledDetailsTab aria-busy={loading || undefined} {...tabPanel}>
-        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- Like the scrolling list of Windows, which not every browser lets Tab reach */}
-        <table aria-label="Details" tabIndex={0}>
+      <StyledDetailsTab aria-busy={loading || undefined}>
+        <table aria-label="Details">
           <thead>
             <tr>
               <th className="property" scope="col">

@@ -1,6 +1,6 @@
 import { basename, extname } from "path";
 import dynamic from "next/dynamic";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
 import GeneralTab from "components/system/Dialogs/Properties/GeneralTab";
 import StyledProperties from "components/system/Dialogs/Properties/StyledProperties";
@@ -55,30 +55,6 @@ const Properties: FC<ComponentProcessProps> = ({ id }) => {
   const [metaData, setMetaData] = useState<PropertiesMetaData>({});
   const onGeneral = currentTab === "general";
   const onDetails = currentTab === "details";
-  const hasDetails = MEDIA_APPS.has(pid) && !isShortcut;
-  const tabsId = useId();
-  const tabPanel = {
-    "aria-labelledby": `${tabsId}${currentTab}`,
-    id: `${tabsId}panel`,
-    role: "tabpanel",
-  };
-  // Like a property sheet, arrow keys switch tabs, stopping at the ends
-  const onTabKeyDown: React.KeyboardEventHandler = (event) => {
-    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-      const right = event.key === "ArrowRight";
-      const tab = (
-        right
-          ? event.currentTarget.nextElementSibling
-          : event.currentTarget.previousElementSibling
-      ) as HTMLElement | null;
-
-      if (tab) {
-        haltEvent(event);
-        setCurrentTab(right ? "details" : "general");
-        tab.focus(PREVENT_SCROLL);
-      }
-    }
-  };
   const extension = extname(generalUrl);
 
   useEffect(() => {
@@ -109,14 +85,7 @@ const Properties: FC<ComponentProcessProps> = ({ id }) => {
 
   useEffect(() => () => getIconAbortController.current?.abort(), []);
 
-  // Like Windows, the dialog opens on its selected tab
-  useEffect(
-    () =>
-      propertiesRef.current
-        ?.querySelector<HTMLElement>("[role=tab][aria-selected=true]")
-        ?.focus(PREVENT_SCROLL),
-    []
-  );
+  useEffect(() => propertiesRef.current?.focus(PREVENT_SCROLL), []);
 
   return (
     <StyledProperties
@@ -128,39 +97,30 @@ const Properties: FC<ComponentProcessProps> = ({ id }) => {
       }}
       {...closeOnEscape}
     >
-      <div className="tabs" role="tablist">
+      <nav className="tabs" role="presentation">
         <StyledButton
-          aria-controls={onGeneral ? tabPanel.id : undefined}
-          aria-selected={onGeneral}
+          aria-pressed={onGeneral}
           className={onGeneral ? undefined : "inactive"}
-          id={`${tabsId}general`}
           onClick={onGeneral ? undefined : () => setCurrentTab("general")}
-          onKeyDown={onTabKeyDown}
-          role="tab"
         >
           General
         </StyledButton>
-        {hasDetails && (
+        {MEDIA_APPS.has(pid) && !isShortcut && (
           <StyledButton
-            aria-controls={onDetails ? tabPanel.id : undefined}
-            aria-selected={onDetails}
+            aria-pressed={onDetails}
             className={onDetails ? undefined : "inactive"}
-            id={`${tabsId}details`}
             onClick={onDetails ? undefined : () => setCurrentTab("details")}
-            onKeyDown={onTabKeyDown}
-            role="tab"
           >
             Details
           </StyledButton>
         )}
-      </div>
+      </nav>
       {onGeneral && (
         <GeneralTab
           icon={icon}
           id={id}
           isShortcut={isShortcut}
           pid={pid}
-          tabPanel={tabPanel}
           url={generalUrl}
         />
       )}
@@ -170,7 +130,6 @@ const Properties: FC<ComponentProcessProps> = ({ id }) => {
           id={id}
           metaData={metaData}
           setMetaData={setMetaData}
-          tabPanel={tabPanel}
           url={url}
         />
       )}

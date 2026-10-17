@@ -1,6 +1,5 @@
 import { basename } from "path";
 import type * as PrintJs from "print-js";
-import { useState } from "react";
 import {
   Add,
   Download,
@@ -15,7 +14,6 @@ import { useProcess, useProcessesActions } from "contexts/process";
 import Button from "styles/common/Button";
 import { MILLISECONDS_IN_SECOND } from "utils/constants";
 import { bufferToUrl, isSafari, label } from "utils/functions";
-import { isComposingKey } from "utils/keyboard";
 
 declare global {
   interface Window {
@@ -24,33 +22,6 @@ declare global {
 }
 
 const loadPrintJs = (): Promise<typeof PrintJs> => import("print-js");
-
-// Like Edge, what is typed applies on Enter or on leaving, unless Escape
-// puts it back
-const useDraftInput = (
-  value: string,
-  apply: (draft: string) => void
-): React.InputHTMLAttributes<HTMLInputElement> => {
-  const [draft, setDraft] = useState<string>();
-  const applyDraft = (): void => {
-    if (draft !== undefined) apply(draft);
-    setDraft(undefined);
-  };
-
-  return {
-    onBlur: applyDraft,
-    onChange: ({ target }) => setDraft(target.value),
-    onKeyDown: (event) => {
-      if (isComposingKey(event.nativeEvent)) return;
-      if (event.key === "Enter") applyDraft();
-      else if (event.key === "Escape" && draft !== undefined) {
-        event.preventDefault();
-        setDraft(undefined);
-      }
-    },
-    value: draft ?? value,
-  };
-};
 
 const Controls: FC<ComponentProcessProps> = ({ id }) => {
   const { readFile } = useFileSystemActions();
@@ -64,27 +35,6 @@ const Controls: FC<ComponentProcessProps> = ({ id }) => {
     subTitle = "",
     url = "",
   } = useProcess(id);
-  const pageInput = useDraftInput(String(currentPage), (draft) => {
-    const newPage = Number(draft);
-
-    if (Number.isInteger(newPage) && newPage >= 1 && newPage <= count) {
-      argument(id, "page", newPage);
-      componentWindow
-        ?.querySelector(`ol.pages > li:nth-child(${newPage})`)
-        ?.scrollIntoView();
-    }
-  });
-  const scaleInput = useDraftInput(`${Math.round(scale * 100)}%`, (draft) => {
-    const newScale = Number(draft.replace("%", "")) / 100;
-
-    if (newScale > 0) {
-      argument(
-        id,
-        "scale",
-        scales.find((s) => s >= newScale) || scales[scales.length - 1]
-      );
-    }
-  });
 
   return (
     <StyledControls role="presentation">
@@ -97,8 +47,21 @@ const Controls: FC<ComponentProcessProps> = ({ id }) => {
             <input
               aria-label="Page number"
               enterKeyHint="go"
-              inputMode="numeric"
-              {...pageInput}
+              onChange={({ target }) => {
+                const newPage = Number(target.value);
+
+                if (Number.isNaN(newPage) || newPage < 1 || newPage > count) {
+                  return;
+                }
+
+                argument(id, "page", newPage);
+
+                componentWindow
+                  ?.querySelectorAll("li")
+                  .item(newPage - 1)
+                  .scrollIntoView();
+              }}
+              value={currentPage}
             />{" "}
             / {count}
           </li>
@@ -118,7 +81,32 @@ const Controls: FC<ComponentProcessProps> = ({ id }) => {
             aria-label="Zoom level"
             disabled={rendering || count === 0}
             enterKeyHint="done"
-            {...scaleInput}
+            onChange={({ target }) => {
+              if (
+                !target.value.endsWith("%") ||
+                target.value.length > 4 ||
+                target.value.length < 2
+              ) {
+                return;
+              }
+
+              const newScale = Number(target.value.replace("%", "")) / 100;
+
+              if (
+                Number.isNaN(newScale) ||
+                newScale > scales[scales.length - 1] ||
+                newScale < scales[0]
+              ) {
+                return;
+              }
+
+              argument(
+                id,
+                "scale",
+                scales[scales.findIndex((s) => s >= newScale)]
+              );
+            }}
+            value={`${Math.round(scale * 100)}%`}
           />
           <Button
             className="add"

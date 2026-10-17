@@ -11,13 +11,7 @@ const PDF: FC<ComponentProcessProps> = ({ id }) => {
 
   return (
     <>
-      <StyledPDF
-        ref={containerRef}
-        aria-label="Pages"
-        role="region"
-        tabIndex={0}
-        {...useFileDrop({ id })}
-      >
+      <StyledPDF ref={containerRef} {...useFileDrop({ id })}>
         <ol className="pages">
           {usePDF(id, containerRef).map((canvas, index) => (
             <Page

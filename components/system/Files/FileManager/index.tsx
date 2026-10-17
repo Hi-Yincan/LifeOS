@@ -36,8 +36,7 @@ import {
   SHORTCUT_EXTENSION,
   START_MENU_PATH,
 } from "utils/constants";
-import { clsx, getExtension, haltEvent } from "utils/functions";
-import { isEditableElement } from "utils/keyboard";
+import { getExtension, haltEvent } from "utils/functions";
 import { loadFileSystemFunctions } from "utils/loaders";
 
 const StyledEmpty = dynamic(
@@ -154,7 +153,7 @@ const FileManager: FC<FileManagerProps> = ({
   const [permission, setPermission] = useState<PermissionState>("prompt");
   const requestingPermissions = useRef(false);
   const focusedOnLoad = useRef(false);
-  const onKeyDown = renaming === "" ? keyShortcuts : undefined;
+  const onKeyDown = renaming === "" ? keyShortcuts() : undefined;
 
   useEffect(() => {
     if (
@@ -226,21 +225,7 @@ const FileManager: FC<FileManagerProps> = ({
       !isStartMenu &&
       (!id || foregroundId === id)
     ) {
-      // Loading can finish after focus has left the window or is being typed in
-      requestAnimationFrame(() => {
-        const { activeElement } = document;
-
-        if (
-          activeElement === document.body ||
-          (fileManagerRef.current
-            ?.closest("section")
-            ?.contains(activeElement) &&
-            !isEditableElement(activeElement))
-        ) {
-          fileManagerRef.current?.focus(PREVENT_SCROLL);
-        }
-      });
-
+      fileManagerRef.current?.focus(PREVENT_SCROLL);
       focusedOnLoad.current = true;
     }
   }, [foregroundId, id, isDesktop, isStartMenu, loading]);
@@ -275,10 +260,6 @@ const FileManager: FC<FileManagerProps> = ({
                 : `${basename(url)} folder`
               : basename(url) || ROOT_NAME
         }
-        className={clsx({
-          "has-selection": focusedEntries.length > 0,
-          "multi-select": focusedEntries.length > 1,
-        })}
         onKeyDownCapture={loading ? undefined : onKeyDown}
         {...(isDesktop && { onFocusCapture: onDesktopFocusCapture })}
         {...(loading || readOnly
@@ -310,6 +291,7 @@ const FileManager: FC<FileManagerProps> = ({
                 $selecting={isSelecting}
                 $visible={!isLoading}
                 {...(!readOnly && draggableEntry(url, file, renaming === file))}
+                {...(renaming === "" && { onKeyDown: keyShortcuts(file) })}
                 {...focusableEntry(file)}
               >
                 <FileEntry

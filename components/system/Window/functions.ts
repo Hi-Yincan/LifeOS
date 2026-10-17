@@ -27,8 +27,7 @@ export const cascadePosition = (
     y = 0,
   } = componentWindow?.getBoundingClientRect() || {};
   const isOffscreen =
-    x + offset + width > viewWidth() ||
-    y + offset + height > viewHeight() - TASKBAR_HEIGHT;
+    x + offset + width > viewWidth() || y + offset + height > viewHeight();
 
   return !isOffscreen && (x || y)
     ? {

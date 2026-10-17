@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { MAX_SUGGESTIONS } from "components/apps/Messenger/constants";
 import {
   dataToProfile,
@@ -11,7 +11,6 @@ import { useFollows, useProfiles } from "components/apps/Messenger/hooks";
 import Profile from "components/apps/Messenger/Profile";
 import StyledTo from "components/apps/Messenger/StyledTo";
 import Button from "styles/common/Button";
-import { isComposingKey } from "utils/keyboard";
 
 type ToProps = {
   knownKeys: string[];
@@ -33,6 +32,7 @@ const explainInvalidAddress = (address: string): string => {
 const To: FC<ToProps> = ({ knownKeys, setRecipientKey }) => {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
+  const statusId = useId();
   const follows = useFollows();
   const { profiles } = useHistoryContext();
   const candidateKeys = [...new Set([...knownKeys, ...follows])];
@@ -55,6 +55,7 @@ const To: FC<ToProps> = ({ knownKeys, setRecipientKey }) => {
   return (
     <StyledTo>
       <input
+        aria-describedby={status ? statusId : undefined}
         aria-label="To"
         onChange={({ currentTarget: { value } }) => {
           const publicKey = decodePublicKey(value);
@@ -65,12 +66,10 @@ const To: FC<ToProps> = ({ knownKeys, setRecipientKey }) => {
             setStatus("");
           }
         }}
-        onKeyDown={async ({ currentTarget: { value }, key, nativeEvent }) => {
+        onKeyDown={async ({ currentTarget: { value }, key }) => {
           const address = value.trim();
 
-          if (key !== "Enter" || !address || isComposingKey(nativeEvent)) {
-            return;
-          }
+          if (key !== "Enter" || !address) return;
 
           setStatus(`Looking up ${address}…`);
 
@@ -85,7 +84,11 @@ const To: FC<ToProps> = ({ knownKeys, setRecipientKey }) => {
         type="text"
         autoFocus
       />
-      <div role="status">{status}</div>
+      {status && (
+        <div id={statusId} role="status">
+          {status}
+        </div>
+      )}
       {suggestions.length > 0 && (
         <ol aria-label="Suggestions">
           {suggestions.map((key) => {
@@ -94,10 +97,7 @@ const To: FC<ToProps> = ({ knownKeys, setRecipientKey }) => {
 
             return (
               <li key={key}>
-                <Button
-                  aria-label={userName}
-                  onClick={() => setRecipientKey(key)}
-                >
+                <Button onClick={() => setRecipientKey(key)}>
                   <Profile
                     nip05={nip05}
                     picture={picture}

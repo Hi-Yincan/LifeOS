@@ -46,22 +46,9 @@ const StyledMenu = styled(motion.nav).attrs<StyledMenuProps>(({ $x, $y }) => ({
       display: flex;
       padding: 3px 0;
 
-      /* While using the keyboard, a resting pointer selects nothing */
-      :root:not([data-keyboard]) &:hover,
-      &.active,
-      :root[data-keyboard] &:focus {
+      &:hover,
+      &.active {
         background-color: rgb(65 65 65);
-
-        /* Like Windows in high contrast, using its own selection colors */
-        @media (forced-colors: active) {
-          background-color: highlight;
-          color: highlighttext;
-          forced-color-adjust: none;
-
-          svg {
-            fill: highlighttext;
-          }
-        }
       }
 
       figcaption {

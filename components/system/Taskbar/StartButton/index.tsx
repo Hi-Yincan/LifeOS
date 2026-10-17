@@ -47,7 +47,6 @@ const StartButton: FC<StartButtonProps> = ({
       $active={startMenuVisible}
       aria-expanded={startMenuVisible}
       aria-haspopup="dialog"
-      aria-keyshortcuts="Shift+Escape"
       {...(startMenuVisible && { "aria-controls": "startMenu" })}
       onClick={onClick}
       $highlight

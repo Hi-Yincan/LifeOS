@@ -4,11 +4,7 @@ import { Avatar, Verified } from "components/apps/Messenger/Icons";
 import StyledProfile from "components/apps/Messenger/StyledProfile";
 import { label } from "utils/functions";
 
-export const PROFILE = "Profile";
-
 type ProfileProps = {
-  captionId?: string;
-  expanded?: boolean;
   nip05?: string;
   onClick?: React.MouseEventHandler;
   picture?: string;
@@ -17,9 +13,7 @@ type ProfileProps = {
 };
 
 const Profile: FC<ProfileProps> = ({
-  captionId,
   children,
-  expanded,
   nip05,
   onClick,
   picture,
@@ -44,7 +38,7 @@ const Profile: FC<ProfileProps> = ({
       )}
       {(!picture || loadedImage !== picture) && <Avatar />}
       {verifiedDomain && (
-        <div className="verified" role="img" {...label(verifiedDomain)}>
+        <div className="verified" title={verifiedDomain}>
           <Verified />
         </div>
       )}
@@ -54,19 +48,13 @@ const Profile: FC<ProfileProps> = ({
   return (
     <StyledProfile $clickable={Boolean(onClick)}>
       {onClick ? (
-        <button
-          aria-expanded={expanded}
-          aria-haspopup="menu"
-          onClick={onClick}
-          type="button"
-          {...label(PROFILE)}
-        >
+        <button onClick={onClick} type="button" {...label("Profile")}>
           {avatar}
         </button>
       ) : (
         <div>{avatar}</div>
       )}
-      <figcaption id={captionId}>
+      <figcaption>
         <span>{userName}</span>
         {children}
       </figcaption>

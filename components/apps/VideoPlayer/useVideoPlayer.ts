@@ -322,7 +322,7 @@ const useVideoPlayer = ({
       );
       containerRef.current
         ?.closest("section")
-        ?.addEventListener("keydown", ({ altKey, ctrlKey, key, target }) => {
+        ?.addEventListener("keydown", ({ altKey, ctrlKey, key }) => {
           if (altKey) {
             if (VideoResizeKey[key]) {
               updateWindowSize(
@@ -332,9 +332,7 @@ const useVideoPlayer = ({
             } else if (key === "Enter") {
               toggleFullscreen();
             }
-          } else if (!ctrlKey && !(target instanceof HTMLButtonElement)) {
-            // Keys on the title bar's buttons, which share the window, don't
-            // also play or seek
+          } else if (!ctrlKey) {
             // eslint-disable-next-line default-case
             switch (key) {
               case " ":
