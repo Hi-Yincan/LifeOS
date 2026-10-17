@@ -349,7 +349,7 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
   );
   return (
     <Surface aria-label={t.title} className="hyc-surface hyc-store">
-      <StyledNavigation as="header" className="hyc-toolbar">
+      <StyledNavigation className="hyc-toolbar">
         <Button
           aria-label={t.back}
           disabled={!selected && !adding}

@@ -18,6 +18,7 @@
 | [验收矩阵](acceptance.md) | A01–A21，区分要求与实测证据 |
 | [计划输入](implementation-plan.md) | T01–T16、M0–M4，供 Issue #3 拆解 |
 | [资料来源](sources.md) | 个人资料、项目归属、参考与上游基线 |
+| [商店顶部布局修复](../../research/concept/app-store-layout.md) | 地址栏重叠、工具栏边界与窄屏可读性专项回归 |
 | [商店原型验证](../../research/concept/app-store.md) | 分类/启动、本机清单、语言与实际验证证据 |
 | [OS 设置入口验证](../../research/concept/sidebar-settings.md) | 开始菜单左侧栏入口、应用入口移除与验证 |
 | [视觉修订报告](../../research/concept/style-revision.md) | 取消额外适配、视觉统一、构建和浏览器验证 |
