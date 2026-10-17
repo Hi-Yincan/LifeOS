@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-17",
+  "issue": 26,
+  "source": {
+    "repository": "Hi-Yincan/LifeOS",
+    "repositoryId": 1322923060,
+    "releaseCommit": "1144f2a4bd55c1ea7463c2a81021c99f6afc6b9b",
+    "ciRun": 39079597929,
+    "pagesEnabled": false
+  },
+  "publisher": {
+    "repository": "Hi-Yincan/Hi-Yincan.github.io",
+    "repositoryId": 1423837444,
+    "commit": "a8681b9722a3687833db126ecf562e38883e306a",
+    "ciRun": 39079697792,
+    "files": [
+      ".github/workflows/deploy.yml",
+      "README.md",
+      "deployment.json"
+    ],
+    "pagesMode": "workflow",
+    "customDomain": "hyc.ac",
+    "httpsEnforced": true
+  },
+  "history": {
+    "originalIssuesAndPRsPreserved": 25,
+    "originalIssueCommentsPreserved": 80,
+    "repairedBodiesAndComments": 54
+  },
+  "checks": {
+    "source": {
+      "unitPassed": 30,
+      "servicePassed": 13,
+      "browserPassed": 7
+    },
+    "publisher": {
+      "unitPassed": 30,
+      "servicePassed": 13,
+      "browserPassed": 8,
+      "browserSkipped": 1,
+      "skippedReason": "Admin-only scenario excluded in static visitor mode"
+    }
+  },
+  "sites": [
+    {
+      "path": "/",
+      "status": 200,
+      "url": "https://hyc.ac/?migration=1144f2a4",
+      "sha256": "ac4bf6657eed1ae1a0fafd9ace9f516da47c6d288735719c5989e5f460aaaf02",
+      "bytes": 9648
+    },
+    {
+      "path": "/blog/",
+      "status": 200,
+      "url": "https://hyc.ac/blog/?migration=1144f2a4",
+      "sha256": "fb5d4e8570a5f941f4dce6e10f00a642decb931713722ccf72c7a5d63a4110f4",
+      "bytes": 5505,
+      "unchanged": true
+    },
+    {
+      "path": "/gallery/",
+      "status": 200,
+      "url": "https://hyc.ac/gallery/?migration=1144f2a4",
+      "sha256": "3ff9275dfabc2eaf0870f95370a12291b307c8361ac26a175a64d7742ddbf15a",
+      "bytes": 5104,
+      "unchanged": true
+    },
+    {
+      "path": "/release.json",
+      "status": 200,
+      "url": "https://hyc.ac/release.json?migration=1144f2a4",
+      "sha256": "c1185367a0ba70621aee9bfb49f6873539d205e0a5f364ad0d7020212d392d15",
+      "bytes": 319
+    },
+    {
+      "path": "/.index/fs.9p.json",
+      "status": 200,
+      "url": "https://hyc.ac/.index/fs.9p.json?migration=1144f2a4",
+      "sha256": "44dc1362f6d3f40305bc50e70f244409cb14387f7770a70b69e16b01e6582a76",
+      "bytes": 72497
+    },
+    {
+      "path": "/content/projects.json",
+      "status": 200,
+      "url": "https://hyc.ac/content/projects.json?migration=1144f2a4",
+      "sha256": "9ef996c9bf31cc12841441c1eee8dad6e710bb3e364286702b1162d9cb71ff41",
+      "bytes": 4676
+    }
+  ],
+  "release": {
+    "commit": "1144f2a4bd55c1ea7463c2a81021c99f6afc6b9b",
+    "dirty": false,
+    "mode": "visitor",
+    "builtAt": "2026-10-17T23:41:05.887Z",
+    "bytes": 328377907,
+    "publisher": {
+      "repository": "Hi-Yincan/Hi-Yincan.github.io",
+      "commit": "a8681b9722a3687833db126ecf562e38883e306a",
+      "runId": "39079697792"
+    }
+  },
+  "dnsChanged": false,
+  "local": {
+    "sourcePath": "/Users/acccan/Repos/Hi-Yincan/hi-yincan.github.io",
+    "sourceWorktrees": 1,
+    "prototypePort": 4391,
+    "productPort": 4392,
+    "runtimePreserved": true,
+    "migrationBackup": "/private/tmp/lifeos-migration/published-artifact/artifact.tar"
+  },
+  "notes": [
+    "Historical evidence URLs corrected; commit IDs, run IDs and test results preserved.",
+    "External old GitHub bookmarks require changing the repository name to LifeOS.",
+    "Local migration artifact is temporary, not a long-term backup policy."
+  ]
+}

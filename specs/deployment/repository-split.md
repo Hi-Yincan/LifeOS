@@ -37,3 +37,9 @@
 - 发布 CI 全部检查通过，release.json 可反查源码 SHA 与配置 SHA。
 - hyc.ac HTTPS 可访问，blog/gallery 内容与迁移前一致；必要的静态索引和作品集数据可访问。
 - LifeOS 不再拥有生产 Pages；生产域名归发布仓库管理。
+
+## 实施结果
+
+迁移已完成，详见 #26 的验收评论和 [机器可读记录](../../maintenance/deployment/2026-10-17-repository-split.json)。线上锁定源码 `1144f2a4bd55c1ea7463c2a81021c99f6afc6b9b`，发布配置 `a8681b9722a3687833db126ecf562e38883e306a`。此后的维护验收文档提交不触发重新发布。
+
+LifeOS 的产品 CI 与发布仓库的访客构建/验收均通过。新仓库现持有 hyc.ac 的 Pages 配置，HTTPS 强制开启；LifeOS 的 Pages 已关闭。blog/gallery 内容 SHA-256 与切换前一致，原 25 个 Issue/PR 和 80 条评论均保留，54 处正文/评论链接已修复。
