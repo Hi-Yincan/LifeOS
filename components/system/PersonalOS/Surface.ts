@@ -16,7 +16,8 @@ const Surface = styled.section`
   --hyc-selected-border: ${({ theme }) => theme.colors.fileEntry.borderFocused};
   font-family: ${({ theme }) => theme.formats.systemFont};
 
-  .hyc-main, &.hyc-settings {
+  .hyc-main,
+  &.hyc-settings {
     ${ScrollBars()}
   }
 `;

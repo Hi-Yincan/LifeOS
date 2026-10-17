@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  fullyParallel: true,
+  fullyParallel: false,
   projects: [{ name: "chromium", use: devices["Desktop Chrome"] }],
   reporter: [["list"], ["html", { open: "never" }]],
   retries: process.env.CI ? 1 : 0,
@@ -13,9 +13,9 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
-    command: "node server/start.mjs",
+    command: "node server/test/serve.mjs",
     reuseExistingServer: false,
     url: "http://127.0.0.1:4392/api/projects",
   },
-  workers: 2,
+  workers: 1,
 });

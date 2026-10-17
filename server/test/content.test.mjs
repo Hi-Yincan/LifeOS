@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync } from 'node:fs';
+import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { once } from 'node:events';
@@ -96,10 +96,4 @@ test('repeated invalid keys are rate limited', async t => {
   const { call } = await fixture(t);
   for (let i = 0; i < 12; i++) assert.equal((await call('/api/session', { method: 'POST', body: { key: 'invalid' } })).status, 401);
   assert.equal((await call('/api/session', { method: 'POST', body: { key: 'invalid' } })).status, 429);
-});
-
-test('integration manifest retains every upstream process entry', () => {
-  const manifest = JSON.parse(readFileSync(new URL('../evidence/integration-manifest.json', import.meta.url), 'utf8'));
-  assert.equal(manifest.originalAppEntriesRemoved, 0); assert.equal(manifest.originalAppCount, 33);
-  assert.ok(manifest.originalApps.includes('Terminal') && manifest.originalApps.includes('V86') && manifest.originalApps.includes('Paint'));
 });

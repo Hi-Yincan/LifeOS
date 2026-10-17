@@ -15,6 +15,8 @@ let scanned = 0;
 function scan(path) {
   for (const entry of readdirSync(path, { withFileTypes: true })) {
     const file = resolve(path, entry.name);
+    // The auditor's own denylist is not runtime or published site content.
+    if (file === fileURLToPath(import.meta.url)) continue;
     if (entry.isDirectory()) scan(file);
     else if (entry.isFile() && textExtensions.has(extname(file))) {
       scanned++;

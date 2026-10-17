@@ -1,6 +1,6 @@
-import PersonalShell from "components/system/PersonalOS/Shell";
 import AppsLoader from "components/system/Apps/AppsLoader";
 import Desktop from "components/system/Desktop";
+import PersonalShell from "components/system/PersonalOS/Shell";
 import Taskbar from "components/system/Taskbar";
 import useGlobalErrorHandler from "hooks/useGlobalErrorHandler";
 import useGlobalKeyboardShortcuts from "hooks/useGlobalKeyboardShortcuts";

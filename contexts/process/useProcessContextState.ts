@@ -1,5 +1,5 @@
-import { canClosePersonalApp } from "components/system/PersonalOS/closeGuards";
 import { useRef, useState } from "react";
+import { canClosePersonalApp } from "components/system/PersonalOS/closeGuards";
 import {
   closeProcess,
   maximizeProcess,

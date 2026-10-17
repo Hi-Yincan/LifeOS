@@ -46,10 +46,7 @@ const fileBased = new Set([
   "VideoPlayer",
 ]);
 export const catalog: CatalogApp[] = Object.entries(directory)
-  .filter(
-    ([id, process]) =>
-      !process.dialogProcess && id !== "SystemSettings"
-  )
+  .filter(([id, process]) => !process.dialogProcess && id !== "SystemSettings")
   .map(([id, process]): CatalogApp => ({
     description:
       descriptions[id] ||

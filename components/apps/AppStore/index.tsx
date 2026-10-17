@@ -123,8 +123,7 @@ const messages = {
     name: "名称（中文或原文）",
     nameEn: "英文名称（选填）",
     native: "系统软件",
-    nativeHint:
-      "内置应用始终保留可用。收藏记录仅保存在此浏览器。",
+    nativeHint: "内置应用始终保留可用。收藏记录仅保存在此浏览器。",
     open: "打开",
     origin: "目标网站",
     process: "daedalOS 原生窗口",

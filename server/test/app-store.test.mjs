@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { emptyLibrary, externalURL, parseManifest, readLibrary } from '../overlay/components/apps/AppStore/model.ts';
+import { emptyLibrary, externalURL, parseManifest, readLibrary } from '../../components/apps/AppStore/model.ts';
 const origin = 'https://hyc.ac';
 const manifest = { name: 'My app', url: 'https://example.com/app' };
 const app = { ...parseManifest(manifest, origin), id: 'web-12345678-1234-1234-1234-123456789abc', enabled: true };

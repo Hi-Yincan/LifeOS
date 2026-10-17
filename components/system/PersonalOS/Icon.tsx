@@ -1,3 +1,49 @@
 const paths: Record<string, string> = {
-  grid: "M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z", code: "m8 5-7 7 7 7m8-14 7 7-7 7m-3-17-3 20", arrow: "M5 12h14m-6-6 6 6-6 6", back: "M19 12H5m6-6-6 6 6 6", link: "M14 3h7v7m-1-6L10 14m0-10H4v16h16v-6", user: "M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 21v-2a8 8 0 0 1 16 0v2", mail: "M3 5h18v14H3z m0 0 9 7 9-7", globe: "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM3 12h18M12 3c5 5 5 13 0 18-5-5-5-13 0-18", search: "M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Zm-2 5 7 7", plus: "M12 4v16M4 12h16", check: "m4 12 5 5L20 6", settings: "M10 3h4l1 3 3 1 3-1 2 4-2 2v3l2 2-2 4-3-1-3 1-1 3h-4l-1-3-3-1-3 1-2-4 2-2v-3L1 10l2-4 3 1 3-1 1-3Zm6 10a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z", home: "m3 10 9-7 9 7v11h-6v-7H9v7H3z", close: "m5 5 14 14M19 5 5 19", list: "M8 5h13M8 12h13M8 19h13M3 5h1M3 12h1M3 19h1", edit: "m15 4 5 5M4 20l5-1L21 7l-4-4L5 15l-1 5Z", upload: "M12 16V3m-5 5 5-5 5 5M3 15v6h18v-6", book: "M3 4h7l2 2 2-2h7v16h-7l-2 2-2-2H3V4Zm9 2v16", play: "m8 4 12 8-12 8V4Z", spark: "m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z", clock: "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM12 6v6l4 2", lock: "M6 10h12v11H6zM8 10V7a4 4 0 0 1 8 0v3" };
-export default function Icon({ name, size = 20 }: { name: string; size?: number }): React.ReactNode { return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paths[name] || paths.grid}/></svg>; }
+  arrow: "M5 12h14m-6-6 6 6-6 6",
+  back: "M19 12H5m6-6-6 6 6 6",
+  book: "M3 4h7l2 2 2-2h7v16h-7l-2 2-2-2H3V4Zm9 2v16",
+  check: "m4 12 5 5L20 6",
+  clock: "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM12 6v6l4 2",
+  close: "m5 5 14 14M19 5 5 19",
+  code: "m8 5-7 7 7 7m8-14 7 7-7 7m-3-17-3 20",
+  edit: "m15 4 5 5M4 20l5-1L21 7l-4-4L5 15l-1 5Z",
+  globe:
+    "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM3 12h18M12 3c5 5 5 13 0 18-5-5-5-13 0-18",
+  grid: "M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z",
+  home: "m3 10 9-7 9 7v11h-6v-7H9v7H3z",
+  link: "M14 3h7v7m-1-6L10 14m0-10H4v16h16v-6",
+  list: "M8 5h13M8 12h13M8 19h13M3 5h1M3 12h1M3 19h1",
+  lock: "M6 10h12v11H6zM8 10V7a4 4 0 0 1 8 0v3",
+  mail: "M3 5h18v14H3z m0 0 9 7 9-7",
+  play: "m8 4 12 8-12 8V4Z",
+  plus: "M12 4v16M4 12h16",
+  search: "M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Zm-2 5 7 7",
+  settings:
+    "M10 3h4l1 3 3 1 3-1 2 4-2 2v3l2 2-2 4-3-1-3 1-1 3h-4l-1-3-3-1-3 1-2-4 2-2v-3L1 10l2-4 3 1 3-1 1-3Zm6 10a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z",
+  spark: "m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z",
+  upload: "M12 16V3m-5 5 5-5 5 5M3 15v6h18v-6",
+  user: "M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 21v-2a8 8 0 0 1 16 0v2",
+};
+const Icon = ({
+  name,
+  size = 20,
+}: {
+  name: string;
+  size?: number;
+}): React.ReactNode => (
+  <svg
+    aria-hidden="true"
+    fill="none"
+    height={size}
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1.65"
+    viewBox="0 0 24 24"
+    width={size}
+  >
+    <path d={paths[name] || paths.grid} />
+  </svg>
+);
+
+export default Icon;

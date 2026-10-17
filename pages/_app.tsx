@@ -1,11 +1,12 @@
 // eslint-disable-next-line import/no-unassigned-import
 import "utils/polyfills";
+// eslint-disable-next-line import/no-unassigned-import -- Global product styles must be imported by Next App.
 import "components/system/PersonalOS/personal.css";
-import { PersonalOSProvider } from "components/system/PersonalOS/context";
 import { type AppProps } from "next/app";
 import { ErrorBoundary } from "components/pages/ErrorBoundary";
 import Metadata from "components/pages/Metadata";
 import StyledApp from "components/pages/StyledApp";
+import { PersonalOSProvider } from "components/system/PersonalOS/context";
 import { FileSystemProvider } from "contexts/fileSystem";
 import { MenuProvider } from "contexts/menu";
 import { ProcessProvider } from "contexts/process";
@@ -20,9 +21,11 @@ const App: FC<AppProps> = ({ Component: Index, pageProps }) => (
           <ErrorBoundary>
             <Metadata />
             <StyledApp>
-              <PersonalOSProvider><MenuProvider>
-                <Index {...pageProps} />
-              </MenuProvider></PersonalOSProvider>
+              <PersonalOSProvider>
+                <MenuProvider>
+                  <Index {...pageProps} />
+                </MenuProvider>
+              </PersonalOSProvider>
             </StyledApp>
           </ErrorBoundary>
         </SessionProvider>

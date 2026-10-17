@@ -13,7 +13,9 @@ const PersonalShell = (): React.ReactNode => {
       loaded &&
       route &&
       new URLSearchParams(location.search).get("app") === "Portfolio"
-    ) open("Portfolio");
+    ) {
+      open("Portfolio");
+    }
   }, [route, loaded, open]);
   // eslint-disable-next-line react/jsx-no-useless-fragment -- This route bridge renders no UI.
   return <></>;
