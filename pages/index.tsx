@@ -1,3 +1,4 @@
+import PersonalShell from "components/system/PersonalOS/Shell";
 import AppsLoader from "components/system/Apps/AppsLoader";
 import Desktop from "components/system/Desktop";
 import Taskbar from "components/system/Taskbar";
@@ -20,6 +21,7 @@ const Index: FC = () => {
     <Desktop>
       <Taskbar />
       <AppsLoader />
+      <PersonalShell />
     </Desktop>
   );
 };

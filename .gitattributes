@@ -1,2 +1,8 @@
 * text=auto eol=crlf
 .husky/* text eol=lf
+
+research/** text eol=lf
+specs/** text eol=lf
+server/** text eol=lf
+maintenance/** text eol=lf
+scripts/product/** text eol=lf

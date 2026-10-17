@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/no-unassigned-import
 import "utils/polyfills";
+import "components/system/PersonalOS/personal.css";
+import { PersonalOSProvider } from "components/system/PersonalOS/context";
 import { type AppProps } from "next/app";
 import { ErrorBoundary } from "components/pages/ErrorBoundary";
 import Metadata from "components/pages/Metadata";
@@ -18,9 +20,9 @@ const App: FC<AppProps> = ({ Component: Index, pageProps }) => (
           <ErrorBoundary>
             <Metadata />
             <StyledApp>
-              <MenuProvider>
+              <PersonalOSProvider><MenuProvider>
                 <Index {...pageProps} />
-              </MenuProvider>
+              </MenuProvider></PersonalOSProvider>
             </StyledApp>
           </ErrorBoundary>
         </SessionProvider>

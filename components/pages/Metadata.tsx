@@ -1,4 +1,5 @@
 import Head from "next/head";
+import site from "personal-site.json";
 import { useCursor } from "components/pages/hooks/useCursor";
 import { useFaviconAndTitle } from "components/pages/hooks/useFaviconAndTitle";
 import desktopIcons from "public/.index/desktopIcons.json";
@@ -53,16 +54,12 @@ const Metadata: FC = () => {
       />
       <meta content={description} name="description" />
       <meta content={alias} property="og:title" />
+      <meta content={alias} property="og:site_name" />
+      <link href={author.url} rel="canonical" />
       <meta content="website" property="og:type" />
       <meta content={author.url} property="og:url" />
-      <meta content={`${author.url}/screenshot.png`} property="og:image" />
+      <meta content={`${author.url}${site.icon}`} property="og:image" />
       <meta content={description} property="og:description" />
-      <link
-        href={`${author.url}/rss.xml`}
-        rel="alternate"
-        title={`RSS Feed for ${alias}`}
-        type="application/rss+xml"
-      />
       <PreloadIcons />
       {useCursor()}
     </Head>

@@ -1,4 +1,5 @@
 import { type AsyncZipOptions } from "fflate";
+import site from "personal-site.json";
 import { type Size } from "components/system/Window/RndWindow/useResizable";
 import { type ClockSource, type WallpaperFit } from "contexts/session/types";
 import { type ThemeName } from "styles/themes";
@@ -319,7 +320,7 @@ export const SESSION_FILE = "/session.json";
 
 export const SHORTCUT_ICON = `${ICON_PATH}/shortcut.webp`;
 
-export const FAVICON_BASE_PATH = "/favicon.ico";
+export const FAVICON_BASE_PATH = site.icon;
 
 export const FOLDER_ICON = `${ICON_PATH}/folder.webp`;
 
@@ -376,14 +377,9 @@ export const DEFAULT_SCROLLBAR_WIDTH = 17;
 export const TASKBAR_HEIGHT = 30;
 
 export const PACKAGE_DATA = {
-  alias: "daedalOS",
-  author: {
-    email: "dustinbrett@gmail.com",
-    name: "Dustin Brett",
-    npub: "npub10l3amzckl56834tgsvdafrg5dtux9aam9maqvudjfsjtnjjdduaqj0sehy",
-    url: "https://dustinbrett.com",
-  },
-  description: "Desktop environment in the browser",
+  alias: site.name,
+  author: { name: site.name, url: site.url },
+  description: site.description,
   license: "MIT",
   version: "2.0.0",
 };

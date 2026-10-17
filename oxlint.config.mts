@@ -15,7 +15,7 @@ export default defineConfig({
     style: "error",
     suspicious: "error",
   },
-  ignorePatterns: ["public", "scripts", "*.config.js", "oxlint.config.mts"],
+  ignorePatterns: ["public", "scripts", "research", "server", "maintenance", "*.config.js", "oxlint.config.mts"],
   jsPlugins: [
     "eslint-plugin-no-relative-import-paths",
     "eslint-plugin-perfectionist",

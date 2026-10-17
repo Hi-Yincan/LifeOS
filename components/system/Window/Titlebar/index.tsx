@@ -1,3 +1,4 @@
+import { usePersonalOS } from "components/system/PersonalOS/context";
 import { useRef } from "react";
 import rndDefaults from "components/system/Window/RndWindow/rndDefaults";
 import StyledTitlebar from "components/system/Window/Titlebar/StyledTitlebar";
@@ -28,6 +29,7 @@ type TitlebarProps = {
 };
 
 const Titlebar: FC<TitlebarProps> = ({ id }) => {
+  const { locale } = usePersonalOS();
   const {
     allowResizing = true,
     closing,
@@ -150,7 +152,7 @@ const Titlebar: FC<TitlebarProps> = ({ id }) => {
             }
             className="minimize"
             onClick={triggerMinimize}
-            {...label("Minimize")}
+            {...label(locale === "zh" ? "最小化" : "Minimize")}
           >
             <MinimizeIcon />
           </Button>
@@ -168,8 +170,8 @@ const Titlebar: FC<TitlebarProps> = ({ id }) => {
             disabled={!allowResizing}
             onClick={onMaximize}
             {...(maximized
-              ? label("Restore Down", "Restore")
-              : label("Maximize"))}
+              ? label(locale === "zh" ? "还原" : "Restore Down", locale === "zh" ? "还原" : "Restore")
+              : label(locale === "zh" ? "最大化" : "Maximize"))}
           >
             {maximized ? <MaximizedIcon /> : <MaximizeIcon />}
           </Button>
@@ -179,7 +181,7 @@ const Titlebar: FC<TitlebarProps> = ({ id }) => {
           aria-keyshortcuts={isForeground ? "Control+Alt+F4" : undefined}
           className="close"
           onClick={onClose}
-          {...label("Close")}
+          {...label(locale === "zh" ? "关闭" : "Close")}
         >
           <CloseIcon />
         </Button>

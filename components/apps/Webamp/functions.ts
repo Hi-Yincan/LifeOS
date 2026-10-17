@@ -16,7 +16,6 @@ import { centerPosition } from "components/system/Window/functions";
 import {
   HOME,
   MP3_MIME_TYPE,
-  PACKAGE_DATA,
   TASKBAR_HEIGHT,
 } from "utils/constants";
 import {
@@ -35,9 +34,7 @@ const WEBAMP_SKINS_PATH = `${HOME}/Documents/Winamp Skins`;
 
 const ALLOWS_CORS_IN_WINAMP_SKIN_MUSEUM =
   typeof window !== "undefined" &&
-  ["localhost", PACKAGE_DATA.author.url.replace("https://", "")].includes(
-    window.location.hostname
-  );
+  window.location.hostname === "localhost";
 
 const createWebampSkinMuseumQuery = (offset: number): string => `
   query {
