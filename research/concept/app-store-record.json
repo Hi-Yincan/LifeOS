@@ -19,5 +19,13 @@
     "report": "research/concept/app-store-layout.md",
     "browserCasesPassed": 5,
     "buildSeconds": 265.97
+  },
+  "categoryRevision": {
+    "commit": "0bd79c6",
+    "comment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/19#issuecomment-6231429022",
+    "report": "research/concept/app-store-categories.md",
+    "catalogCount": 30,
+    "browserChecksPassed": 16,
+    "buildSeconds": 81.69
   }
 }
