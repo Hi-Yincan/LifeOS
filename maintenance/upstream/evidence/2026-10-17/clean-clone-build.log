@@ -1,0 +1,33 @@
+Creating file tree ...
+Creating json ...
+▲ Next.js 16.3.8 (webpack)
+⚠ Specified "headers" will not automatically work with "output: export". See more info here: https://nextjs.org/docs/messages/export-no-custom-routes
+✓ Running next.config.js took 54ms
+
+  Running TypeScript ...
+  Finished TypeScript in 1507ms ...
+  Creating an optimized production build ...
+✓ Compiled successfully in 14.5s
+  Collecting page data using 5 workers ...
+  Generating static pages using 5 workers (0/3) ...
+✓ Generating static pages using 5 workers (3/3) in 119ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+⚠ rewrites, redirects, and headers are not applied when exporting your application, detected (headers). See more info here: https://nextjs.org/docs/messages/export-no-custom-routes
+  Exporting using 9 workers (0/3) ...
+✓ Exporting using 9 workers (3/3) in 302ms
+
+Route (pages)
+┌ ○ /
+├   /_app
+└ ○ /404
+
+○  (Static)  prerendered as static content
+
+{
+  "status": "passed",
+  "scannedTextFiles": 1683,
+  "site": "https://hyc.ac",
+  "retiredArtifactsAbsent": true,
+  "requiredIndexesPresent": true
+}

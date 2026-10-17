@@ -1,0 +1,25 @@
+diff --git a/e2e/product.spec.ts b/e2e/product.spec.ts
+index 6e65daf9..51f795ca 100644
+--- a/e2e/product.spec.ts
++++ b/e2e/product.spec.ts
+@@ -68,15 +68,15 @@ test("Start keeps settings and Power without folder shortcuts", async ({
+   await page.goto("/");
+   await page.locator('button[aria-label="Start"]').click();
+   const sidebar = page.locator('nav[aria-label="Start"]');
+-  await expect(sidebar.getByRole("button")).toHaveCount(4);
++  await expect(sidebar.locator("li[aria-label]")).toHaveCount(4);
+   await expect(
+-    sidebar.getByRole("button", { name: "System settings" })
++    sidebar.locator('li[aria-label="System settings"]')
+   ).toBeVisible();
+-  await expect(sidebar.getByRole("button", { name: "Power" })).toBeVisible();
++  await expect(sidebar.locator('li[aria-label="Power"]')).toBeVisible();
+   await expect(
+-    sidebar.getByRole("button", { name: /Documents|Pictures|Videos/ })
++    sidebar.locator('li[aria-label="Documents"], li[aria-label="Pictures"], li[aria-label="Videos"]')
+   ).toHaveCount(0);
+-  await sidebar.getByRole("button", { name: "System settings" }).click();
++  await sidebar.locator('li[aria-label="System settings"]').click();
+   await expect(page.locator('select[name="os-language"]')).toBeVisible();
+   await page.locator('select[name="os-language"]').selectOption("zh");
+   await expect(page).toHaveTitle("系统设置 - Yincan Huang");

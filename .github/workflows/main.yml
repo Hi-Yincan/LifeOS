@@ -1,0 +1,42 @@
+name: Product checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: product-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+      - run: npm install --global yarn@1.22.22
+      - run: yarn install --frozen-lockfile --ignore-scripts --non-interactive
+      - run: yarn build
+      - run: yarn lint
+      - run: yarn test:unit
+      - run: yarn test:server
+      - run: yarn playwright install --with-deps chromium
+      - run: yarn e2e:product
+      - uses: actions/upload-artifact@v6
+        if: failure()
+        with:
+          name: product-test-results
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14

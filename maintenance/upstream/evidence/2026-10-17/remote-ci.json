@@ -1,0 +1,141 @@
+{
+  "conclusion": "success",
+  "event": "pull_request",
+  "headBranch": "integration/daedalos-ready",
+  "headSha": "6c9a4f58e0405c2c997eb3af89b739d48d865a19",
+  "jobs": [
+    {
+      "completedAt": "2026-10-17T09:39:44Z",
+      "conclusion": "success",
+      "databaseId": 117364469315,
+      "name": "validate",
+      "startedAt": "2026-10-17T09:34:23Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-17T09:34:24Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-17T09:34:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:34:35Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v5",
+          "number": 2,
+          "startedAt": "2026-10-17T09:34:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:34:36Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v5",
+          "number": 3,
+          "startedAt": "2026-10-17T09:34:35Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:34:38Z",
+          "conclusion": "success",
+          "name": "Run npm install --global yarn@1.22.22",
+          "number": 4,
+          "startedAt": "2026-10-17T09:34:36Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:35:24Z",
+          "conclusion": "success",
+          "name": "Run yarn install --frozen-lockfile --ignore-scripts --non-interactive",
+          "number": 5,
+          "startedAt": "2026-10-17T09:34:38Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:38:31Z",
+          "conclusion": "success",
+          "name": "Run yarn build",
+          "number": 6,
+          "startedAt": "2026-10-17T09:35:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:38:37Z",
+          "conclusion": "success",
+          "name": "Run yarn lint",
+          "number": 7,
+          "startedAt": "2026-10-17T09:38:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:38:39Z",
+          "conclusion": "success",
+          "name": "Run yarn test:unit",
+          "number": 8,
+          "startedAt": "2026-10-17T09:38:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:38:41Z",
+          "conclusion": "success",
+          "name": "Run yarn test:server",
+          "number": 9,
+          "startedAt": "2026-10-17T09:38:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:39:05Z",
+          "conclusion": "success",
+          "name": "Run yarn playwright install --with-deps chromium",
+          "number": 10,
+          "startedAt": "2026-10-17T09:38:41Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:39:25Z",
+          "conclusion": "success",
+          "name": "Run yarn e2e:product",
+          "number": 11,
+          "startedAt": "2026-10-17T09:39:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:39:25Z",
+          "conclusion": "skipped",
+          "name": "Run actions/upload-artifact@v6",
+          "number": 12,
+          "startedAt": "2026-10-17T09:39:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:39:43Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v5",
+          "number": 23,
+          "startedAt": "2026-10-17T09:39:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:39:43Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v5",
+          "number": 24,
+          "startedAt": "2026-10-17T09:39:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-17T09:39:43Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 25,
+          "startedAt": "2026-10-17T09:39:43Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/actions/runs/39021641079/job/117364469315"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/actions/runs/39021641079"
+}

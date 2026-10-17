@@ -1,0 +1,56 @@
+[WebServer] (node:8034) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 7 tests using 1 worker
+
+(node:8035) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › e2e/product.spec.ts:4:5 › plain visits show the desktop; portfolio remains opt-in (2.8s)
+  ✓  2 [chromium] › e2e/product.spec.ts:22:5 › portfolio project links load public content (302ms)
+  ✓  3 [chromium] › e2e/product.spec.ts:33:5 › store defaults to all and toggles its three categories (4.8s)
+  ✘  4 [chromium] › e2e/product.spec.ts:65:5 › Start keeps settings and Power without folder shortcuts (7.0s)
+(node:8106) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 [chromium] › e2e/product.spec.ts:85:5 › native Paint and file browser still load (4.9s)
+  ✓  6 [chromium] › e2e/product.spec.ts:95:5 › site metadata uses the owner identity and old assets stay absent (219ms)
+  ✓  7 [chromium] › e2e/product.spec.ts:118:5 › author can save a private draft, publish it and unpublish it (23.9s)
+
+
+  1) [chromium] › e2e/product.spec.ts:65:5 › Start keeps settings and Power without folder shortcuts
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('nav[aria-label="Start"]').getByRole('button')
+    Expected: 4
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('nav[aria-label="Start"]').getByRole('button') with timeout 5000ms
+      - waiting for locator('nav[aria-label="Start"]').getByRole('button')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      69 |   await page.locator('button[aria-label="Start"]').click();
+      70 |   const sidebar = page.locator('nav[aria-label="Start"]');
+    > 71 |   await expect(sidebar.getByRole("button")).toHaveCount(4);
+         |                                             ^
+      72 |   await expect(
+      73 |     sidebar.getByRole("button", { name: "System settings" })
+      74 |   ).toBeVisible();
+        at <rehearsal>/e2e/product.spec.ts:71:45
+
+    Error Context: test-results/product-Start-keeps-settin-1be9b-er-without-folder-shortcuts-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/product-Start-keeps-settin-1be9b-er-without-folder-shortcuts-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/product-Start-keeps-settin-1be9b-er-without-folder-shortcuts-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/product.spec.ts:65:5 › Start keeps settings and Power without folder shortcuts
+  6 passed (48.0s)
