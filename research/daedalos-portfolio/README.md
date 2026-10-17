@@ -3,6 +3,7 @@
 这是概念验证，不是生产实现。源码 overlay 与内容服务在本目录；完整 daedalOS 在独立临时 checkout 构建，根目录现有站点未修改。
 
 - 本地入口：`http://127.0.0.1:4391`
+- 站点名称：`Yincan Huang`；浏览器标题与 Open Graph 站点名共用 `components/system/PersonalOS/site.ts` 配置。
 - 基线：`DustinBrett/daedalOS@f017b393d4175eb396a741a7562299423843f1b1`
 - 默认自动打开作品集；设置保留语言选择与单密钥管理入口。2026-10-17 起取消额外手机/平板适配和独立 App 皮肤，全部沿用 daedalOS 原生响应式。
 - 管理入口：开始菜单左侧栏 → 系统设置 → 站点维护。密钥在本机忽略目录 `.runtime/key.json` 中；不要提交、截图或粘贴到 Issue。无用户名。

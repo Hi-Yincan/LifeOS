@@ -43,9 +43,16 @@ modify('pages/index.tsx', text => text.replace('import AppsLoader', 'import Pers
 modify('components/system/Window/Titlebar/index.tsx', text => text.replace('import { useRef }', 'import { usePersonalOS } from "components/system/PersonalOS/context";\nimport { useRef }').replace('const Titlebar: FC<TitlebarProps> = ({ id }) => {', 'const Titlebar: FC<TitlebarProps> = ({ id }) => {\n  const { locale } = usePersonalOS();').replace('label("Minimize")', 'label(locale === "zh" ? "最小化" : "Minimize")').replace('label("Maximize")', 'label(locale === "zh" ? "最大化" : "Maximize")').replace('label("Close")', 'label(locale === "zh" ? "关闭" : "Close")').replace('label("Restore Down", "Restore")', 'label(locale === "zh" ? "还原" : "Restore Down", locale === "zh" ? "还原" : "Restore")'));
 // Keep site identity stable while upstream continues to update the page title.
 modify('components/pages/hooks/useFaviconAndTitle.tsx', text => text
+  .replace('  PACKAGE_DATA,\n', '')
+  .replace('import { useProcess }', 'import { SITE_NAME as alias } from "components/system/PersonalOS/site";\nimport { useProcess }')
+  .replace('const { alias } = PACKAGE_DATA;\n\n', '')
   .replace('const Favicon = createFavicon(favIcon);', 'const Favicon = createFavicon("/System/PersonalOS/avatar.png");')
   .replace('faviconLinkElement.href = FAVICON_BASE_PATH;', 'faviconLinkElement.href = "/System/PersonalOS/avatar.png";'));
-modify('components/pages/Metadata.tsx', text => text.replace('<meta content={description} name="description" />', '<meta content="Yincan Huang — open-source projects and contributions." name="description" />'));
+modify('components/pages/Metadata.tsx', text => text
+  .replace('import desktopIcons', 'import { SITE_NAME as alias } from "components/system/PersonalOS/site";\nimport desktopIcons')
+  .replace('const { alias, author, description } = PACKAGE_DATA;', 'const { author, description } = PACKAGE_DATA;')
+  .replace('<meta content={alias} property="og:title" />', '<meta content={alias} property="og:title" />\n      <meta content={alias} property="og:site_name" />')
+  .replace('<meta content={description} name="description" />', '<meta content="Yincan Huang — open-source projects and contributions." name="description" />'));
 modify('contexts/process/useProcessContextState.ts', text => text.replace('import { useRef, useState }', 'import { canClosePersonalApp } from "components/system/PersonalOS/closeGuards";\nimport { useRef, useState }').replace('const closeWithTransition = (id: string): void => {', 'const closeWithTransition = (id: string): void => {\n    if (!canClosePersonalApp(id)) return;'));
 modify('components/system/StartMenu/Sidebar/index.tsx', text => text
   .replace('import { useEffect, useRef, useState } from "react";', 'import { useEffect, useRef, useState } from "react";\nimport { usePersonalOS } from "components/system/PersonalOS/context";\nimport useLaunch from "components/system/PersonalOS/useLaunch";\nimport StartSettingsIcon from "components/system/PersonalOS/StartSettingsIcon";')
