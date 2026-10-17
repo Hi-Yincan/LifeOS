@@ -20,9 +20,13 @@
       "sha256": "6eee88e6848aafc825995d8a85ab648c0195eb267af8e6c8540e4e8b2d10f450"
     }
   ],
-  "ownerContactStatus": "awaiting user-controlled public Nostr key or NIP-05 address",
+  "ownerContactStatus": "deferred by owner; resume only on explicit request",
   "messagesSent": false,
   "chinaConnectivityTested": false,
   "endToEndDeliveryTested": false,
-  "issueComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/9#issuecomment-6231717676"
+  "issueComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/9#issuecomment-6231717676",
+  "followUpIssue": 20,
+  "parentIssue": 9,
+  "nativeSubIssueRelation": true,
+  "deferralComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/20#issuecomment-6231816801"
 }
