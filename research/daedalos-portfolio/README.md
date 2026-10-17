@@ -5,7 +5,7 @@
 - 本地入口：`http://127.0.0.1:4391`
 - 基线：`DustinBrett/daedalOS@f017b393d4175eb396a741a7562299423843f1b1`
 - 默认自动打开作品集；设置保留语言选择与单密钥管理入口。2026-10-17 起取消额外手机/平板适配和独立 App 皮肤，全部沿用 daedalOS 原生响应式。
-- 管理入口：开始菜单 → 电源 → 系统设置 → 站点维护。密钥在本机忽略目录 `.runtime/key.json` 中；不要提交、截图或粘贴到 Issue。无用户名。
+- 管理入口：开始菜单左侧栏 → 系统设置 → 站点维护。密钥在本机忽略目录 `.runtime/key.json` 中；不要提交、截图或粘贴到 Issue。无用户名。
 - 公开四个项目；浏览器验证创建的合成项目保持下架，仅管理态可见。
 
 ## 复现
@@ -38,7 +38,7 @@ node --test research/daedalos-portfolio/test/*.test.mjs
 
 ## 验证与限制
 
-系统设置入口见 [OS 设置报告](../concept/os-settings.md)。作品集默认不带设置按钮。
+系统设置入口见 [OS 设置报告](../concept/sidebar-settings.md)。作品集默认不带设置按钮。
 
 参见 [视觉修订报告](../concept/style-revision.md)；[2026-10-16 历史验证报告](../concept/validation.md)中的 A/B 与自制三模式已作废 与 [概念目录](../../specs/concept/README.md)。本地服务仅绑定 127.0.0.1，浏览器访客隔离测试使用 localhost 主机名；这不代表真实跨域部署已完成。
 
