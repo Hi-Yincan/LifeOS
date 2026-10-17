@@ -38,7 +38,8 @@
   ],
   "addedProcesses": [
     "Portfolio",
-    "SystemSettings"
+    "SystemSettings",
+    "AppStore"
   ],
   "modifiedUpstreamFiles": [
     "contexts/process/directory.ts",

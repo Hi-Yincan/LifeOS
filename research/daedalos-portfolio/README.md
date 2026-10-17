@@ -8,6 +8,8 @@
 - 管理入口：开始菜单左侧栏 → 系统设置 → 站点维护。密钥在本机忽略目录 `.runtime/key.json` 中；不要提交、截图或粘贴到 Issue。无用户名。
 - 公开四个项目；浏览器验证创建的合成项目保持下架，仅管理态可见。
 
+新增 [系统级应用商店研究原型](../../specs/concept/app-store.md)：从开始菜单的 App Store 进入。28 个原生应用＋作品集目录；可添加本机网页应用清单，启停/移除只影响当前浏览器。第三方接入方案尚待评审，未提供代码包执行与站点发布。
+
 ## 复现
 
 需 Git、Node 与 Yarn Classic。此次实际环境为 Node 26.7.0、Yarn 1.22.22；上游 CI 的 Node 22 尚未在本轮本机重复测试。正式项目应先锁定并验证统一版本。
@@ -37,6 +39,8 @@ node --test research/daedalos-portfolio/test/*.test.mjs
 `prepare.mjs` 检查 SHA，复制自有 overlay，并修改 7 个明确列出的上游文件；识别不了的已有改动会拒绝覆盖。这是实验构建工具，**不等于生产 submodule 接入契约**。应用保留和补丁清单见 `evidence/integration-manifest.json`。
 
 ## 验证与限制
+
+商店实际验证见 [应用商店报告](../concept/app-store.md)。
 
 系统设置入口见 [OS 设置报告](../concept/sidebar-settings.md)。作品集默认不带设置按钮。
 

@@ -21,7 +21,9 @@ export async function captureDOM(page, selector, filename, { normalizePosition =
     if (!rect.width || !rect.height) throw new Error('Capture target is not visible');
     // Fixed menus carry viewport translations. Rebase only the cloned image
     // target; do not mutate the live UI or normalize ordinary app captures.
-    return window.htmlToImage.toPng(element, { pixelRatio: 1, skipFonts: true, backgroundColor: normalizePosition ? getComputedStyle(element).backgroundColor : '#f7f9fc', ...(normalizePosition ? { style: { position: 'relative', left: '0', top: '0', transform: 'none', margin: '0' } } : {}) });
+    // Preserve the real background. Omit picture/source in the clone so the
+    // embedded img fallback is used instead of a non-embedded srcset URL.
+    return window.htmlToImage.toPng(element, { pixelRatio: 1, skipFonts: true, backgroundColor: getComputedStyle(element).backgroundColor, filter: node => node.tagName !== 'SOURCE', ...(normalizePosition ? { style: { position: 'relative', left: '0', top: '0', transform: 'none', margin: '0' } } : {}) });
   }, { selector, normalizePosition });
   await writeFile(filename, Buffer.from(data.split(',')[1], 'base64'));
 }

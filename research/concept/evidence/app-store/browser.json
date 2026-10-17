@@ -1,0 +1,25 @@
+{
+  "narrow": {
+    "viewport": 390,
+    "width": 390,
+    "overflow": false,
+    "cards": 29,
+    "controlsHeight": 47
+  },
+  "corruption": {
+    "error": "无法读取或保存本机应用库。原有数据未覆盖，请检查浏览器存储。",
+    "rawPreserved": true,
+    "addDisabled": true
+  },
+  "final": {
+    "language": "zh-CN",
+    "library": {
+      "apps": [],
+      "favorites": [],
+      "version": 1
+    },
+    "catalogCount": 29,
+    "brokenIcons": 0,
+    "background": "rgb(32, 32, 32)"
+  }
+}
