@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-17",
+  "sourceRepository": "Hi-Yincan/content",
+  "sourceCommit": "5fe34ffcdecf12c70a295c7d96bf6c971b35200a",
+  "sourcePath": "assets/images/favicon.png",
+  "referencedBy": "Hi-Yincan/blog/src/_includes/layouts/base.njk",
+  "sha256": "c8a30fd039ec2e8320b39fe083d5e40ee3650825211bf9a5d3517ee1a601a8c1",
+  "bytes": 384251,
+  "dimensions": [
+    940,
+    940
+  ],
+  "hasAlpha": true,
+  "reuse": "byte-identical existing circular PNG; exact PNG embedded in existing Portfolio SVG URL",
+  "originalDocumentsImageReadable": false,
+  "generatedImageUsed": false
+}

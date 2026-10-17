@@ -6,7 +6,6 @@ import {
   HOME_PAGE,
   NOT_FOUND,
   PROXIES,
-  SURF_TO_MISC,
 } from "components/apps/Browser/config";
 import {
   createDirectoryIndex,
@@ -142,9 +141,7 @@ const Browser: FC<ComponentProcessProps> = ({ id }) => {
       };
       const lowerAddressInput = addressInput.toLowerCase();
 
-      if (lowerAddressInput.startsWith(SURF_TO_MISC.url)) {
-        loadLocalSite(SURF_TO_MISC.path, SURF_TO_MISC.name);
-      } else if (lowerAddressInput.startsWith(DINO_GAME.url)) {
+      if (lowerAddressInput.startsWith(DINO_GAME.url)) {
         loadLocalSite(DINO_GAME.path, `${DINO_GAME.url}/`);
       } else if (!isHtml) {
         iframeRef.current?.setAttribute("sandbox", IFRAME_CONFIG.sandbox);

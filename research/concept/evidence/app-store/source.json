@@ -1,0 +1,23 @@
+{
+  "upstreamSHA": "f017b393d4175eb396a741a7562299423843f1b1",
+  "originalProcessEntries": 33,
+  "originalEntriesIdentical": true,
+  "excludedSystemProcesses": [
+    "OpenWith",
+    "Properties",
+    "Run",
+    "ScreenSaver",
+    "Transfer"
+  ],
+  "nativeCatalogApps": 28,
+  "siteCatalogApps": [
+    "Portfolio"
+  ],
+  "newProcess": "AppStore",
+  "startMenuShortcut": "[InternetShortcut]\nBaseURL=AppStore\nComment=App Store\nIconFile=/System/PersonalOS/store.svg\n",
+  "desktopStoreShortcutAdded": false,
+  "settingsSidebarRecipeChanged": false,
+  "powerActionChanged": false,
+  "catalogPublishingAPIAdded": false,
+  "thirdPartyExecution": "external browser tab; no embedded code execution"
+}

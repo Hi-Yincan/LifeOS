@@ -1,6 +1,5 @@
 import { type ProxyState } from "components/apps/Browser/useProxyMenu";
-import { get9pModifiedTime } from "contexts/fileSystem/core";
-import { FAVICON_BASE_PATH } from "utils/constants";
+import { FAVICON_BASE_PATH, PACKAGE_DATA } from "utils/constants";
 
 type Bookmark = {
   icon: string;
@@ -20,25 +19,17 @@ export const DINO_GAME = {
   url: "chrome://dino",
 };
 
-export const SURF_TO_MISC = {
-  icon: "/Users/Public/Documents/OldSite/favicon.ico",
-  name: "The Ultimate Misc Page",
-  path: "/Users/Public/Documents/OldSite/index.html",
-  url: "http://surf.to/misc",
-};
-
 export const bookmarks: Bookmark[] = [
   {
     icon: FAVICON_BASE_PATH,
-    name: "daedalOS",
-    url: "https://dustinbrett.com/",
+    name: PACKAGE_DATA.alias,
+    url: PACKAGE_DATA.author.url,
   },
   {
     icon: "/System/Icons/Favicons/dir.webp",
     name: "Index of /",
     url: "http://localhost/",
   },
-  ...(get9pModifiedTime(SURF_TO_MISC.path) === -1 ? [] : [SURF_TO_MISC]),
   DINO_GAME,
   {
     icon: "/System/Icons/Favicons/google.webp",

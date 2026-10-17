@@ -1,0 +1,28 @@
+name: Check daedalOS updates
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+      - name: Compare pinned baseline with upstream
+        run: |
+          node scripts/product/upstream.mjs > upstream-status.json
+          cat upstream-status.json
+          printf '```json\n' >> "$GITHUB_STEP_SUMMARY"
+          cat upstream-status.json >> "$GITHUB_STEP_SUMMARY"
+          printf '\n```\n' >> "$GITHUB_STEP_SUMMARY"

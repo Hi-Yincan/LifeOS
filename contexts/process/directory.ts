@@ -1,8 +1,15 @@
 import dynamic from "next/dynamic";
+import { SETTINGS_ICON } from "components/system/PersonalOS/settingsIcon";
 import { type Processes } from "contexts/process/types";
 import { FOLDER_ICON, TASKBAR_HEIGHT } from "utils/constants";
 
 const directory: Processes = {
+  AppStore: {
+    backgroundColor: "#202020",
+    Component: dynamic(() => import("components/apps/AppStore")),
+    defaultSize: { height: 580, width: 820 },
+    icon: "/System/PersonalOS/store.svg", singleton: true, title: "App Store",
+  },
   BoxedWine: {
     allowResizing: false,
     backgroundColor: "#000",
@@ -219,6 +226,12 @@ const directory: Processes = {
     icon: "/System/Icons/photos.webp",
     title: "Photos",
   },
+  Portfolio: {
+    backgroundColor: "#202020",
+    Component: dynamic(() => import("components/apps/Portfolio")),
+    defaultSize: { height: 640, width: 960 },
+    icon: "/System/PersonalOS/portfolio.svg", singleton: true, title: "Portfolio",
+  },
   Properties: {
     allowResizing: false,
     backgroundColor: "rgb(240, 240, 240)",
@@ -308,6 +321,12 @@ const directory: Processes = {
     icon: "/System/Icons/stablediffusion.webp",
     singleton: true,
     title: "Stable Diffusion",
+  },
+  SystemSettings: {
+    backgroundColor: "#202020",
+    Component: dynamic(() => import("components/system/PersonalOS/Settings")),
+    defaultSize: { height: 420, width: 500 },
+    icon: SETTINGS_ICON, singleton: true, title: "Settings",
   },
   Terminal: {
     backgroundBlur: "8px",

@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-17",
+  "upstreamSHA": "f017b393d4175eb396a741a7562299423843f1b1",
+  "files": [
+    {
+      "path": "components/system/Window/functions.ts",
+      "unchangedFromUpstream": true,
+      "sha256": "32366b0c36a1719240fce5c75a1f756e94ac4790b452e069e8a3aeaa5476fb4c"
+    },
+    {
+      "path": "components/system/Window/useWindowTransitions.ts",
+      "unchangedFromUpstream": true,
+      "sha256": "53ee594aea20682973958c25a57a9c74f8502eca97eff692467e351052f0ee3d"
+    },
+    {
+      "path": "components/system/Window/RndWindow/useDefaultSize.ts",
+      "unchangedFromUpstream": true,
+      "sha256": "4b595943ac0490645f73b169f0a0cc0e3dfb5885792ea6fd43ac5d23d07d090b"
+    },
+    {
+      "path": "components/system/Window/RndWindow/useRnd.ts",
+      "unchangedFromUpstream": true,
+      "sha256": "5d852fa7b4ffcc9c3cc4aeab0166689233d24b8a3e40b70e2df69d3897aa7b29"
+    },
+    {
+      "path": "components/system/Taskbar/index.tsx",
+      "unchangedFromUpstream": true,
+      "sha256": "d7fcb5bed54df74d3e7c7fda3af975bd6efe433359cd1c120ea7a8e3088b019d"
+    },
+    {
+      "path": "components/apps/FileExplorer/StyledNavigation.ts",
+      "unchangedFromUpstream": true,
+      "sha256": "0a516078268f57a286a13f1592552484d81b8b22af896515a9786fa6521fd92d"
+    },
+    {
+      "path": "components/system/Files/FileManager/StyledStatusBar.ts",
+      "unchangedFromUpstream": true,
+      "sha256": "17a84d8f3e3a7956d32b86593db76d71621520a2a1a4d6f8e1c268e45d095391"
+    },
+    {
+      "path": "styles/defaultTheme/formats.ts",
+      "unchangedFromUpstream": true,
+      "sha256": "662ecd0170c2befbc795c3b82edc7de3481f465844e79fb41bbd436be947d56e"
+    }
+  ],
+  "viewportUnchanged": true,
+  "buildPassed": true,
+  "buildSeconds": 85.38,
+  "scope": "Source preservation and compilation; browser results recorded separately."
+}

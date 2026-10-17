@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-17",
+  "build": {
+    "exitCode": 0,
+    "durationSeconds": 265.97
+  },
+  "previousBuildBeforeWrapping": {
+    "exitCode": 0,
+    "durationSeconds": 2147.43
+  },
+  "typecheck": "passed in final Next build",
+  "lint": {
+    "scope": "components/apps/AppStore",
+    "exitCode": 0
+  },
+  "browserCases": 5,
+  "allPassed": true,
+  "temporaryStyleProbesRemoved": true,
+  "browserTaskSpace": 33,
+  "browserTaskFinished": true,
+  "retainedPage": "p1",
+  "limitations": [
+    "DOM-render images, not native screenshots",
+    "390px viewport emulation, not physical devices"
+  ]
+}

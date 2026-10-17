@@ -1,0 +1,233 @@
+[p3 "My PC - daedalOS" | space "daedalOS 作品集概念验证"(26): 3 managed, 0 untracked — p1 "Dhiraj Reddy — AI / Software Engineer", p2 "daedalOS", p3* "My PC - daedalOS"]
+root
+  container
+    ordered_list "Desktop" [ref=82]
+      list_item
+        button "My PC" [ref=83]
+          heading
+            image
+            text "My PC"
+      list_item
+        button "Public" [ref=84, loc=css:button[aria-label="Public"]]
+          heading
+            image
+            text "Public"
+      list_item
+        button "Portfolio" [ref=85, loc=css:button[aria-label="Portfolio"]]
+          image
+          image
+          text "Portfolio"
+    container
+      dialog "个人作品集" [ref=86, loc=role:dialog[name="个人作品集"]]
+        container
+          button "个人作品集" [ref=87, loc=css:button[aria-label="个人作品集"]]
+            image
+            text "个人作品集"
+          container
+            button "最小化" [ref=88]
+              svg_root
+            button "最大化" [ref=89]
+              svg_root
+            button "关闭" [ref=90]
+              svg_root
+        container "个人作品集"
+          container
+            container
+              svg_root
+              container
+                text "Yincan"
+                text "PORTFOLIO"
+            container "个人作品集"
+              button [ref=91]
+                svg_root
+                text "概览"
+              button [ref=92]
+                svg_root
+                text "作品"
+                text "4"
+              button [ref=93]
+                svg_root
+                text "关于我"
+            container
+              container
+                text "YH"
+                container
+                  text "Yincan Huang"
+                  text "Zhejiang University"
+              button [ref=94]
+                svg_root
+                text "设置"
+                text "中"
+          container
+            container
+              container
+                text "个人作品集"
+                text "/"
+                text "AIPM"
+              button "设置" [ref=95]
+                svg_root
+            container [ref=96]
+              container
+                button [ref=97]
+                  svg_root
+                  text "返回作品"
+                container
+                  text "OPEN SOURCE"
+                  svg_root
+                  text "AIPM"
+                  container
+                    text "MkDocs"
+                    text "↗"
+                container
+                  text "我的项目"
+                  heading
+                    text "AIPM"
+                  paragraph
+                    text "面向 AI 产品经理的现代知识 Wiki。"
+                container
+                  anchor [ref=98, loc=href:https://github.com/AI-PM-Wiki/AIPM, url=https://github.com/AI-PM-Wiki/AIPM]
+                    svg_root
+                    text "查看源码"
+                  anchor [ref=99, loc=href:https://aipm.ac/, url=https://aipm.ac/]
+                    svg_root
+                    text "访问项目"
+                container
+                  container
+                    container
+                      heading
+                        text "项目背景"
+                      paragraph
+                        text "以结构化知识整理 AI 产品管理相关的学习内容，为学习和查阅提供入口。"
+                    container
+                      heading
+                        text "项目介绍"
+                      paragraph
+                        text "从公开知识出发，连接产品思考与 AI 实践。可以直接访问项目网站阅读，也可以在 GitHub 查看项目。"
+                  container
+                    heading
+                      text "技术与方向"
+                    container
+                      text "MkDocs"
+                      text "Python"
+                      text "JavaScript"
+                    paragraph
+                      text "Open source"
+                      text "GitHub"
+      container [ref=100]
+      container [ref=101]
+      container [ref=102]
+      container [ref=103]
+      container [ref=104]
+      container [ref=105]
+      container [ref=106]
+      container [ref=107]
+    container
+      dialog "My PC" [ref=136, loc=role:dialog[name="My PC"]]
+        container
+          button "My PC" [ref=137]
+            image
+            text "My PC"
+          container
+            button "最小化" [ref=138]
+              svg_root
+            button "最大化" [ref=139]
+              svg_root
+            button "关闭" [ref=140]
+              svg_root
+        container
+          container
+            button "Back" [ref=141, loc=css:button[aria-label="Back"]]
+              svg_root
+            button "Forward" [ref=142, loc=css:button[aria-label="Forward"]]
+              svg_root
+            button "Recent locations" [ref=143, loc=css:button[aria-label="Recent locations"]]
+              svg_root
+            button "Up one level" [ref=144, loc=css:button[aria-label="Up one level"]]
+              svg_root
+            container
+              image
+              textbox "Address" [ref=145, loc=css:input[name="address"]]
+                text "My PC"
+              button "Refresh "My PC" (F5)" [ref=146, loc=css:button[aria-label="Refresh \"My PC\" (F5)"]]
+                svg_root
+            container
+              searchbox "Search Box" [ref=147, loc=css:input[name="search"]]
+                text "Search"
+              svg_root
+          ordered_list "My PC" [ref=148]
+            list_item
+              button "Program Files" [ref=149, loc=css:button[aria-label="Program Files"]]
+                image
+                text "Program Files"
+            list_item
+              button "System" [ref=150, loc=css:button[aria-label="System"]]
+                image
+                text "System"
+            list_item
+              button "Users" [ref=151, loc=css:button[aria-label="Users"]]
+                image
+                text "Users"
+            list_item
+              button "CREDITS.md" [ref=152, loc=css:button[aria-label="CREDITS.md"]]
+                image
+                text "CREDITS.md"
+            list_item
+              button "favicon.ico" [ref=153, loc=css:button[aria-label="favicon.ico"]]
+                image
+                text "favicon.ico"
+            list_item
+              button "robots.txt" [ref=154, loc=css:button[aria-label="robots.txt"]]
+                image
+                text "robots.txt"
+            list_item
+              button "rss.xml" [ref=155, loc=css:button[aria-label="rss.xml"]]
+                image
+                text "rss.xml"
+            list_item
+              button "screenshot.png" [ref=156, loc=css:button[aria-label="screenshot.png"]]
+                image
+                text "screenshot.png"
+            list_item
+              button "session.json" [ref=157, loc=css:button[aria-label="session.json"]]
+                image
+                text "session.json"
+            list_item
+              button "sitemap.xml" [ref=158, loc=css:button[aria-label="sitemap.xml"]]
+                image
+                text "sitemap.xml"
+          container
+            group "Total item count"
+              text "10"
+              text "item"
+              text "s"
+            container
+              button "Details view" [ref=159, loc=css:button[aria-label="Details view"]]
+                image
+              button "Medium icons view" [ref=160, loc=css:button[aria-label="Medium icons view"]]
+                image
+      container [ref=161]
+      container [ref=162]
+      container [ref=163]
+      container [ref=164]
+      container [ref=165]
+      container [ref=166]
+      container [ref=167]
+      container [ref=168]
+    container
+      text "16:47"
+      paragraph
+        text "熟悉的桌面，持续生长的作品。"
+      button [ref=108]
+        svg_root
+        text "个人作品集"
+        text "Yincan Huang"
+    canvas
+    container "OS navigation"
+      button "所有应用" [ref=109, loc=css:button[aria-label="所有应用"]]
+        svg_root
+      button "桌面" [ref=110, loc=css:button[aria-label="桌面"]]
+        svg_root
+      button "运行中的应用" [ref=111, loc=css:button[aria-label="运行中的应用"]]
+        svg_root
+      button "设置" [ref=112]
+        svg_root

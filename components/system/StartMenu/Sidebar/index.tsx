@@ -1,23 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { useTheme } from "styled-components";
+import { usePersonalOS } from "components/system/PersonalOS/context";
+import StartSettingsIcon from "components/system/PersonalOS/StartSettingsIcon";
+import useLaunch from "components/system/PersonalOS/useLaunch";
 import SidebarButton, {
   type SidebarButtons,
 } from "components/system/StartMenu/Sidebar/SidebarButton";
 import {
   AllApps,
-  Documents,
-  Pictures,
   Power,
   SideMenu,
-  Videos,
 } from "components/system/StartMenu/Sidebar/SidebarIcons";
 import StyledSidebar from "components/system/StartMenu/Sidebar/StyledSidebar";
 import { useRootFs } from "contexts/fileSystem";
 import { resetStorageAndReload } from "contexts/fileSystem/useAsyncFs";
-import { useProcessesActions } from "contexts/process";
 import { useSessionActions } from "contexts/session";
-import { HOME, TASKBAR_HEIGHT } from "utils/constants";
-import { haltEvent, viewHeight } from "utils/functions";
+import { haltEvent } from "utils/functions";
 
 type SidebarGroupProps = {
   sidebarButtons: SidebarButtons;
@@ -37,7 +34,8 @@ type SidebarProps = {
 
 const Sidebar: FC<SidebarProps> = ({ height }) => {
   const rootFs = useRootFs();
-  const { open } = useProcessesActions();
+  const { t } = usePersonalOS();
+  const launch = useLaunch();
   const { setHaltSession } = useSessionActions();
   const [collapsed, setCollapsed] = useState(true);
   const expandTimer = useRef(0);
@@ -62,51 +60,13 @@ const Sidebar: FC<SidebarProps> = ({ height }) => {
       ...(collapsed && { tooltip: "All apps" }),
     },
   ];
-  const { sizes } = useTheme();
-  const vh = viewHeight();
-  const buttonAreaCount = Math.floor(
-    (vh - TASKBAR_HEIGHT) / sizes.startMenu.sideBar.width
-  );
-  const bottomButtons = [
-    buttonAreaCount > 3
-      ? {
-          action: () =>
-            open(
-              "FileExplorer",
-              { url: `${HOME}/Documents` },
-              "/System/Icons/documents.webp"
-            ),
-          icon: <Documents />,
-          name: "Documents",
-          ...(collapsed && { tooltip: "Documents" }),
-        }
-      : undefined,
-    buttonAreaCount > 4
-      ? {
-          action: () =>
-            open(
-              "FileExplorer",
-              { url: `${HOME}/Pictures` },
-              "/System/Icons/pictures.webp"
-            ),
-          icon: <Pictures />,
-          name: "Pictures",
-          ...(collapsed && { tooltip: "Pictures" }),
-        }
-      : undefined,
-    buttonAreaCount > 5
-      ? {
-          action: () =>
-            open(
-              "FileExplorer",
-              { url: `${HOME}/Videos` },
-              "/System/Icons/videos.webp"
-            ),
-          icon: <Videos />,
-          name: "Videos",
-          ...(collapsed && { tooltip: "Videos" }),
-        }
-      : undefined,
+  const bottomButtons: SidebarButtons = [
+    {
+      action: () => launch("SystemSettings"),
+      icon: <StartSettingsIcon />,
+      name: t("settings"),
+      ...(collapsed && { tooltip: t("settings") }),
+    },
     {
       action: () => {
         setHaltSession(true);
@@ -117,7 +77,7 @@ const Sidebar: FC<SidebarProps> = ({ height }) => {
       name: "Power",
       tooltip: "Clears session data and reloads the page.",
     },
-  ].filter(Boolean) as SidebarButtons;
+  ];
 
   useEffect(() => clearTimer, [clearTimer]);
 

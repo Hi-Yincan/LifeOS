@@ -28,7 +28,7 @@ import {
 } from "components/apps/Messenger/types";
 import { useProcessesActions } from "contexts/process";
 import directory from "contexts/process/directory";
-import { PACKAGE_DATA, PROCESS_DELIMITER } from "utils/constants";
+import { PROCESS_DELIMITER } from "utils/constants";
 import { toSorted } from "utils/functions";
 
 const subscribe = (
@@ -154,7 +154,7 @@ export const useNostrContacts = (
   const { blockedKeys, seenEventIds } = useHistoryContext();
   const globalKeys = [
     ...new Set(
-      [PACKAGE_DATA.author.npub, ...Object.values(wellKnownNames)].map(
+      Object.values(wellKnownNames).map(
         decodePublicKey
       )
     ),

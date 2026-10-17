@@ -1,0 +1,9 @@
+{
+  "blogDirectAndRefresh": true,
+  "maximizeAndMinimizeRestore": true,
+  "toolTiming": "Restored window control briefly had zero bounds; semantic reinspection confirmed recovery before continuing.",
+  "closeRoute": "http://localhost:4387/",
+  "backRoute": "http://localhost:4387/wardrobe",
+  "forwardRoute": "http://localhost:4387/wardrobe/blue-shirt",
+  "detailRefresh": true
+}

@@ -1,0 +1,377 @@
+{
+  "date": "2026-10-17",
+  "build": {
+    "exitCode": 0,
+    "durationSeconds": 81.69
+  },
+  "lint": "passed: AppStore index.tsx and catalog.ts",
+  "browserTaskSpace": 11,
+  "browserTaskFinished": true,
+  "cases": [
+    {
+      "name": "default all, none selected",
+      "heading": "全部应用",
+      "buttons": [
+        {
+          "text": "系统软件",
+          "pressed": "false"
+        },
+        {
+          "text": "应用软件",
+          "pressed": "false"
+        },
+        {
+          "text": "第三方",
+          "pressed": "false"
+        }
+      ],
+      "ids": [
+        "AppStore",
+        "Portfolio",
+        "BoxedWine",
+        "Browser",
+        "Chess",
+        "ClassiCube",
+        "DevTools",
+        "DXBall",
+        "Emulator",
+        "FileExplorer",
+        "IRC",
+        "JSDOS",
+        "Marked",
+        "Messenger",
+        "MonacoEditor",
+        "OpenType",
+        "Paint",
+        "PDF",
+        "Photos",
+        "Quake3",
+        "Ruffle",
+        "SpaceCadet",
+        "StableDiffusion",
+        "Terminal",
+        "Tic80",
+        "TinyMCE",
+        "VideoPlayer",
+        "Vim",
+        "V86",
+        "Webamp"
+      ],
+      "search": ""
+    },
+    {
+      "name": "system",
+      "heading": "系统软件",
+      "buttons": [
+        {
+          "text": "系统软件",
+          "pressed": "true"
+        },
+        {
+          "text": "应用软件",
+          "pressed": "false"
+        },
+        {
+          "text": "第三方",
+          "pressed": "false"
+        }
+      ],
+      "ids": [
+        "BoxedWine",
+        "Browser",
+        "Chess",
+        "ClassiCube",
+        "DevTools",
+        "DXBall",
+        "Emulator",
+        "FileExplorer",
+        "IRC",
+        "JSDOS",
+        "Marked",
+        "Messenger",
+        "MonacoEditor",
+        "OpenType",
+        "Paint",
+        "PDF",
+        "Photos",
+        "Quake3",
+        "Ruffle",
+        "SpaceCadet",
+        "StableDiffusion",
+        "Terminal",
+        "Tic80",
+        "TinyMCE",
+        "VideoPlayer",
+        "Vim",
+        "V86",
+        "Webamp"
+      ],
+      "search": ""
+    },
+    {
+      "name": "system toggles off",
+      "heading": "全部应用",
+      "buttons": [
+        {
+          "text": "系统软件",
+          "pressed": "false"
+        },
+        {
+          "text": "应用软件",
+          "pressed": "false"
+        },
+        {
+          "text": "第三方",
+          "pressed": "false"
+        }
+      ],
+      "ids": [
+        "AppStore",
+        "Portfolio",
+        "BoxedWine",
+        "Browser",
+        "Chess",
+        "ClassiCube",
+        "DevTools",
+        "DXBall",
+        "Emulator",
+        "FileExplorer",
+        "IRC",
+        "JSDOS",
+        "Marked",
+        "Messenger",
+        "MonacoEditor",
+        "OpenType",
+        "Paint",
+        "PDF",
+        "Photos",
+        "Quake3",
+        "Ruffle",
+        "SpaceCadet",
+        "StableDiffusion",
+        "Terminal",
+        "Tic80",
+        "TinyMCE",
+        "VideoPlayer",
+        "Vim",
+        "V86",
+        "Webamp"
+      ],
+      "search": ""
+    },
+    {
+      "name": "application includes AppStore and Portfolio",
+      "heading": "应用软件",
+      "buttons": [
+        {
+          "text": "系统软件",
+          "pressed": "false"
+        },
+        {
+          "text": "应用软件",
+          "pressed": "true"
+        },
+        {
+          "text": "第三方",
+          "pressed": "false"
+        }
+      ],
+      "ids": [
+        "AppStore",
+        "Portfolio"
+      ],
+      "search": ""
+    },
+    {
+      "name": "AppStore self launch singleton",
+      "count": 1
+    },
+    {
+      "name": "application toggles off",
+      "heading": "全部应用",
+      "pressed": [],
+      "ids": [
+        "AppStore",
+        "Portfolio",
+        "BoxedWine",
+        "Browser",
+        "Chess",
+        "ClassiCube",
+        "DevTools",
+        "DXBall",
+        "Emulator",
+        "FileExplorer",
+        "IRC",
+        "JSDOS",
+        "Marked",
+        "Messenger",
+        "MonacoEditor",
+        "OpenType",
+        "Paint",
+        "PDF",
+        "Photos",
+        "Quake3",
+        "Ruffle",
+        "SpaceCadet",
+        "StableDiffusion",
+        "Terminal",
+        "Tic80",
+        "TinyMCE",
+        "VideoPlayer",
+        "Vim",
+        "V86",
+        "Webamp"
+      ],
+      "search": ""
+    },
+    {
+      "name": "third party empty",
+      "heading": "第三方",
+      "pressed": [
+        "第三方"
+      ],
+      "ids": [],
+      "search": ""
+    },
+    {
+      "name": "third party toggles off",
+      "heading": "全部应用",
+      "pressed": [],
+      "ids": [
+        "AppStore",
+        "Portfolio",
+        "BoxedWine",
+        "Browser",
+        "Chess",
+        "ClassiCube",
+        "DevTools",
+        "DXBall",
+        "Emulator",
+        "FileExplorer",
+        "IRC",
+        "JSDOS",
+        "Marked",
+        "Messenger",
+        "MonacoEditor",
+        "OpenType",
+        "Paint",
+        "PDF",
+        "Photos",
+        "Quake3",
+        "Ruffle",
+        "SpaceCadet",
+        "StableDiffusion",
+        "Terminal",
+        "Tic80",
+        "TinyMCE",
+        "VideoPlayer",
+        "Vim",
+        "V86",
+        "Webamp"
+      ],
+      "search": ""
+    },
+    {
+      "name": "search all",
+      "heading": "全部应用",
+      "pressed": [],
+      "ids": [
+        "Paint"
+      ],
+      "search": "Paint"
+    },
+    {
+      "name": "search combined with application filter",
+      "heading": "应用软件",
+      "pressed": [
+        "应用软件"
+      ],
+      "ids": [],
+      "search": "Paint"
+    },
+    {
+      "name": "switch category keeps search",
+      "heading": "系统软件",
+      "pressed": [
+        "系统软件"
+      ],
+      "ids": [
+        "Paint"
+      ],
+      "search": "Paint"
+    },
+    {
+      "name": "deselect keeps search",
+      "heading": "全部应用",
+      "pressed": [],
+      "ids": [
+        "Paint"
+      ],
+      "search": "Paint"
+    },
+    {
+      "name": "clear search restores all",
+      "heading": "全部应用",
+      "pressed": [],
+      "ids": [
+        "AppStore",
+        "Portfolio",
+        "BoxedWine",
+        "Browser",
+        "Chess",
+        "ClassiCube",
+        "DevTools",
+        "DXBall",
+        "Emulator",
+        "FileExplorer",
+        "IRC",
+        "JSDOS",
+        "Marked",
+        "Messenger",
+        "MonacoEditor",
+        "OpenType",
+        "Paint",
+        "PDF",
+        "Photos",
+        "Quake3",
+        "Ruffle",
+        "SpaceCadet",
+        "StableDiffusion",
+        "Terminal",
+        "Tic80",
+        "TinyMCE",
+        "VideoPlayer",
+        "Vim",
+        "V86",
+        "Webamp"
+      ],
+      "search": ""
+    },
+    {
+      "name": "English categories and default",
+      "labels": [
+        "System software",
+        "Application software",
+        "Third-party"
+      ],
+      "pressed": 0,
+      "heading": "All apps",
+      "count": 30
+    },
+    {
+      "name": "final build English AppStore details",
+      "hasFavorite": true
+    },
+    {
+      "name": "final build Chinese default",
+      "labels": [
+        "系统软件",
+        "应用软件",
+        "第三方"
+      ],
+      "pressed": 0,
+      "count": 30
+    }
+  ],
+  "productionDeployed": false
+}

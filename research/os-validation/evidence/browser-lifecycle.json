@@ -1,0 +1,21 @@
+{
+  "id": "f978f521-c1f1-4589-978a-19ea83af1095",
+  "imageUrl": "/media/be544154-ee32-4f65-b825-e7d10e996967.png",
+  "draftDetail": 404,
+  "draftImage": 404,
+  "published": {
+    "id": "f978f521-c1f1-4589-978a-19ea83af1095",
+    "title": "浏览器验证衬衫",
+    "description": "合成内容：用于验证发布与下架。",
+    "imageId": "be544154-ee32-4f65-b825-e7d10e996967.png",
+    "imageUrl": "/media/be544154-ee32-4f65-b825-e7d10e996967.png"
+  },
+  "publishedImage": 200,
+  "privateNoteInVisitorDOM": false,
+  "savedEditorTitle": "浏览器验证衬衫第二版",
+  "publicTitleBeforeRepublish": "浏览器验证衬衫",
+  "withdrawnDetail": 404,
+  "withdrawnImage": 404,
+  "withdrawnVisible": false,
+  "loggedOutAdminAPI": 401
+}

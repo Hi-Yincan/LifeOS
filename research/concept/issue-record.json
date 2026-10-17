@@ -1,0 +1,89 @@
+{
+  "portfolioIssue": 15,
+  "reports": [
+    {
+      "issue": 15,
+      "label": "C06｜个人作品集 v1 PRD",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6220288881",
+      "source": "specs/concept/PRD.md"
+    },
+    {
+      "issue": 15,
+      "label": "C07｜内容、权限与发布模型",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6220289505",
+      "source": "specs/concept/data-and-permissions.md"
+    },
+    {
+      "issue": 15,
+      "label": "C08｜用户流程与关键状态",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6220290184",
+      "source": "specs/concept/flows-and-states.md"
+    },
+    {
+      "issue": 15,
+      "label": "C09｜UI 规范与两套设计方案",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6220290975",
+      "source": "specs/concept/design-system.md"
+    },
+    {
+      "issue": 10,
+      "label": "C10｜上游升级：真实集成后的维护边界",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/10#issuecomment-6220458598"
+    },
+    {
+      "issue": 11,
+      "label": "C11｜仓库方案：基于运行原型的取舍",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/11#issuecomment-6220459268"
+    },
+    {
+      "issue": 12,
+      "label": "C12｜部署概念：Pages 入口与内容多节点边界",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/12#issuecomment-6220459812"
+    },
+    {
+      "issue": 13,
+      "label": "C13｜双语范围、偏好与内容版本",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/13#issuecomment-6220460306"
+    },
+    {
+      "issue": 14,
+      "label": "C14｜桌面、平板、手机的显示模式与验证",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/14#issuecomment-6220460810"
+    },
+    {
+      "issue": 15,
+      "label": "C15｜真实 daedalOS 原型与验证报告",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6220461292",
+      "source": "research/concept/validation.md"
+    },
+    {
+      "issue": 15,
+      "label": "C16｜A/B 视觉评审入口",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6220461747"
+    },
+    {
+      "issue": 3,
+      "label": "P01｜概念阶段移交：任务与里程碑",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/3#issuecomment-6220462252",
+      "source": "specs/concept/implementation-plan.md"
+    },
+    {
+      "issue": 2,
+      "label": "C17｜验收标准与证据分级",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2#issuecomment-6220462942",
+      "source": "specs/concept/acceptance.md"
+    },
+    {
+      "issue": 9,
+      "label": "C18｜v1 应用范围冻结与后续需求池",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/9#issuecomment-6220463608"
+    },
+    {
+      "issue": 2,
+      "label": "C19｜概念阶段交付总览与评审边界",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2#issuecomment-6220503773"
+    }
+  ],
+  "draftPR": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/pull/16",
+  "branch": "concept/portfolio-v1"
+}

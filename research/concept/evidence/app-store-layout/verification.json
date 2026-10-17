@@ -1,0 +1,372 @@
+[
+  {
+    "name": "desktop-zh",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "width": 820,
+    "iconTextGap": 6,
+    "controlTopPadding": 8,
+    "controlBottomPadding": 9,
+    "mainBelowControls": true,
+    "readableControls": true,
+    "horizontalOverflow": false,
+    "controlsHeight": 43,
+    "items": [
+      {
+        "label": "全部应用",
+        "top": 203,
+        "bottom": 229,
+        "left": 322,
+        "right": 384,
+        "height": 26
+      },
+      {
+        "label": "原生应用",
+        "top": 203,
+        "bottom": 229,
+        "left": 386,
+        "right": 448,
+        "height": 26
+      },
+      {
+        "label": "本站二开",
+        "top": 203,
+        "bottom": 229,
+        "left": 450,
+        "right": 512,
+        "height": 26
+      },
+      {
+        "label": "第三方",
+        "top": 203,
+        "bottom": 229,
+        "left": 514,
+        "right": 564,
+        "height": 26
+      },
+      {
+        "label": "我的应用",
+        "top": 203,
+        "bottom": 229,
+        "left": 566,
+        "right": 628,
+        "height": 26
+      },
+      {
+        "label": "搜索应用",
+        "top": 204,
+        "bottom": 228,
+        "left": 665,
+        "right": 855,
+        "height": 24
+      },
+      {
+        "label": "添加网页应用",
+        "top": 203,
+        "bottom": 229,
+        "left": 1024,
+        "right": 1118,
+        "height": 26
+      }
+    ],
+    "pass": true
+  },
+  {
+    "name": "maximized-zh",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "width": 1440,
+    "iconTextGap": 6,
+    "controlTopPadding": 8,
+    "controlBottomPadding": 9,
+    "mainBelowControls": true,
+    "readableControls": true,
+    "horizontalOverflow": false,
+    "controlsHeight": 43,
+    "items": [
+      {
+        "label": "全部应用",
+        "top": 73,
+        "bottom": 99,
+        "left": 12,
+        "right": 74,
+        "height": 26
+      },
+      {
+        "label": "原生应用",
+        "top": 73,
+        "bottom": 99,
+        "left": 76,
+        "right": 138,
+        "height": 26
+      },
+      {
+        "label": "本站二开",
+        "top": 73,
+        "bottom": 99,
+        "left": 140,
+        "right": 202,
+        "height": 26
+      },
+      {
+        "label": "第三方",
+        "top": 73,
+        "bottom": 99,
+        "left": 204,
+        "right": 254,
+        "height": 26
+      },
+      {
+        "label": "我的应用",
+        "top": 73,
+        "bottom": 99,
+        "left": 256,
+        "right": 318,
+        "height": 26
+      },
+      {
+        "label": "搜索应用",
+        "top": 74,
+        "bottom": 98,
+        "left": 355,
+        "right": 545,
+        "height": 24
+      },
+      {
+        "label": "添加网页应用",
+        "top": 73,
+        "bottom": 99,
+        "left": 1334,
+        "right": 1428,
+        "height": 26
+      }
+    ],
+    "pass": true
+  },
+  {
+    "name": "narrow-zh",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "width": 390,
+    "iconTextGap": 6,
+    "controlTopPadding": 8,
+    "controlBottomPadding": 9,
+    "mainBelowControls": true,
+    "readableControls": true,
+    "horizontalOverflow": false,
+    "controlsHeight": 77,
+    "items": [
+      {
+        "label": "全部应用",
+        "top": 175,
+        "bottom": 201,
+        "left": 12,
+        "right": 74,
+        "height": 26
+      },
+      {
+        "label": "原生应用",
+        "top": 175,
+        "bottom": 201,
+        "left": 76,
+        "right": 138,
+        "height": 26
+      },
+      {
+        "label": "本站二开",
+        "top": 175,
+        "bottom": 201,
+        "left": 140,
+        "right": 202,
+        "height": 26
+      },
+      {
+        "label": "第三方",
+        "top": 175,
+        "bottom": 201,
+        "left": 204,
+        "right": 254,
+        "height": 26
+      },
+      {
+        "label": "我的应用",
+        "top": 175,
+        "bottom": 201,
+        "left": 256,
+        "right": 318,
+        "height": 26
+      },
+      {
+        "label": "搜索应用",
+        "top": 210,
+        "bottom": 234,
+        "left": 41,
+        "right": 231,
+        "height": 24
+      },
+      {
+        "label": "添加网页应用",
+        "top": 209,
+        "bottom": 235,
+        "left": 284,
+        "right": 378,
+        "height": 26
+      }
+    ],
+    "pass": true
+  },
+  {
+    "name": "narrow-en",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "width": 390,
+    "iconTextGap": 6,
+    "controlTopPadding": 8,
+    "controlBottomPadding": 9,
+    "mainBelowControls": true,
+    "readableControls": true,
+    "horizontalOverflow": false,
+    "controlsHeight": 77,
+    "items": [
+      {
+        "label": "All apps",
+        "top": 175,
+        "bottom": 201,
+        "left": 12,
+        "right": 71.0859375,
+        "height": 26
+      },
+      {
+        "label": "Native",
+        "top": 175,
+        "bottom": 201,
+        "left": 73.0859375,
+        "right": 123.0625,
+        "height": 26
+      },
+      {
+        "label": "Site apps",
+        "top": 175,
+        "bottom": 201,
+        "left": 125.0625,
+        "right": 191.7265625,
+        "height": 26
+      },
+      {
+        "label": "Third-party",
+        "top": 175,
+        "bottom": 201,
+        "left": 193.7265625,
+        "right": 272.296875,
+        "height": 26
+      },
+      {
+        "label": "My apps",
+        "top": 175,
+        "bottom": 201,
+        "left": 274.296875,
+        "right": 336.2265625,
+        "height": 26
+      },
+      {
+        "label": "Search apps",
+        "top": 210,
+        "bottom": 234,
+        "left": 41,
+        "right": 231,
+        "height": 24
+      },
+      {
+        "label": "Add web app",
+        "top": 209,
+        "bottom": 235,
+        "left": 282.21875,
+        "right": 378,
+        "height": 26
+      }
+    ],
+    "pass": true
+  },
+  {
+    "name": "desktop-en",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "width": 820,
+    "iconTextGap": 6,
+    "controlTopPadding": 8,
+    "controlBottomPadding": 9,
+    "mainBelowControls": true,
+    "readableControls": true,
+    "horizontalOverflow": false,
+    "controlsHeight": 43,
+    "items": [
+      {
+        "label": "All apps",
+        "top": 203,
+        "bottom": 229,
+        "left": 322,
+        "right": 381.0859375,
+        "height": 26
+      },
+      {
+        "label": "Native",
+        "top": 203,
+        "bottom": 229,
+        "left": 383.0859375,
+        "right": 433.0625,
+        "height": 26
+      },
+      {
+        "label": "Site apps",
+        "top": 203,
+        "bottom": 229,
+        "left": 435.0625,
+        "right": 501.7265625,
+        "height": 26
+      },
+      {
+        "label": "Third-party",
+        "top": 203,
+        "bottom": 229,
+        "left": 503.7265625,
+        "right": 582.296875,
+        "height": 26
+      },
+      {
+        "label": "My apps",
+        "top": 203,
+        "bottom": 229,
+        "left": 584.296875,
+        "right": 646.2265625,
+        "height": 26
+      },
+      {
+        "label": "Search apps",
+        "top": 204,
+        "bottom": 228,
+        "left": 683.2265625,
+        "right": 873.2265625,
+        "height": 24
+      },
+      {
+        "label": "Add web app",
+        "top": 203,
+        "bottom": 229,
+        "left": 1022.21875,
+        "right": 1118,
+        "height": 26
+      }
+    ],
+    "pass": true
+  }
+]

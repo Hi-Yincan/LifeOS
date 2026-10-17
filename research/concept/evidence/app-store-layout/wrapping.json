@@ -1,0 +1,140 @@
+{
+  "before": {
+    "width": 390,
+    "iconTextGap": 6,
+    "controlTopPadding": 8,
+    "controlBottomPadding": 9,
+    "mainBelowControls": true,
+    "readableControls": false,
+    "horizontalOverflow": false,
+    "controlsHeight": 113,
+    "items": [
+      {
+        "label": "全部应用",
+        "top": 175,
+        "bottom": 271,
+        "left": 12,
+        "right": 74,
+        "height": 96
+      },
+      {
+        "label": "原生应用",
+        "top": 175,
+        "bottom": 271,
+        "left": 76,
+        "right": 138,
+        "height": 96
+      },
+      {
+        "label": "本站二开",
+        "top": 175,
+        "bottom": 271,
+        "left": 140,
+        "right": 202,
+        "height": 96
+      },
+      {
+        "label": "第三方",
+        "top": 175,
+        "bottom": 271,
+        "left": 204,
+        "right": 254,
+        "height": 96
+      },
+      {
+        "label": "我的应用",
+        "top": 175,
+        "bottom": 271,
+        "left": 256,
+        "right": 318,
+        "height": 96
+      },
+      {
+        "label": "搜索应用",
+        "top": 176,
+        "bottom": 200,
+        "left": 355,
+        "right": 377,
+        "height": 24
+      },
+      {
+        "label": "添加网页应用",
+        "top": 209,
+        "bottom": 271,
+        "left": 326,
+        "right": 378,
+        "height": 62
+      }
+    ],
+    "pass": false
+  },
+  "after": {
+    "width": 390,
+    "iconTextGap": 6,
+    "controlTopPadding": 8,
+    "controlBottomPadding": 9,
+    "mainBelowControls": true,
+    "readableControls": true,
+    "horizontalOverflow": false,
+    "controlsHeight": 77,
+    "items": [
+      {
+        "label": "全部应用",
+        "top": 175,
+        "bottom": 201,
+        "left": 12,
+        "right": 74,
+        "height": 26
+      },
+      {
+        "label": "原生应用",
+        "top": 175,
+        "bottom": 201,
+        "left": 76,
+        "right": 138,
+        "height": 26
+      },
+      {
+        "label": "本站二开",
+        "top": 175,
+        "bottom": 201,
+        "left": 140,
+        "right": 202,
+        "height": 26
+      },
+      {
+        "label": "第三方",
+        "top": 175,
+        "bottom": 201,
+        "left": 204,
+        "right": 254,
+        "height": 26
+      },
+      {
+        "label": "我的应用",
+        "top": 175,
+        "bottom": 201,
+        "left": 256,
+        "right": 318,
+        "height": 26
+      },
+      {
+        "label": "搜索应用",
+        "top": 210,
+        "bottom": 234,
+        "left": 41,
+        "right": 231,
+        "height": 24
+      },
+      {
+        "label": "添加网页应用",
+        "top": 209,
+        "bottom": 235,
+        "left": 284,
+        "right": 378,
+        "height": 26
+      }
+    ],
+    "pass": true
+  }
+}

@@ -45,7 +45,7 @@ export const useFaviconAndTitle = (): {
       currentFavicon ? FAVICON_BASE_PATH : currentFavicon
     );
   };
-  const Favicon = createFavicon(favIcon);
+  const Favicon = createFavicon(FAVICON_BASE_PATH);
 
   useEffect(() => {
     if (!hideTaskbarEntry && (processIcon || processTitle)) {

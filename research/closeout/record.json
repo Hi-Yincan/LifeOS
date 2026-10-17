@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-16",
+  "decision": "D-001",
+  "selectedBase": "DustinBrett/daedalOS",
+  "decisionStatus": "accepted-by-project-owner",
+  "decisionComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/1#issuecomment-6209307900",
+  "handoffComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2#issuecomment-6209308484",
+  "researchIssue": {
+    "closed_at": "2026-10-16T06:11:53Z",
+    "state": "closed",
+    "state_reason": "completed"
+  },
+  "conceptIssueState": "OPEN",
+  "preservedExistingComments": {
+    "1": 14,
+    "2": 5
+  },
+  "finalCommentCounts": {
+    "1": 15,
+    "2": 6
+  },
+  "localArchiveSHA256": "d7c7318f1b2772b73a7d2269a827a7e9faaa56b375fe18c515c510f297172ea4",
+  "localArtifactsGitStatus": "not committed or pushed",
+  "temporaryPrototypeServer": "stopped; existing Puter deployment untouched"
+}

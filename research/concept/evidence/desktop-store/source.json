@@ -1,0 +1,7 @@
+{
+  "desktopShortcut": "[InternetShortcut]\nBaseURL=AppStore\nComment=App Store\nIconFile=/System/PersonalOS/store.svg\n",
+  "matchesStartShortcut": true,
+  "desktopCacheTarget": "AppStore",
+  "prepareIdempotent": true,
+  "startupPolicyChanged": false
+}

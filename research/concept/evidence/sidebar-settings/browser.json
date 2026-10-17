@@ -1,0 +1,25 @@
+{
+  "sidebar": [
+    "Documents",
+    "Pictures",
+    "Videos",
+    "系统设置",
+    "Power"
+  ],
+  "settingsInApp": 0,
+  "direct": {
+    "count": 1,
+    "noPowerSubmenu": true
+  },
+  "keyboardRestore": {
+    "sameInstance": true,
+    "count": 1
+  },
+  "englishSidebar": [
+    "Documents",
+    "Pictures",
+    "Videos",
+    "System settings",
+    "Power"
+  ]
+}

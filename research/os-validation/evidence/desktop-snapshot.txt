@@ -1,0 +1,133 @@
+[p3 "个人展示 OS 实验 | 内容展示与管理" | space "个人展示 OS 本地选型验证"(24): 3 managed, 0 untracked — p1 "Puter", p2 "博客 | 个人展示 OS 实验", p3* "个人展示 OS 实验 | 内容展示与管理"]
+root
+  image
+  container
+    paragraph
+      text "HI · YINCAN / 选型实验"
+    heading
+      text "内容，是这个桌面的主角。"
+    paragraph
+      text "两个应用，一套窗口。"
+      text "访客浏览公开内容，作者登录后管理。"
+    container "内容应用"
+      anchor [ref=88, loc=href:/blog/validation-note, url=http://localhost:4387/blog/validation-note]
+        image
+        text "博客"
+        text "阅读一篇文章"
+      anchor [ref=89, loc=href:/wardrobe, url=http://localhost:4387/wardrobe]
+        image
+        text "衣柜"
+        text "浏览与管理衣物"
+    container
+      text "visitor · 公开浏览"
+      button [ref=90]
+        text "管理员登录"
+    paragraph
+      text "本地研究原型 · 全部为合成内容 · 非正式产品"
+  container
+    container
+      image
+      paragraph
+        text "衣柜"
+      button "Minimize" [ref=91, loc=css:button[aria-label="Minimize"]]
+        image
+      button "Maximize" [ref=92, loc=css:button[aria-label="Maximize"]]
+        image
+      button "Close" [ref=93, loc=css:button[aria-label="Close"]]
+        image
+    container "衣柜内容" [ref=94]
+      container
+        button [ref=95]
+          text "← 返回桌面"
+        text "visitor · 公开浏览"
+        button [ref=96]
+          text "管理员登录"
+      container
+        paragraph
+          text "合成样例 · 同一 APP 的两种角色"
+        heading
+          text "我的衣柜"
+      paragraph
+        text "这里展示作者已经发布的衣物和搭配。"
+      button [ref=97]
+        text "← 返回衣柜列表"
+      container
+        container "合成衣物占位图"
+          text "👕"
+        heading
+          text "蓝色棉衬衫"
+        paragraph
+          text "合成样例：适合日常通勤的蓝色衬衫。"
+        anchor [ref=98, loc=href:/wardrobe/blue-shirt, url=http://localhost:4387/wardrobe/blue-shirt]
+          text "此衣物的永久链接"
+  container
+    container
+      container
+        button [ref=99]
+          image
+        button [ref=113]
+          image
+          paragraph
+            text "Shut down"
+        image
+        heading
+          text "个人展示 OS 实验"
+        container
+          button [ref=100]
+            image
+            heading
+              text "博客"
+          button [ref=101]
+            image
+            heading
+              text "衣柜"
+      container
+        button [ref=102]
+          image
+        container
+          button [ref=103]
+            image
+            paragraph
+              text "博客"
+          button [ref=104]
+            image
+            paragraph
+              text "衣柜"
+        textbox "Search query" [ref=105, loc=css:input[placeholder="Search..."]]
+          text "Search..."
+    container
+      button [ref=106]
+        image
+      button [ref=107]
+        image
+    container
+      container
+        button [ref=108]
+          image
+        image
+        paragraph
+          text "95"
+          text "%"
+      container
+        button [ref=109]
+          image
+        image
+        paragraph
+          text "Connected"
+      container
+        button [ref=110]
+          image
+        image
+        paragraph
+          text "100%"
+      container
+        button [ref=111]
+          paragraph
+            text "05:32"
+          paragraph
+            text "16 Oct 2026"
+        paragraph
+          text "05:32:39"
+        paragraph
+          text "Friday, 16 October 2026"
+      button [ref=112]

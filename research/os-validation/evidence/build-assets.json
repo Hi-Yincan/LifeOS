@@ -1,0 +1,313 @@
+{
+  "date": "2026-10-16",
+  "node": "v26.7.0",
+  "core": "2.1.2",
+  "assets": [
+    {
+      "name": "afire-DlRwSfiJ-C3oTFPvk.js",
+      "bytes": 2135,
+      "gzipBytes": 1094
+    },
+    {
+      "name": "banner-jSvYkuqB-BwsiWl6N.js",
+      "bytes": 2590,
+      "gzipBytes": 766
+    },
+    {
+      "name": "cat-B_KOgu80-CNfkyqfF.js",
+      "bytes": 804,
+      "gzipBytes": 513
+    },
+    {
+      "name": "cd-DGILEGTs-SOahUVib.js",
+      "bytes": 533,
+      "gzipBytes": 355
+    },
+    {
+      "name": "clear-C8xhqHmC-BCuKQ7-b.js",
+      "bytes": 194,
+      "gzipBytes": 176
+    },
+    {
+      "name": "cmatrix-DvaWzvRn-DIxTb14U.js",
+      "bytes": 1322,
+      "gzipBytes": 803
+    },
+    {
+      "name": "compgen-2kLzA1wV-bZp2epgo.js",
+      "bytes": 299,
+      "gzipBytes": 249
+    },
+    {
+      "name": "cowsay-CTLxUPtF-DU8GJOQy.js",
+      "bytes": 1187,
+      "gzipBytes": 686
+    },
+    {
+      "name": "date-CA1ub92R-BAaJmGQq.js",
+      "bytes": 1007,
+      "gzipBytes": 594
+    },
+    {
+      "name": "dir-w2XNd6oI-CoZzLfOJ.js",
+      "bytes": 322,
+      "gzipBytes": 261
+    },
+    {
+      "name": "doubleBracket-B5nqIccY-Cv5Y72my.js",
+      "bytes": 1628,
+      "gzipBytes": 704
+    },
+    {
+      "name": "echo-_hDVbupR-CsplWx4-.js",
+      "bytes": 430,
+      "gzipBytes": 320
+    },
+    {
+      "name": "eval-4uLqmhXl-CYTR1EIu.js",
+      "bytes": 593,
+      "gzipBytes": 401
+    },
+    {
+      "name": "exit-w3PqRkwA-DrvH6k_2.js",
+      "bytes": 160,
+      "gzipBytes": 154
+    },
+    {
+      "name": "false-D6AWAlcU-dNbMQVb4.js",
+      "bytes": 308,
+      "gzipBytes": 248
+    },
+    {
+      "name": "fortune-D8ZK6xtX-DRl-rS_4.js",
+      "bytes": 2326,
+      "gzipBytes": 1227
+    },
+    {
+      "name": "grep-DZO92KaH-V9F__5mU.js",
+      "bytes": 1147,
+      "gzipBytes": 686
+    },
+    {
+      "name": "head-C_bbNyUc-UuudxbdZ.js",
+      "bytes": 1121,
+      "gzipBytes": 672
+    },
+    {
+      "name": "help-OHTeCzgo-CfwB8RLm.js",
+      "bytes": 579,
+      "gzipBytes": 370
+    },
+    {
+      "name": "history-DeQor0w1-DZF1-T_I.js",
+      "bytes": 531,
+      "gzipBytes": 373
+    },
+    {
+      "name": "hostname-B-lPyRps-DDO7zNdM.js",
+      "bytes": 204,
+      "gzipBytes": 177
+    },
+    {
+      "name": "index-BcxVOUar.js",
+      "bytes": 611953,
+      "gzipBytes": 188402
+    },
+    {
+      "name": "index-CKI_RCsM.css",
+      "bytes": 3614,
+      "gzipBytes": 1340
+    },
+    {
+      "name": "install-9Dikj7i2-DLlwxvso.js",
+      "bytes": 989,
+      "gzipBytes": 592
+    },
+    {
+      "name": "less-wELkkcQx-uOTcg0fN.js",
+      "bytes": 2119,
+      "gzipBytes": 1004
+    },
+    {
+      "name": "lolcat-xpDAXsIt-BynzCafk.js",
+      "bytes": 1209,
+      "gzipBytes": 734
+    },
+    {
+      "name": "ls-D2Ln7mue-BbAOTDw0.js",
+      "bytes": 613,
+      "gzipBytes": 428
+    },
+    {
+      "name": "macOs-BsaljMkK.css",
+      "bytes": 5421,
+      "gzipBytes": 1634
+    },
+    {
+      "name": "man-E9nMmKZ1-BBaXHGO9.js",
+      "bytes": 1580,
+      "gzipBytes": 874
+    },
+    {
+      "name": "minimal-tn0RQdqM.css",
+      "bytes": 0,
+      "gzipBytes": 20
+    },
+    {
+      "name": "mkdir-BdEywO2H-D2lrcgEo.js",
+      "bytes": 234,
+      "gzipBytes": 206
+    },
+    {
+      "name": "nano-DsRjsQ-k-BUoPvDA2.js",
+      "bytes": 2874,
+      "gzipBytes": 1243
+    },
+    {
+      "name": "neofetch-Dyre2Ik0-oCwVGcfQ.js",
+      "bytes": 1403,
+      "gzipBytes": 842
+    },
+    {
+      "name": "pipes-CQ-pK6Kv-BbKoGuF0.js",
+      "bytes": 2445,
+      "gzipBytes": 1241
+    },
+    {
+      "name": "pixel-D8FOJQqy.css",
+      "bytes": 1383,
+      "gzipBytes": 635
+    },
+    {
+      "name": "printenv-Cq-skM9d-BqLIG3yQ.js",
+      "bytes": 592,
+      "gzipBytes": 389
+    },
+    {
+      "name": "pwd-CZ9IWAfu-CdoDQMBv.js",
+      "bytes": 261,
+      "gzipBytes": 224
+    },
+    {
+      "name": "rain-DT-V01dD-C0GbZj0H.js",
+      "bytes": 1572,
+      "gzipBytes": 847
+    },
+    {
+      "name": "reboot-nbAmZck6-ADU_B0S_.js",
+      "bytes": 153,
+      "gzipBytes": 151
+    },
+    {
+      "name": "reload-CE3ZVq6O-BYe8KNBh.js",
+      "bytes": 180,
+      "gzipBytes": 166
+    },
+    {
+      "name": "rev-C5m1qeoZ-e8XgnfyI.js",
+      "bytes": 316,
+      "gzipBytes": 248
+    },
+    {
+      "name": "rm-Uxuv-dEz-MMtyTGZp.js",
+      "bytes": 334,
+      "gzipBytes": 277
+    },
+    {
+      "name": "rmdir-BYWer3pb-Bw-ChYin.js",
+      "bytes": 309,
+      "gzipBytes": 255
+    },
+    {
+      "name": "sh-CIyBHb8C-CeyxF7st.js",
+      "bytes": 365,
+      "gzipBytes": 288
+    },
+    {
+      "name": "sl-CVLteJLH-5MqPfLSp.js",
+      "bytes": 4721,
+      "gzipBytes": 1311
+    },
+    {
+      "name": "sleep-hEBW30R3-WAI_hib6.js",
+      "bytes": 375,
+      "gzipBytes": 301
+    },
+    {
+      "name": "snow-DAlyPPxX-DrVTYXku.js",
+      "bytes": 1589,
+      "gzipBytes": 847
+    },
+    {
+      "name": "tail-BLlaoTxA-BSGcb7cz.js",
+      "bytes": 1073,
+      "gzipBytes": 645
+    },
+    {
+      "name": "terminalUIApp-Bmiaqvd9-C6yd-vNC.js",
+      "bytes": 1182,
+      "gzipBytes": 534
+    },
+    {
+      "name": "textEditorApp-BM3EiMoV-YMxEzu5G.js",
+      "bytes": 1315,
+      "gzipBytes": 628
+    },
+    {
+      "name": "touch-BReUyL_z-DmDyuSdP.js",
+      "bytes": 450,
+      "gzipBytes": 336
+    },
+    {
+      "name": "true-j1Uf2Nz9-BndBZBpc.js",
+      "bytes": 298,
+      "gzipBytes": 239
+    },
+    {
+      "name": "uniq-LncLpnFY-CcTc_Nr3.js",
+      "bytes": 1393,
+      "gzipBytes": 806
+    },
+    {
+      "name": "uptime-pYltXMOi-bSCZaQLR.js",
+      "bytes": 253,
+      "gzipBytes": 214
+    },
+    {
+      "name": "vi-Cgo3qLR9-DNyY4VKM.js",
+      "bytes": 3380,
+      "gzipBytes": 1303
+    },
+    {
+      "name": "watch-B4Tgzgbn-C47qS7Kb.js",
+      "bytes": 1183,
+      "gzipBytes": 739
+    },
+    {
+      "name": "whatis-BPKA-MNF-BcV479J7.js",
+      "bytes": 476,
+      "gzipBytes": 323
+    },
+    {
+      "name": "whoami-BS3xdQEI-B_KTQcOj.js",
+      "bytes": 202,
+      "gzipBytes": 180
+    },
+    {
+      "name": "windows95-CScyEfuw.css",
+      "bytes": 1279,
+      "gzipBytes": 535
+    },
+    {
+      "name": "yes-ilM2l2xq-BwQQoNMx.js",
+      "bytes": 387,
+      "gzipBytes": 300
+    }
+  ],
+  "totals": {
+    "files": 60,
+    "bytes": 678895,
+    "gzipBytes": 222110
+  },
+  "note": "gzip computed per emitted asset; not actual network transfer or a Puter speed comparison"
+}

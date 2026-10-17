@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: V01/V05 public lists omit drafts and management-only fields
+ok 1 - V01/V05 public lists omit drafts and management-only fields
+  ---
+  duration_ms: 97.038583
+  type: 'test'
+  ...
+# Subtest: V04 role spoofing and anonymous writes fail at the API
+ok 2 - V04 role spoofing and anonymous writes fail at the API
+  ---
+  duration_ms: 84.556042
+  type: 'test'
+  ...
+# Subtest: V04 a real signed-in visitor cannot read admin data or write
+ok 3 - V04 a real signed-in visitor cannot read admin data or write
+  ---
+  duration_ms: 112.729875
+  type: 'test'
+  ...
+# Subtest: V02/V03 drafts, publication snapshots, edits and withdrawal are isolated
+ok 4 - V02/V03 drafts, publication snapshots, edits and withdrawal are isolated
+  ---
+  duration_ms: 118.563166
+  type: 'test'
+  ...
+# Subtest: V03/V05 draft images are private and withdrawal removes public image access
+ok 5 - V03/V05 draft images are private and withdrawal removes public image access
+  ---
+  duration_ms: 113.351292
+  type: 'test'
+  ...
+# Subtest: V05 foreign origins and absent CSRF proofs cannot write
+ok 6 - V05 foreign origins and absent CSRF proofs cannot write
+  ---
+  duration_ms: 110.4355
+  type: 'test'
+  ...
+# Subtest: V06 logout revokes the session even if its cookie is replayed
+ok 7 - V06 logout revokes the session even if its cookie is replayed
+  ---
+  duration_ms: 110.772833
+  type: 'test'
+  ...
+# Subtest: V06 saved and published content survives a service restart
+ok 8 - V06 saved and published content survives a service restart
+  ---
+  duration_ms: 183.052292
+  type: 'test'
+  ...
+# Subtest: V08 direct content URLs work and unknown or unpublished URLs return 404
+ok 9 - V08 direct content URLs work and unknown or unpublished URLs return 404
+  ---
+  duration_ms: 77.830709
+  type: 'test'
+  ...
+# Subtest: V05 only supported image content and draft fields can be saved
+ok 10 - V05 only supported image content and draft fields can be saved
+  ---
+  duration_ms: 110.052667
+  type: 'test'
+  ...
+# Subtest: V09 the installed dependency tree has core but no optional OS app packages
+ok 11 - V09 the installed dependency tree has core but no optional OS app packages
+  ---
+  duration_ms: 1.433583
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1195.0295

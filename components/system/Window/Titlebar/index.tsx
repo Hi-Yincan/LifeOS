@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { usePersonalOS } from "components/system/PersonalOS/context";
 import rndDefaults from "components/system/Window/RndWindow/rndDefaults";
 import StyledTitlebar from "components/system/Window/Titlebar/StyledTitlebar";
 import useTitlebarContextMenu from "components/system/Window/Titlebar/useTitlebarContextMenu";
@@ -28,6 +29,7 @@ type TitlebarProps = {
 };
 
 const Titlebar: FC<TitlebarProps> = ({ id }) => {
+  const { locale } = usePersonalOS();
   const {
     allowResizing = true,
     closing,
@@ -145,7 +147,7 @@ const Titlebar: FC<TitlebarProps> = ({ id }) => {
           <Button
             className="minimize"
             onClick={triggerMinimize}
-            {...label("Minimize")}
+            {...label(locale === "zh" ? "最小化" : "Minimize")}
           >
             <MinimizeIcon />
           </Button>
@@ -155,7 +157,7 @@ const Titlebar: FC<TitlebarProps> = ({ id }) => {
             className="maximize"
             disabled={!allowResizing}
             onClick={onMaximize}
-            {...label(maximized ? "Restore Down" : "Maximize")}
+            {...label(maximized ? (locale === "zh" ? "还原" : "Restore Down") : (locale === "zh" ? "最大化" : "Maximize"))}
           >
             {maximized ? <MaximizedIcon /> : <MaximizeIcon />}
           </Button>
@@ -164,7 +166,7 @@ const Titlebar: FC<TitlebarProps> = ({ id }) => {
           $short={hideMaximizeButton && hideMinimizeButton}
           className="close"
           onClick={onClose}
-          {...label("Close")}
+          {...label(locale === "zh" ? "关闭" : "Close")}
         >
           <CloseIcon />
         </Button>

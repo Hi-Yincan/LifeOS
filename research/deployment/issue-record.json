@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-16",
+  "parent": 2,
+  "issues": [
+    {
+      "number": 12,
+      "id": 5880349429,
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/12",
+      "title": "部署架构：hyc.ac 统一入口、国内外节点与 CDN",
+      "code": "C04",
+      "comment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/12#issuecomment-6210648139",
+      "scope": "域名与路由、前后端部署、负载均衡、数据一致性与 CDN 取舍",
+      "filename": "deployment/discussion.md"
+    },
+    {
+      "number": 13,
+      "id": 5880351807,
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/13",
+      "title": "OS 多语言与地区设置",
+      "code": "C05",
+      "comment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/13#issuecomment-6210650870",
+      "scope": "语言自动识别、设置入口、偏好持久化、界面翻译与地区格式",
+      "filename": "localization/discussion.md"
+    }
+  ],
+  "nativeSubissuesVerified": true,
+  "priorChildrenPreserved": [
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "dnsChanged": false,
+  "deploymentChanged": false
+}
