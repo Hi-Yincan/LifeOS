@@ -21,6 +21,7 @@ import StyledBrowser from "components/apps/Browser/StyledBrowser";
 import useBookmarkMenu from "components/apps/Browser/useBookmarkMenu";
 import useHistoryMenu from "components/apps/Browser/useHistoryMenu";
 import useProxyMenu, {
+  PROXY_SETTINGS,
   type ProxyState,
 } from "components/apps/Browser/useProxyMenu";
 import { ADDRESS_INPUT_PROPS } from "components/apps/FileExplorer/AddressBar";
@@ -32,9 +33,10 @@ import {
 } from "components/system/Files/FileEntry/functions";
 import useTitle from "components/system/Window/useTitle";
 import { useFileSystemActions, useFs } from "contexts/fileSystem";
+import { useMenu } from "contexts/menu";
 import { hasProcess, useProcess, useProcessesActions } from "contexts/process";
 import processDirectory from "contexts/process/directory";
-import { useSessionActions } from "contexts/session";
+import { useForegroundId, useSessionActions } from "contexts/session";
 import useHistory from "hooks/useHistory";
 import Button from "styles/common/Button";
 import Icon from "styles/common/Icon";
@@ -42,6 +44,7 @@ import {
   FAVICON_BASE_PATH,
   IFRAME_CONFIG,
   ONE_TIME_PASSIVE_EVENT,
+  PREVENT_SCROLL,
   SHORTCUT_EXTENSION,
 } from "utils/constants";
 import {
@@ -52,6 +55,7 @@ import {
   label,
   LOCAL_HOST,
 } from "utils/functions";
+import { isComposingKey } from "utils/keyboard";
 
 declare module "react" {
   interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -118,6 +122,8 @@ const Browser: FC<ComponentProcessProps> = ({ id }) => {
   );
   const [proxyState, setProxyState] = useState<ProxyState>("CORS");
   const proxyMenu = useProxyMenu(proxyState, setProxyState);
+  const { label: openMenu } = useMenu();
+  const foregroundId = useForegroundId();
   const bookmarkMenu = useBookmarkMenu();
   const setUrl = async (addressInput: string): Promise<void> => {
     const { contentWindow } = iframeRef.current || {};
@@ -413,23 +419,31 @@ const Browser: FC<ComponentProcessProps> = ({ id }) => {
           aria-label="Address and search bar"
           defaultValue={initialUrl}
           onFocusCapture={() => inputRef.current?.select()}
-          onKeyDown={({ key }) => {
-            if (inputRef.current && key === "Enter") {
+          onKeyDown={({ key, nativeEvent }) => {
+            if (
+              inputRef.current &&
+              key === "Enter" &&
+              !isComposingKey(nativeEvent)
+            ) {
               changeUrl(id, inputRef.current.value);
               if (currentUrl.current === inputRef.current.value) {
                 setUrl(inputRef.current.value);
               }
               window.getSelection()?.removeAllRanges();
-              inputRef.current.blur();
+              // Like Chrome, focus moves on to the page
+              iframeRef.current?.focus(PREVENT_SCROLL);
             }
           }}
           {...ADDRESS_INPUT_PROPS}
         />
         <Button
+          // Every browser shares this menu name, but only the active one opens it
+          aria-expanded={openMenu === PROXY_SETTINGS && foregroundId === id}
+          aria-haspopup="menu"
           className="proxy"
           onClick={proxyMenu.onContextMenuCapture}
           onContextMenu={haltEvent}
-          {...label("Proxy settings")}
+          {...label(PROXY_SETTINGS)}
         >
           <Network />
         </Button>
@@ -478,7 +492,7 @@ const Browser: FC<ComponentProcessProps> = ({ id }) => {
           if (loading) setLoading(false);
         }}
         srcDoc={srcDoc || undefined}
-        title={id}
+        title={process.title}
         {...IFRAME_CONFIG}
         credentialless={supportsCredentialless ? "credentialless" : undefined}
       />

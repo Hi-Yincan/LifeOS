@@ -120,6 +120,7 @@ const Titlebar: FC<TitlebarProps> = ({ id }) => {
       {...titlebarContextMenu}
     >
       <Button
+        aria-label={title}
         {...FOCUSABLE_ELEMENT}
         {...(!hideMaximizeButton && allowResizing && !closing
           ? onClickMaximize
@@ -142,9 +143,13 @@ const Titlebar: FC<TitlebarProps> = ({ id }) => {
           <figcaption>{title}</figcaption>
         </figure>
       </Button>
+      {/* Shortcuts act on the window in front, so only it advertises them */}
       <nav className="cancel" role="presentation">
         {!hideMinimizeButton && (
           <Button
+            aria-keyshortcuts={
+              isForeground && !maximized ? "Control+Shift+ArrowDown" : undefined
+            }
             className="minimize"
             onClick={triggerMinimize}
             {...label(locale === "zh" ? "最小化" : "Minimize")}
@@ -154,16 +159,29 @@ const Titlebar: FC<TitlebarProps> = ({ id }) => {
         )}
         {!hideMaximizeButton && (
           <Button
+            aria-keyshortcuts={
+              isForeground && allowResizing
+                ? maximized
+                  ? "Control+Shift+ArrowDown"
+                  : "Control+Shift+ArrowUp"
+                : undefined
+            }
             className="maximize"
             disabled={!allowResizing}
             onClick={onMaximize}
-            {...label(maximized ? (locale === "zh" ? "还原" : "Restore Down") : (locale === "zh" ? "最大化" : "Maximize"))}
+            {...(maximized
+              ? label(
+                  locale === "zh" ? "还原" : "Restore Down",
+                  locale === "zh" ? "还原" : "Restore"
+                )
+              : label(locale === "zh" ? "最大化" : "Maximize"))}
           >
             {maximized ? <MaximizedIcon /> : <MaximizeIcon />}
           </Button>
         )}
         <Button
           $short={hideMaximizeButton && hideMinimizeButton}
+          aria-keyshortcuts={isForeground ? "Control+Alt+F4" : undefined}
           className="close"
           onClick={onClose}
           {...label(locale === "zh" ? "关闭" : "Close")}
