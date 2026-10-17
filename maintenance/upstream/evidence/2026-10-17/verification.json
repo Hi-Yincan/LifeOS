@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-17",
+  "productCodeCommit": "f51982519abe8f56a9ed567726d4e5d5a5587ef5",
+  "integrationMerge": "14066967c251b4ab49deef50ec33f0d2f764f2a4",
+  "parents": [
+    "f57d30f428a39906e5f2f772f2c08780b709748e",
+    "f017b393d4175eb396a741a7562299423843f1b1"
+  ],
+  "upstreamCommitCount": 4580,
+  "shallow": false,
+  "lockGitBlobSha256": "0105168153dd4702a49c8429b6e45261ed91ad5d2d7bb7bf1b8090c9e082a878",
+  "nativeProcesses": 33,
+  "productProcesses": [
+    "Portfolio",
+    "SystemSettings",
+    "AppStore"
+  ],
+  "cleanClone": {
+    "separateCheckout": true,
+    "ownNodeModules": true,
+    "frozenLockInstall": true,
+    "build": true,
+    "lint": true,
+    "unitPassed": 30,
+    "serverPassed": 11,
+    "e2ePassed": 7
+  },
+  "auditNegativeControl": {
+    "temporaryOldDomainArtifactRejected": true,
+    "rejectionExitCode": 1,
+    "removedArtifactAndRerunExitCode": 0
+  },
+  "remoteCI": {
+    "status": "not run",
+    "dispatch": "404 workflow main.yml not found on the default branch",
+    "defaultBranch": "main",
+    "scheduleActive": false
+  },
+  "publishedToProduction": false
+}

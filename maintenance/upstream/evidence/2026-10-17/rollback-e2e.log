@@ -1,0 +1,16 @@
+[WebServer] (node:11271) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 7 tests using 1 worker
+
+(node:11272) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › e2e/product.spec.ts:4:5 › plain visits show the desktop; portfolio remains opt-in (2.7s)
+  ✓  2 [chromium] › e2e/product.spec.ts:22:5 › portfolio project links load public content (295ms)
+  ✓  3 [chromium] › e2e/product.spec.ts:33:5 › store defaults to all and toggles its three categories (6.9s)
+  ✓  4 [chromium] › e2e/product.spec.ts:65:5 › Start keeps settings and Power without folder shortcuts (6.3s)
+  ✓  5 [chromium] › e2e/product.spec.ts:85:5 › native Paint and file browser still load (6.6s)
+  ✓  6 [chromium] › e2e/product.spec.ts:95:5 › site metadata uses the owner identity and old assets stay absent (228ms)
+  ✓  7 [chromium] › e2e/product.spec.ts:118:5 › author can save a private draft, publish it and unpublish it (23.1s)
+
+  7 passed (48.5s)

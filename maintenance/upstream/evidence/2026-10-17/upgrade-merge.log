@@ -1,0 +1,8 @@
+Auto-merging components/apps/Browser/index.tsx
+Auto-merging components/system/StartMenu/Sidebar/index.tsx
+CONFLICT (content): Merge conflict in components/system/StartMenu/Sidebar/index.tsx
+Auto-merging components/system/Window/Titlebar/index.tsx
+CONFLICT (content): Merge conflict in components/system/Window/Titlebar/index.tsx
+Auto-merging contexts/process/directory.ts
+Auto-merging utils/constants.ts
+Automatic merge failed; fix conflicts and then commit the result.
