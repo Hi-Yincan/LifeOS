@@ -112,28 +112,56 @@ test("site metadata uses the owner identity and old assets stay absent", async (
   expect((await request.get("/favicon.ico")).status()).toBe(404);
   expect((await request.get("/screenshot.png")).status()).toBe(404);
   expect((await request.get("/rss.xml")).status()).toBe(404);
-  expect((await request.get("/api/admin/projects")).status()).toBe(401);
+  expect((await request.get("/api/admin/projects")).status()).toBe(
+    process.env.PUBLIC_DEPLOYMENT ? 404 : 401
+  );
 });
 
-test("author can save a private draft, publish it and unpublish it", async ({ page, request }) => {
+test("author can save a private draft, publish it and unpublish it", async ({
+  page,
+  request,
+}) => {
+  test.skip(
+    Boolean(process.env.PUBLIC_DEPLOYMENT),
+    "Public releases have no write API"
+  );
   await page.goto("/?app=SystemSettings");
   await page.locator("summary").filter({ hasText: "Site maintenance" }).click();
-  await page.locator('input[name="administrator-key"]').fill("product-e2e-only-not-a-real-credential");
+  await page
+    .locator('input[name="administrator-key"]')
+    .fill("product-e2e-only-not-a-real-credential");
   await page.getByRole("button", { name: "Enter management" }).click();
-  const portfolio = page.getByRole("dialog", { exact: true, name: "Portfolio" });
+  const portfolio = page.getByRole("dialog", {
+    exact: true,
+    name: "Portfolio",
+  });
   await expect(portfolio).toBeVisible();
   await portfolio.locator('a[href="/?app=Portfolio&project=aipm"]').click();
-  await portfolio.getByRole("button", { exact: true, name: "Edit project" }).click();
-  await portfolio.locator('input[name="project-title"]').fill("AIPM integration test");
-  await portfolio.getByRole("button", { exact: true, name: "Save draft" }).click();
+  await portfolio
+    .getByRole("button", { exact: true, name: "Edit project" })
+    .click();
+  await portfolio
+    .locator('input[name="project-title"]')
+    .fill("AIPM integration test");
+  await portfolio
+    .getByRole("button", { exact: true, name: "Save draft" })
+    .click();
   await expect(portfolio.getByRole("status")).toContainText("Draft saved");
   const draftPublic = await request.get("/api/projects/aipm");
-  expect(((await draftPublic.json()) as Project).translations.en.title).toBe("AIPM");
-  await portfolio.getByRole("button", { exact: true, name: "Publish saved version" }).click();
+  expect(((await draftPublic.json()) as Project).translations.en.title).toBe(
+    "AIPM"
+  );
+  await portfolio
+    .getByRole("button", { exact: true, name: "Publish saved version" })
+    .click();
   await expect(portfolio.getByRole("status")).toContainText("Published");
   const published = await request.get("/api/projects/aipm");
-  expect(((await published.json()) as Project).translations.en.title).toBe("AIPM integration test");
-  await portfolio.getByRole("button", { exact: true, name: "Unpublish" }).click();
+  expect(((await published.json()) as Project).translations.en.title).toBe(
+    "AIPM integration test"
+  );
+  await portfolio
+    .getByRole("button", { exact: true, name: "Unpublish" })
+    .click();
   await expect(portfolio.getByRole("status")).toContainText("Unpublished");
   expect((await request.get("/api/projects/aipm")).status()).toBe(404);
 });
