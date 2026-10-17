@@ -1,0 +1,4 @@
+interface:
+  display_name: "Parallel development"
+  short_description: "Coordinate isolated multi-agent work across coding tools"
+  default_prompt: "Use $parallel-development to plan and run a reviewable parallel batch for this project."

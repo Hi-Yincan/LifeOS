@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "id": "prototype-audit",
+  "goal": "Validate the parallel workflow using two isolated audits of the current prototype; preserve active UI design",
+  "max_workers": 2,
+  "tasks": [
+    {
+      "id": "content-audit",
+      "goal": "Review service.mjs, content tests and content/data specifications. Write a concise source audit to specs/development/validation/prototype-content-audit.md. Do not modify product code.",
+      "acceptance": "Report actual baseline SHA, reviewed file:line references, passing checks, concrete findings or a bounded no-findings conclusion, and production gaps separately. No keys or runtime data.",
+      "owns": ["specs/development/validation/prototype-content-audit.md"],
+      "depends_on": [],
+      "gates": [
+        {"name": "service-syntax", "argv": ["node", "--check", "research/daedalos-portfolio/service.mjs"]},
+        {"name": "report-present", "argv": ["python3", "-c", "from pathlib import Path; p=Path('specs/development/validation/prototype-content-audit.md'); assert p.is_file() and p.stat().st_size > 200"]}
+      ]
+    },
+    {
+      "id": "shell-audit",
+      "goal": "Review prototype startup, OS settings and App Store entrypoints against current concept specs. Write specs/development/validation/prototype-shell-audit.md. Do not modify product code or UI.",
+      "acceptance": "Report actual baseline SHA, reviewed file:line references, checks, concrete inconsistencies or a bounded no-findings conclusion. Explicitly separate source observations from browser verification.",
+      "owns": ["specs/development/validation/prototype-shell-audit.md"],
+      "depends_on": [],
+      "gates": [
+        {"name": "prepare-syntax", "argv": ["node", "--check", "research/daedalos-portfolio/tools/prepare.mjs"]},
+        {"name": "report-present", "argv": ["python3", "-c", "from pathlib import Path; p=Path('specs/development/validation/prototype-shell-audit.md'); assert p.is_file() and p.stat().st_size > 200"]}
+      ]
+    }
+  ],
+  "integration_gates": [
+    {"name": "diff-check", "argv": ["git", "diff", "--check", "HEAD~1", "HEAD"]},
+    {"name": "prototype-tests", "argv": ["node", "--test", "research/daedalos-portfolio/test/content.test.mjs", "research/daedalos-portfolio/test/app-store.test.mjs"], "timeout": 120}
+  ]
+}

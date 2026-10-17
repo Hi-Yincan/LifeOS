@@ -1,0 +1,186 @@
+{
+  "version": 1,
+  "date": "2026-10-17",
+  "mode": "disposable-local-clone",
+  "source_baseline": "f57d30f428a39906e5f2f772f2c08780b709748e",
+  "staged_baseline": "a59eda1f195e2f46d6a3cab574c2fd3f3625095f",
+  "agents_used": [
+    "Codex independent content worker",
+    "Codex independent shell worker",
+    "Codex coordinator/reviewer"
+  ],
+  "environment": {
+    "python": "3.14.0b3",
+    "git": "2.39.5 (Apple Git-154)",
+    "node": "v26.7.0",
+    "os": "macOS"
+  },
+  "final_helper_sha256": "bc998c31144045df3595ddc32a91e07c55754f8e73dd6adef87c9eb98f1b548c",
+  "behavioral_tests": {
+    "passed": 14,
+    "failed": 0
+  },
+  "native_launch_validation": {
+    "claude_code": "not_run",
+    "cursor": "not_run"
+  },
+  "tasks": [
+    {
+      "id": "content-audit",
+      "owner": "codex-forward-content-audit",
+      "attempt": 1,
+      "status": "verified",
+      "commit": "9e4c62ad67504d9e58ca83318aa0ae6537b62550",
+      "files": [
+        "specs/development/validation/prototype-content-audit.md"
+      ],
+      "worker_gates": [
+        {
+          "name": "diff-check",
+          "argv": [
+            "git",
+            "diff",
+            "--check",
+            "a59eda1f195e2f46d6a3cab574c2fd3f3625095f",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "name": "service-syntax",
+          "argv": [
+            "node",
+            "--check",
+            "research/daedalos-portfolio/service.mjs"
+          ],
+          "exit_code": 0
+        },
+        {
+          "name": "report-present",
+          "argv": [
+            "python3",
+            "-c",
+            "from pathlib import Path; p=Path('specs/development/validation/prototype-content-audit.md'); assert p.is_file() and p.stat().st_size > 200"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "review": {
+        "reviewer": "codex-coordinator-independent-review",
+        "decision": "approve",
+        "sha": "9e4c62ad67504d9e58ca83318aa0ae6537b62550",
+        "note": "Independently inspected report diff and service validation/public serialization; findings match source; scope is bounded."
+      },
+      "integration_sha": "d38345bb459e6b95c0e3e81e3e3f8453bd6d6b27",
+      "integration_gates": [
+        {
+          "name": "diff-check",
+          "argv": [
+            "git",
+            "diff",
+            "--check",
+            "HEAD~1",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "name": "prototype-tests",
+          "argv": [
+            "node",
+            "--test",
+            "research/daedalos-portfolio/test/content.test.mjs",
+            "research/daedalos-portfolio/test/app-store.test.mjs"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "prototype_tests_passed": 12,
+      "claim_at": "2026-10-17T08:51:24.528845+00:00",
+      "submit_at": "2026-10-17T08:53:33.843271+00:00"
+    },
+    {
+      "id": "shell-audit",
+      "owner": "codex-forward-shell-audit",
+      "attempt": 1,
+      "status": "verified",
+      "commit": "ed472ff4dd12f9409ec03f855d7fea7cd4f6e3c1",
+      "files": [
+        "specs/development/validation/prototype-shell-audit.md"
+      ],
+      "worker_gates": [
+        {
+          "name": "diff-check",
+          "argv": [
+            "git",
+            "diff",
+            "--check",
+            "a59eda1f195e2f46d6a3cab574c2fd3f3625095f",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "name": "prepare-syntax",
+          "argv": [
+            "node",
+            "--check",
+            "research/daedalos-portfolio/tools/prepare.mjs"
+          ],
+          "exit_code": 0
+        },
+        {
+          "name": "report-present",
+          "argv": [
+            "python3",
+            "-c",
+            "from pathlib import Path; p=Path('specs/development/validation/prototype-shell-audit.md'); assert p.is_file() and p.stat().st_size > 200"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "review": {
+        "reviewer": "codex-coordinator-independent-review",
+        "decision": "approve",
+        "sha": "ed472ff4dd12f9409ec03f855d7fea7cd4f6e3c1",
+        "note": "Independently inspected report diff, current specs and Settings callback; source-only limitations explicitly recorded."
+      },
+      "integration_sha": "e61ce352f9014f5d5f4b4ec266fc6111267876bd",
+      "integration_gates": [
+        {
+          "name": "diff-check",
+          "argv": [
+            "git",
+            "diff",
+            "--check",
+            "HEAD~1",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "name": "prototype-tests",
+          "argv": [
+            "node",
+            "--test",
+            "research/daedalos-portfolio/test/content.test.mjs",
+            "research/daedalos-portfolio/test/app-store.test.mjs"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "prototype_tests_passed": 12,
+      "claim_at": "2026-10-17T08:51:31.448056+00:00",
+      "submit_at": "2026-10-17T08:53:47.373423+00:00"
+    }
+  ],
+  "recovery_runs": 2,
+  "repeated_integration_skipped": true,
+  "source_checkout_business_changes": false,
+  "limitations": [
+    "No browser, real device, Windows/Linux, Python 3.9 runtime or production validation.",
+    "No serial speedup baseline or provider usage cost measured.",
+    "The active repository changed to an integration branch during validation; evidence concerns the fixed clone baseline only."
+  ],
+  "workers_overlapped": true
+}

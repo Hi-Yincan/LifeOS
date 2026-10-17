@@ -50,3 +50,7 @@ public/Users/Public/**
 server/.runtime/
 !public/Users/Public/Desktop/App Store.url
 !public/Users/Public/Desktop/Portfolio.url
+
+# Local parallel workflow state and Python caches
+.parallel/
+__pycache__/
