@@ -9,6 +9,10 @@ export type CatalogApp = {
   source: "adapted" | "native";
 };
 const descriptions: Record<string, [string, string]> = {
+  AppStore: [
+    "浏览系统软件、应用软件与第三方应用，管理本机网页应用。",
+    "Browse system software, application software and third-party apps, and manage local web apps.",
+  ],
   Browser: ["daedalOS 内置浏览器。", "The built-in daedalOS browser."],
   Chess: ["在桌面窗口中下国际象棋。", "Play chess in a desktop window."],
   FileExplorer: [
@@ -44,7 +48,7 @@ const fileBased = new Set([
 export const catalog: CatalogApp[] = Object.entries(directory)
   .filter(
     ([id, process]) =>
-      !process.dialogProcess && !["AppStore", "SystemSettings"].includes(id)
+      !process.dialogProcess && id !== "SystemSettings"
   )
   .map(([id, process]): CatalogApp => ({
     description:
@@ -62,7 +66,7 @@ export const catalog: CatalogApp[] = Object.entries(directory)
     icon: process.icon,
     id,
     name: process.title,
-    source: id === "Portfolio" ? "adapted" : "native",
+    source: ["AppStore", "Portfolio"].includes(id) ? "adapted" : "native",
   }))
   .sort(
     (a, b) => a.source.localeCompare(b.source) || a.name.localeCompare(b.name)

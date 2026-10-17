@@ -9,6 +9,7 @@
 | 交付 | 内容 |
 | --- | --- |
 | [PRD](PRD.md) | 产品范围、作品集与商店用户流程、成功标准和阶段边界 |
+| [商店三分类与取消筛选](../../research/concept/app-store-categories.md) | 系统软件 / 应用软件 / 第三方；App Store 自身归入应用软件 |
 | [应用商店](app-store.md) | 原生 / 二开 / 第三方应用目录、本机管理实验与待决项 |
 | [系统设置](system-settings.md) | 开始菜单左侧栏→系统设置；应用默认无设置按钮 |
 | [内容与权限](data-and-permissions.md) | 双语字段、草稿/发布快照、媒体、单密钥会话 |

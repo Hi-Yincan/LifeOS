@@ -24,10 +24,10 @@ import NativeIcon from "styles/common/Icon";
 
 type StoreError =
   "" | "capacity" | "conflict" | "duplicate" | "invalid" | "storage";
-type Filter = "adapted" | "all" | "library" | "native" | "thirdParty";
+type Filter = "adapted" | "native" | "thirdParty";
 const messages = {
   en: {
-    adapted: "Site apps",
+    adapted: "Application software",
     add: "Add web app",
     added: "Added",
     all: "All apps",
@@ -49,14 +49,13 @@ const messages = {
     empty: "No matching apps",
     enable: "Enable",
     external: "External browser tab",
-    favorite: "Add to My apps",
+    favorite: "Favorite app",
     fileHint: "Choose a compatible file, then use its Open with menu.",
     files: "Choose a file",
     hint: "Try another search or add your own web app.",
     import: "Import and add",
     invalid:
       "Invalid manifest. Check the name and external HTTPS URL. Scripts, this site and local addresses are not supported.",
-    library: "My apps",
     local: "Local library · This browser only",
     manifest: "Import JSON manifest",
     manifestHint:
@@ -64,9 +63,9 @@ const messages = {
     mode: "Launch mode",
     name: "Name (original language)",
     nameEn: "English name (optional)",
-    native: "Native",
+    native: "System software",
     nativeHint:
-      "Built-in apps remain available. My apps is a shortcut list inside the store.",
+      "Built-in apps remain available. Favorites are saved only in this browser.",
     open: "Open",
     origin: "Destination",
     process: "Native daedalOS window",
@@ -83,14 +82,14 @@ const messages = {
       "Cannot read or save this library. Existing data was not overwritten. Check browser storage.",
     thirdParty: "Third-party",
     title: "App Store",
-    unfavorite: "Remove from My apps",
+    unfavorite: "Unfavorite app",
     url: "App URL (HTTPS)",
     webCount: "custom",
     webHint:
       "Web apps open in a new browser tab. Adding, disabling and removing affect only this browser, without publishing to the site.",
   },
   zh: {
-    adapted: "本站二开",
+    adapted: "应用软件",
     add: "添加网页应用",
     added: "已添加",
     all: "全部应用",
@@ -110,23 +109,22 @@ const messages = {
     empty: "没有符合条件的应用",
     enable: "启用",
     external: "外部浏览器标签",
-    favorite: "加入我的应用",
+    favorite: "收藏应用",
     fileHint: "先选择兼容文件，再通过文件的打开方式使用此应用。",
     files: "选择文件",
     hint: "搜索其他关键词，或添加你自己的网页应用。",
     import: "导入并添加",
     invalid:
       "应用清单无效。请检查名称与 HTTPS 外部网址；不支持脚本、本站或本地地址。",
-    library: "我的应用",
     local: "本机应用库 · 仅此浏览器",
     manifest: "导入 JSON 应用清单",
     manifestHint: "支持 name、nameEn、url、description；粘贴后点击导入。",
     mode: "运行方式",
     name: "名称（中文或原文）",
     nameEn: "英文名称（选填）",
-    native: "原生应用",
+    native: "系统软件",
     nativeHint:
-      "内置应用始终保留可用。加入或移出「我的应用」只改变商店内的快捷列表。",
+      "内置应用始终保留可用。收藏记录仅保存在此浏览器。",
     open: "打开",
     origin: "目标网站",
     process: "daedalOS 原生窗口",
@@ -140,7 +138,7 @@ const messages = {
     storage: "无法读取或保存本机应用库。原有数据未覆盖，请检查浏览器存储。",
     thirdParty: "第三方",
     title: "应用商店",
-    unfavorite: "移出我的应用",
+    unfavorite: "取消收藏",
     url: "应用网址（HTTPS）",
     webCount: "项自建",
     webHint:
@@ -159,7 +157,7 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
   const [error, setError] = useState<StoreError>("");
   const [notice, setNotice] = useState(false);
   const [ready, setReady] = useState(false);
-  const [filter, setFilter] = useState<Filter>("all");
+  const [filter, setFilter] = useState<Filter | undefined>(undefined);
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState("");
   const [removing, setRemoving] = useState("");
@@ -233,9 +231,11 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
       ? locale === "en"
         ? app.nameEn
         : app.name
-      : app.id === "Portfolio" && locale === "zh"
-        ? "个人作品集"
-        : app.name;
+      : app.id === "AppStore"
+        ? t.title
+        : app.id === "Portfolio" && locale === "zh"
+          ? "个人作品集"
+          : app.name;
   const sourceName = (app: CatalogApp | WebApp): string =>
     isWeb(app) ? t.thirdParty : t[app.source];
   const description = (app: CatalogApp | WebApp): string =>
@@ -244,12 +244,10 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
   const selected = apps.find((app) => app.id === selectedId);
   const visible = apps.filter(
     (app) =>
-      (filter === "all" ||
-        (filter === "library"
-          ? isWeb(app) || library.favorites.includes(app.id)
-          : filter === "thirdParty"
-            ? isWeb(app)
-            : !isWeb(app) && app.source === filter)) &&
+      (!filter ||
+        (filter === "thirdParty"
+          ? isWeb(app)
+          : !isWeb(app) && app.source === filter)) &&
       `${appName(app)} ${description(app)} ${app.id}`
         .toLowerCase()
         .includes(search.trim().toLowerCase())
@@ -367,21 +365,19 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
           <span>
             {t.title}
             <span className="hyc-path-separator">›</span>
-            {adding ? t.add : selected ? appName(selected) : t[filter]}
+            {adding ? t.add : selected ? appName(selected) : t[filter ?? "all"]}
           </span>
         </StyledAddressBar>
       </StyledNavigation>
       <div className="hyc-store-controls">
         <nav aria-label={t.title} className="hyc-segments">
-          {(
-            ["all", "native", "adapted", "thirdParty", "library"] as Filter[]
-          ).map((value) => (
+          {(["native", "adapted", "thirdParty"] as Filter[]).map((value) => (
             <button
               key={value}
               aria-pressed={filter === value}
               onClick={() => {
                 reset();
-                setFilter(value);
+                setFilter((current) => (current === value ? undefined : value));
               }}
               type="button"
             >
@@ -545,7 +541,7 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
         ) : (
           <>
             <div className="hyc-heading-line">
-              <h1>{t[filter]}</h1>
+              <h1>{t[filter ?? "all"]}</h1>
               <span className="hyc-muted">
                 {visible.length} {t.count}
               </span>
