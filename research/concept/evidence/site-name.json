@@ -20,5 +20,7 @@
   "lint": "passed for both head components and shared site config",
   "prepareIdempotent": true,
   "browserTaskFinished": true,
-  "productionDeployed": false
+  "productionDeployed": false,
+  "implementationCommit": "6585ce0",
+  "issueComment": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2#issuecomment-6230184755"
 }
