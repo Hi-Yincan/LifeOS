@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-17",
+  "commit": "be4764dd014f75c6419ae3c7fdd201deb6662cd0",
+  "reports": [
+    {
+      "issue": 15,
+      "title": "C20｜保留 Web 应用，统一 daedalOS 视觉与响应式",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6227221522"
+    },
+    {
+      "issue": 15,
+      "title": "C21｜UI 规范 v1.1：原项目视觉一致性",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/15#issuecomment-6227221894"
+    },
+    {
+      "issue": 14,
+      "title": "C22｜取消额外手机与平板适配，改为上游一致性验证",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/14#issuecomment-6227222221"
+    },
+    {
+      "issue": 3,
+      "title": "P02｜计划输入 v1.1：取消额外移动适配与独立皮肤",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/3#issuecomment-6227222583"
+    },
+    {
+      "issue": 2,
+      "title": "C23｜概念修订 v1.1：最新确认范围",
+      "url": "https://github.com/Hi-Yincan/Hi-Yincan.github.io/issues/2#issuecomment-6227222977"
+    }
+  ],
+  "verification": {
+    "issues": [
+      {
+        "issue": 2,
+        "historicalCommentsPreserved": true,
+        "revisionIndexed": true,
+        "title": "概念阶段"
+      },
+      {
+        "issue": 3,
+        "historicalCommentsPreserved": true,
+        "revisionIndexed": true,
+        "title": "计划阶段"
+      },
+      {
+        "issue": 14,
+        "historicalCommentsPreserved": true,
+        "revisionIndexed": true,
+        "title": "沿用 daedalOS 原生响应式与多设备一致性验证"
+      },
+      {
+        "issue": 15,
+        "historicalCommentsPreserved": true,
+        "revisionIndexed": true,
+        "title": "个人作品集 App：v1 概念设计与研究原型"
+      }
+    ],
+    "draftPR": 16,
+    "reviewedCommitPresent": true
+  }
+}
