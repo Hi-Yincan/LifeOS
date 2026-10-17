@@ -24,18 +24,18 @@ cpSync(resolve(root, 'overlay'), checkout, { recursive: true });
 modify('contexts/process/directory.ts', text => text.replace('const directory: Processes = {', `const directory: Processes = {
   Portfolio: {
     Component: dynamic(() => import("components/apps/Portfolio")),
-    defaultSize: { width: 1100, height: 740 },
-    icon: "/System/PersonalOS/portfolio.svg", title: "Portfolio", singleton: true, backgroundColor: "#f7f9fc", isLightBg: true,
+    defaultSize: { width: 960, height: 640 },
+    icon: "/System/PersonalOS/portfolio.svg", title: "Portfolio", singleton: true, backgroundColor: "#202020",
   },
   SystemSettings: {
     Component: dynamic(() => import("components/system/PersonalOS/Settings")),
-    defaultSize: { width: 580, height: 650 },
-    icon: "/System/PersonalOS/settings.svg", title: "Settings", singleton: true, backgroundColor: "#f7f9fc", isLightBg: true,
+    defaultSize: { width: 500, height: 420 },
+    icon: "/System/PersonalOS/settings.svg", title: "Settings", singleton: true, backgroundColor: "#202020",
   },`));
 modify('pages/_app.tsx', text => text.replace('import "utils/polyfills";', 'import "utils/polyfills";\nimport "components/system/PersonalOS/personal.css";\nimport { PersonalOSProvider } from "components/system/PersonalOS/context";').replace('<MenuProvider>', '<PersonalOSProvider><MenuProvider>').replace('</MenuProvider>', '</MenuProvider></PersonalOSProvider>'));
 modify('pages/index.tsx', text => text.replace('import AppsLoader', 'import PersonalShell from "components/system/PersonalOS/Shell";\nimport AppsLoader').replace('<AppsLoader />', '<AppsLoader />\n      <PersonalShell />'));
 modify('components/system/Window/Titlebar/index.tsx', text => text.replace('import { useRef }', 'import { usePersonalOS } from "components/system/PersonalOS/context";\nimport { useRef }').replace('const Titlebar: FC<TitlebarProps> = ({ id }) => {', 'const Titlebar: FC<TitlebarProps> = ({ id }) => {\n  const { locale } = usePersonalOS();').replace('label("Minimize")', 'label(locale === "zh" ? "最小化" : "Minimize")').replace('label("Maximize")', 'label(locale === "zh" ? "最大化" : "Maximize")').replace('label("Close")', 'label(locale === "zh" ? "关闭" : "Close")').replace('label("Restore Down", "Restore")', 'label(locale === "zh" ? "还原" : "Restore Down", locale === "zh" ? "还原" : "Restore")'));
-modify('components/pages/Metadata.tsx', text => text.replace(', minimum-scale=1, maximum-scale=1', '').replace('<meta content={description} name="description" />', '<meta content="Yincan Huang — open-source projects and contributions." name="description" />'));
+modify('components/pages/Metadata.tsx', text => text.replace('<meta content={description} name="description" />', '<meta content="Yincan Huang — open-source projects and contributions." name="description" />'));
 modify('contexts/process/useProcessContextState.ts', text => text.replace('import { useRef, useState }', 'import { canClosePersonalApp } from "components/system/PersonalOS/closeGuards";\nimport { useRef, useState }').replace('const closeWithTransition = (id: string): void => {', 'const closeWithTransition = (id: string): void => {\n    if (!canClosePersonalApp(id)) return;'));
 for (const [name, app, icon] of [['Portfolio', 'Portfolio', 'portfolio'], ['Settings', 'SystemSettings', 'settings']]) {
   const path = resolve(checkout, `public/Users/Public/Start Menu/${name}.url`); mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, `[InternetShortcut]\nBaseURL=${app}\nComment=${name}\nIconFile=/System/PersonalOS/${icon}.svg\n`);

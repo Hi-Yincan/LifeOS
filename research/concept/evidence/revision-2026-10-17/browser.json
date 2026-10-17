@@ -1,0 +1,113 @@
+{
+  "reference": {
+    "font": "\"Segoe UI\", system-ui, Roboto, \"Helvetica Neue\", sans-serif",
+    "toolbar": "rgb(25, 25, 25)",
+    "toolbarHeight": 35
+  },
+  "devices": [
+    {
+      "width": 390,
+      "height": 844,
+      "viewport": "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, interactive-widget=resizes-content",
+      "taskbarVisible": true,
+      "customShell": false,
+      "deviceMode": null,
+      "preferences": {
+        "language": "zh"
+      },
+      "mainWidth": 243,
+      "mainScrollWidth": 243,
+      "dialog": {
+        "x": 0,
+        "y": 72,
+        "width": 390,
+        "height": 670,
+        "top": 72,
+        "right": 390,
+        "bottom": 742,
+        "left": 0
+      },
+      "font": "\"Segoe UI\", system-ui, Roboto, \"Helvetica Neue\", sans-serif",
+      "toolbar": "rgb(25, 25, 25)",
+      "toolbarHeight": 35,
+      "detail": {
+        "title": "AIPM",
+        "overflow": false
+      }
+    },
+    {
+      "width": 820,
+      "height": 1180,
+      "viewport": "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, interactive-widget=resizes-content",
+      "taskbarVisible": true,
+      "customShell": false,
+      "deviceMode": null,
+      "preferences": {
+        "language": "zh"
+      },
+      "mainWidth": 673,
+      "mainScrollWidth": 673,
+      "dialog": {
+        "x": 0,
+        "y": 240,
+        "width": 820,
+        "height": 670,
+        "top": 240,
+        "right": 820,
+        "bottom": 910,
+        "left": 0
+      },
+      "font": "\"Segoe UI\", system-ui, Roboto, \"Helvetica Neue\", sans-serif",
+      "toolbar": "rgb(25, 25, 25)",
+      "toolbarHeight": 35,
+      "detail": {
+        "title": "AIPM",
+        "overflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "viewport": "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, interactive-widget=resizes-content",
+      "taskbarVisible": true,
+      "customShell": false,
+      "deviceMode": null,
+      "preferences": {
+        "language": "zh"
+      },
+      "mainWidth": 813,
+      "mainScrollWidth": 813,
+      "dialog": {
+        "x": 240,
+        "y": 100,
+        "width": 960,
+        "height": 670,
+        "top": 100,
+        "right": 1200,
+        "bottom": 770,
+        "left": 240
+      },
+      "font": "\"Segoe UI\", system-ui, Roboto, \"Helvetica Neue\", sans-serif",
+      "toolbar": "rgb(25, 25, 25)",
+      "toolbarHeight": 35,
+      "detail": {
+        "title": "AIPM",
+        "overflow": false
+      }
+    }
+  ],
+  "management": {
+    "login": true,
+    "bilingualPreserved": true,
+    "draftVisitorStatus": 404,
+    "publishedVisitorStatus": 200,
+    "unpublishedVisitorStatus": 404,
+    "logoutStatus": 401
+  },
+  "settings": {
+    "selects": [
+      "os-language"
+    ],
+    "legacyControls": false
+  }
+}
