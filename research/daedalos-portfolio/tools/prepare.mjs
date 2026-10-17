@@ -85,12 +85,16 @@ modify('components/apps/Webamp/functions.ts', text => text
   .replace('["localhost", PACKAGE_DATA.author.url.replace("https://", "")].includes(\n    window.location.hostname\n  )', 'window.location.hostname === "localhost"'));
 modify('contexts/process/useProcessContextState.ts', text => text.replace('import { useRef, useState }', 'import { canClosePersonalApp } from "components/system/PersonalOS/closeGuards";\nimport { useRef, useState }').replace('const closeWithTransition = (id: string): void => {', 'const closeWithTransition = (id: string): void => {\n    if (!canClosePersonalApp(id)) return;'));
 modify('components/system/StartMenu/Sidebar/index.tsx', text => text
-  .replace('import { useEffect, useRef, useState } from "react";', 'import { useEffect, useRef, useState } from "react";\nimport { usePersonalOS } from "components/system/PersonalOS/context";\nimport useLaunch from "components/system/PersonalOS/useLaunch";\nimport StartSettingsIcon from "components/system/PersonalOS/StartSettingsIcon";')
+  .replace('import { useEffect, useRef, useState } from "react";', 'import { useEffect, useRef, useState } from "react";\nimport { usePersonalOS } from "components/system/PersonalOS/context";\nimport StartSettingsIcon from "components/system/PersonalOS/StartSettingsIcon";\nimport useLaunch from "components/system/PersonalOS/useLaunch";')
   .replace('  const rootFs = useRootFs();', '  const rootFs = useRootFs();\n  const { t } = usePersonalOS();\n  const launch = useLaunch();')
-  // Reserve a row for Settings using the existing height-based sidebar policy.
-  .replace('buttonAreaCount > 5', 'buttonAreaCount > 6')
-  .replace('buttonAreaCount > 4', 'buttonAreaCount > 5')
-  .replace('buttonAreaCount > 3', 'buttonAreaCount > 4')
+  .replace('import { useTheme } from "styled-components";\n', '')
+  .replace('import { useProcessesActions } from "contexts/process";\n', '')
+  .replace('import { HOME, TASKBAR_HEIGHT } from "utils/constants";\n', '')
+  .replace('import { haltEvent, viewHeight }', 'import { haltEvent }')
+  .replace('  Documents,\n', '').replace('  Pictures,\n', '').replace('  Videos,\n', '')
+  .replace('  const { open } = useProcessesActions();\n', '')
+  .replace(/  const \{ sizes \} = useTheme\(\);[\s\S]*?(?=    \{\n      action: \(\) => \{\n        setHaltSession)/, '  const bottomButtons: SidebarButtons = [\n')
+  .replace('  ].filter(Boolean) as SidebarButtons;', '  ];')
   .replace(`    {
       action: () => {
         setHaltSession(true);`, `    {

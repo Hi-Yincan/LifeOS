@@ -1,0 +1,41 @@
+{
+  "collapsed": {
+    "collapsed": true,
+    "labels": [
+      "START",
+      "All apps",
+      "系统设置",
+      "Power"
+    ]
+  },
+  "expanded": {
+    "collapsed": false,
+    "labels": [
+      "START",
+      "All apps",
+      "系统设置",
+      "Power"
+    ]
+  },
+  "settings": {
+    "count": 1,
+    "title": "系统设置 - Yincan Huang"
+  },
+  "expansionMethod": "keyboard Enter on START",
+  "date": "2026-10-17",
+  "build": {
+    "exitCode": 0,
+    "durationSeconds": 92.42
+  },
+  "lint": "passed: StartMenu Sidebar",
+  "siteAudit": "passed",
+  "powerCallbackUnchanged": true,
+  "foldersRetained": [
+    "Documents",
+    "Pictures",
+    "Videos"
+  ],
+  "browserTaskSpace": 13,
+  "browserTaskFinished": true,
+  "productionDeployed": false
+}
