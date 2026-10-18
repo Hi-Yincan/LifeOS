@@ -48,11 +48,6 @@ const CheckupsPanel = ({
             </option>
           </select>
         </Field>
-        {filter !== "all" && (
-          <ActionButton onClick={() => setFilter("all")} type="button">
-            {zh ? "清除筛选" : "Clear filter"}
-          </ActionButton>
-        )}
       </Toolbar>
       <Toolbar>
         {records.map((record) => (
@@ -130,8 +125,8 @@ const CheckupsPanel = ({
         <EmptyState
           description={
             zh
-              ? "可清除类型筛选，或返回全部示例调整公开范围。"
-              : "Clear the type filter, or return to all samples to change preview rules."
+              ? "请选择其他检查类型，或返回全部示例调整公开范围。"
+              : "Choose another checkup type, or return to all samples to change preview rules."
           }
           title={zh ? "没有符合条件的检查记录" : "No matching checkup records"}
         />
