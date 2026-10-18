@@ -2,7 +2,6 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { makeDemoData } from "components/apps/Dashboard/fixtures";
 import { type DashboardDemoData } from "components/apps/Dashboard/model";
-import { selectVisibleDemoData } from "components/apps/Dashboard/shared";
 import Editor from "components/apps/Dashboard/views/Personal/Editor";
 import Personal from "components/apps/Dashboard/views/Personal/index";
 
@@ -226,8 +225,8 @@ describe("personal sample editing", () => {
     expect(onClose).toHaveBeenCalledWith(true);
   });
 
-  it("renders the visitor preview without editing or policy controls", () => {
-    const data = selectVisibleDemoData(makeDemoData(), "visitor");
+  it("renders every health record in read-only mode without editing or policy controls", () => {
+    const data = makeDemoData();
 
     act(() =>
       root.render(
@@ -244,6 +243,9 @@ describe("personal sample editing", () => {
     expect(container.querySelector("form")).toBeNull();
     expect(container.textContent).not.toContain("Edit health sample");
     expect(container.textContent).not.toContain("Visitor visibility");
-    expect(container.textContent).toContain("Read-only visitor preview");
+    expect(container.textContent).not.toContain("Read-only visitor preview");
+    data.personal.health.forEach(({ label }) => {
+      expect(container.textContent).toContain(label.en);
+    });
   });
 });

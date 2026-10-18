@@ -124,9 +124,7 @@ const CheckupsPanel = ({
       ) : (
         <EmptyState
           description={
-            zh
-              ? "请选择其他检查类型，或返回全部示例调整公开范围。"
-              : "Choose another checkup type, or return to all samples to change preview rules."
+            zh ? "请选择其他检查类型。" : "Choose another checkup type."
           }
           title={zh ? "没有符合条件的检查记录" : "No matching checkup records"}
         />

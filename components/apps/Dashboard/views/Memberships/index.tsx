@@ -246,10 +246,7 @@ const MembershipContent = ({
               <dd>{viewDate(selected.entitlement.startsAt)}</dd>
               <dt>{t.end}</dt>
               <dd>{viewDate(selected.entitlement.endsAt)}</dd>
-              <dt>{t.visibility}</dt>
-              <dd>{selected.visibility === "public" ? t.public : t.private}</dd>
             </Facts>
-            <Muted>{t.publicHint}</Muted>
           </Card>
           <Card>
             <h3>{t.plan}</h3>

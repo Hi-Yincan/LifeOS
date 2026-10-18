@@ -1,5 +1,12 @@
-/* eslint-disable no-alert -- 沿用原生确认保护未保存示例，重置也需要明确确认。 */
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+/* eslint-disable no-alert -- 沿用原生确认保护尚未保存的示例。 */
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import { makeDemoData } from "components/apps/Dashboard/fixtures";
 import messages from "components/apps/Dashboard/messages";
@@ -13,7 +20,6 @@ import {
   EmptyState,
   formatDateTime,
   Notice,
-  selectVisibleDemoData,
   StatusBadge,
 } from "components/apps/Dashboard/shared";
 import Memberships from "components/apps/Dashboard/views/Memberships";
@@ -149,26 +155,6 @@ const StyledDashboard = styled(Surface)`
     white-space: nowrap;
   }
 
-  .dashboard-top-actions {
-    align-items: center;
-    display: flex;
-    flex: 0 0 auto;
-    gap: 5px;
-    padding-right: 7px;
-  }
-
-  .dashboard-top-actions select {
-    font-size: 11px;
-    padding: 3px 4px;
-    width: 108px;
-  }
-
-  .dashboard-top-actions button {
-    font-size: 11px;
-    min-height: 24px;
-    padding: 2px 7px;
-  }
-
   .dashboard-workspace {
     display: grid;
     grid-template-columns: clamp(68px, 16%, 148px) minmax(0, 1fr);
@@ -302,10 +288,6 @@ const StyledDashboard = styled(Surface)`
     .dashboard-content {
       padding: 14px;
     }
-
-    .dashboard-top-actions select {
-      width: 126px;
-    }
   }
 
   @container dashboard (min-width: 860px) {
@@ -368,16 +350,17 @@ const StatusBar = styled(StyledStatusBar)`
   }
 `;
 
+const rejectUpdate: DashboardViewProps["onUpdate"] = () => {
+  throw new Error("Dashboard is read-only.");
+};
+
 const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
   const { locale } = useLifeOS();
   const t = messages[locale];
   const { title } = useProcessesActions();
-  const [raw, setRaw] = useState(makeDemoData);
+  const data = useMemo(() => makeDemoData(), []);
   const [route, setRoute] = useState<Route>(initialRoute);
-  const [previewMode, setPreviewMode] = useState<"all" | "visitor">("all");
   const [dirty, setDirty] = useState(false);
-  const [resetRevision, setResetRevision] = useState(0);
-  const [resetNotice, setResetNotice] = useState(false);
   const dirtyRef = useRef(false);
   const currentRoute = useRef(route);
   const currentDashboardUrl = useRef("");
@@ -468,7 +451,6 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
       replaceRoute(next);
       currentDashboardUrl.current = location.href;
       currentHistoryIndex.current = targetIndex ?? currentHistoryIndex.current;
-      setResetNotice(false);
     };
     addEventListener("popstate", sync);
     return () => removeEventListener("popstate", sync);
@@ -499,36 +481,13 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
     }
     if (!canLeave()) return;
     onDirtyChange(false);
-    setResetNotice(false);
     writeRoute({ invalidModule: false, module, selectedId });
   };
-  const onUpdate: DashboardViewProps["onUpdate"] = (update) => {
-    if (previewMode === "all") setRaw(update);
-  };
-  const changePreview = (next: "all" | "visitor"): void => {
-    if (next === previewMode || !canLeave()) return;
-    onDirtyChange(false);
-    setResetNotice(false);
-    setPreviewMode(next);
-    contentRef.current?.focus({ preventScroll: true });
-  };
-  const reset = (): void => {
-    if (!confirm(t.resetConfirm)) return;
-    onDirtyChange(false);
-    setRaw(makeDemoData());
-    setResetRevision((value) => value + 1);
-    setResetNotice(true);
-    contentRef.current?.focus({ preventScroll: true });
-    if (route.selectedId || route.invalidModule) {
-      writeRoute({ invalidModule: false, module: route.module });
-    }
-  };
-  const data = selectVisibleDemoData(raw, previewMode);
   const View = views[route.module];
   const recordExists = hasSelectedRecord(data, route);
   // 列表视图在实体间切换时保留筛选；临时编辑态由对应视图清理。
   const entityKey = route.module === "personal" ? route.selectedId || "" : "";
-  const viewKey = `${route.module}:${entityKey}:${previewMode}:${resetRevision}`;
+  const viewKey = `${route.module}:${entityKey}`;
   const personalTab = getPersonalTab(data.personal, route.selectedId);
   const selectedPersonalTab = personalTabs.find(
     ({ id: tabId }) => tabId === personalTab
@@ -568,28 +527,6 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
             {route.selectedId && !personalSection && ` › ${t.details}`}
           </span>
         </StyledAddressBar>
-        <div className="dashboard-top-actions">
-          <select
-            aria-label={t.preview}
-            onChange={(event) =>
-              changePreview(
-                event.target.value === "visitor" ? "visitor" : "all"
-              )
-            }
-            value={previewMode}
-          >
-            <option value="all">{t.all}</option>
-            <option value="visitor">{t.visitor}</option>
-          </select>
-          <ActionButton
-            aria-label={t.reset}
-            onClick={reset}
-            title={t.reset}
-            type="button"
-          >
-            {t.resetShort}
-          </ActionButton>
-        </div>
       </StyledNavigation>
       <div className="dashboard-workspace">
         <aside className="dashboard-sidebar">
@@ -653,11 +590,6 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
               </ActionButton>
             </Notice>
           )}
-          {resetNotice && (
-            <Notice className="dashboard-notice" role="status">
-              {t.resetDone}
-            </Notice>
-          )}
           {recordExists ? (
             <View
               key={viewKey}
@@ -665,8 +597,8 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
               locale={locale}
               onDirtyChange={onDirtyChange}
               onNavigate={onNavigate}
-              onUpdate={onUpdate}
-              previewMode={previewMode}
+              onUpdate={rejectUpdate}
+              previewMode="visitor"
               selectedId={route.selectedId}
             />
           ) : (
@@ -684,20 +616,17 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
       </div>
       <StatusBar className="dashboard-status-row">
         <StatusBadge label={t.demo} />
-        <time dateTime={raw.now} title={raw.now}>
-          {t.sampleTime}: {formatDateTime(raw.now, locale, raw.timeZone)}{" "}
-          {raw.timeZone}
+        <time dateTime={data.now} title={data.now}>
+          {t.sampleTime}: {formatDateTime(data.now, locale, data.timeZone)}{" "}
+          {data.timeZone}
         </time>
-        <span className="dashboard-memory">{t.memoryHint}</span>
+        <span className="dashboard-memory">{t.readOnly}</span>
         <span className="dashboard-status-end" role="status">
           {dirty ? t.unsaved : t.modules[route.module]}
-          {previewMode === "visitor" && ` · ${t.visitor}`}
         </span>
         <details>
           <summary>{t.demoDetails}</summary>
-          <p>
-            {t.demoHint} {previewMode === "visitor" && t.previewHint}
-          </p>
+          <p>{t.demoHint}</p>
         </details>
       </StatusBar>
     </StyledDashboard>

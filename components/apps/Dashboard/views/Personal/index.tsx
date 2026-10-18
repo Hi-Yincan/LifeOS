@@ -16,7 +16,6 @@ import {
 import Editor from "components/apps/Dashboard/views/Personal/Editor";
 import HealthPanel from "components/apps/Dashboard/views/Personal/HealthPanel";
 import LocationPanel from "components/apps/Dashboard/views/Personal/LocationPanel";
-import PrivacyPreview from "components/apps/Dashboard/views/Personal/PrivacyPreview";
 import { PersonalLayout } from "components/apps/Dashboard/views/Personal/styles";
 
 const PersonalContent = (props: DashboardViewProps): ReactNode => {
@@ -51,14 +50,12 @@ const PersonalContent = (props: DashboardViewProps): ReactNode => {
       </SectionHeading>
       {!found && (
         <Notice role="status">
-          {zh
-            ? "该记录不在当前预览中，可能已被隐藏或超出时间范围。"
-            : "This record is not in the current preview; it may be hidden or outside its time window."}{" "}
+          {zh ? "找不到这条示例记录。" : "This sample record does not exist."}{" "}
           <ActionButton
             onClick={() => onNavigate("personal", tab)}
             type="button"
           >
-            {zh ? "查看可见记录" : "View available records"}
+            {zh ? "查看记录" : "View records"}
           </ActionButton>
         </Notice>
       )}
@@ -86,7 +83,6 @@ const PersonalContent = (props: DashboardViewProps): ReactNode => {
           {tab === "location" && <LocationPanel {...panelProps} />}
           {tab === "health" && <HealthPanel {...panelProps} />}
           {tab === "checkups" && <CheckupsPanel {...panelProps} />}
-          <PrivacyPreview {...props} />
         </>
       )}
     </PersonalLayout>

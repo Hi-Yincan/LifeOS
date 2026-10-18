@@ -69,9 +69,7 @@ const ActivityPanel = ({
             onChange={(event) => setRange(event.target.value)}
             value={range}
           >
-            <option value="all">
-              {zh ? "全部可见示例" : "All visible samples"}
-            </option>
+            <option value="all">{zh ? "全部示例" : "All samples"}</option>
             <option value="today">{zh ? "示例今日" : "Demo today"}</option>
           </select>
         </Field>
