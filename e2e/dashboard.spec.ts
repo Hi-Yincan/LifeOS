@@ -314,9 +314,16 @@ test("personal records, local route sketch, health gaps and visibility rules wor
     app.getByRole("button", { name: "Completing a sample task" })
   ).toHaveCount(0);
   await expect(app.getByText(/Read-only visitor preview/)).toBeVisible();
+  await app
+    .getByRole("button", { exact: true, name: "Edited activity" })
+    .click();
   await expect(
-    app.getByRole("button", { name: /Edit sample|Edit health/ })
+    app.getByRole("heading", { exact: true, name: "Edited activity" })
+  ).toBeVisible();
+  await expect(
+    app.getByRole("button", { exact: true, name: "Edit sample activity" })
   ).toHaveCount(0);
+  await app.getByRole("button", { name: "Activity & schedule" }).click();
   await app
     .getByRole("combobox", { exact: true, name: "Preview" })
     .selectOption("all");
