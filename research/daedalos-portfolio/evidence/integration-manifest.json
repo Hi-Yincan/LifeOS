@@ -1,4 +1,5 @@
 {
+  "namingNote": "2026-10-18：名称和路径已统一为 LifeOS；其余数据为历史观察，未重新验证。",
   "upstreamSHA": "f017b393d4175eb396a741a7562299423843f1b1",
   "originalAppCount": 33,
   "originalApps": [
@@ -66,9 +67,9 @@
     "public/screenshot.png",
     "scripts/robots.js",
     "scripts/rssBuilder.js",
-    "public/System/PersonalOS/settings.svg",
-    "public/System/PersonalOS/capture.js",
-    "components/system/PersonalOS/site.ts",
+    "public/System/LifeOS/settings.svg",
+    "public/System/LifeOS/capture.js",
+    "components/system/LifeOS/site.ts",
     "public/rss.xml"
   ],
   "originalAppEntriesRemoved": 0,

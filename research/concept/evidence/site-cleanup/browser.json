@@ -1,11 +1,12 @@
 {
+  "namingNote": "2026-10-18：名称和路径已统一为 LifeOS；其余数据为历史观察，未重新验证。",
   "settings": {
     "title": "系统设置 - Yincan Huang",
     "iconLoaded": true,
     "head": [
       {
         "property": "icon",
-        "value": "/System/PersonalOS/avatar.png"
+        "value": "/System/LifeOS/avatar.png"
       },
       {
         "property": "og:title",
@@ -29,7 +30,7 @@
       },
       {
         "property": "og:image",
-        "value": "https://hyc.ac/System/PersonalOS/avatar.png"
+        "value": "https://hyc.ac/System/LifeOS/avatar.png"
       },
       {
         "property": "og:description",
@@ -51,11 +52,11 @@
       "status": 404
     },
     {
-      "path": "/System/PersonalOS/settings.svg",
+      "path": "/System/LifeOS/settings.svg",
       "status": 404
     },
     {
-      "path": "/System/PersonalOS/capture.js",
+      "path": "/System/LifeOS/capture.js",
       "status": 404
     },
     {
@@ -75,7 +76,7 @@
       "status": 200
     },
     {
-      "path": "/System/PersonalOS/avatar.png",
+      "path": "/System/LifeOS/avatar.png",
       "status": 200
     }
   ],

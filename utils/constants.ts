@@ -1,5 +1,5 @@
 import { type AsyncZipOptions } from "fflate";
-import site from "personal-site.json";
+import site from "lifeos.json";
 import { type Size } from "components/system/Window/RndWindow/useResizable";
 import { type ClockSource, type WallpaperFit } from "contexts/session/types";
 import { type ThemeName } from "styles/themes";

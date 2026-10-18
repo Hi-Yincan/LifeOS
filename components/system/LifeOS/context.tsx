@@ -8,7 +8,7 @@ import {
 import {
   publicContentPath,
   STATIC_CONTENT,
-} from "components/system/PersonalOS/deployment";
+} from "components/system/LifeOS/deployment";
 
 export type Locale = "en" | "zh";
 export type ProjectText = {
@@ -233,7 +233,7 @@ export const messages = {
 export type Message = keyof typeof messages.zh;
 export type Session = { csrf?: null | string; role: "admin" | "visitor" };
 type Settings = { language: "auto" | Locale };
-type PersonalContext = {
+type LifeOSContext = {
   applySession: (s: Session) => void;
   errorText: (error: unknown) => string;
   locale: Locale;
@@ -245,18 +245,18 @@ type PersonalContext = {
   setPreference: <K extends keyof Settings>(key: K, value: Settings[K]) => void;
   t: (key: Message) => string;
 };
-const Context = createContext<PersonalContext | undefined>(undefined);
+const Context = createContext<LifeOSContext | undefined>(undefined);
 const getRoute = (): string =>
   new URLSearchParams(location.search).get("project")
     ? `project/${new URLSearchParams(location.search).get("project")}`
     : new URLSearchParams(location.search).get("view") || "overview";
-export const usePersonalOS = (): PersonalContext => {
+export const useLifeOS = (): LifeOSContext => {
   const value = useContext(Context);
-  if (!value) throw new Error("Personal OS context missing");
+  if (!value) throw new Error("LifeOS context missing");
   return value;
 };
 
-export const PersonalOSProvider: FC = ({ children }) => {
+export const LifeOSProvider: FC = ({ children }) => {
   const [preferences, setPreferences] = useState<Settings>({
     language: "auto",
   });
@@ -333,7 +333,7 @@ export const PersonalOSProvider: FC = ({ children }) => {
   useEffect(() => {
     document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
   }, [locale]);
-  const setPreference: PersonalContext["setPreference"] = (key, value) =>
+  const setPreference: LifeOSContext["setPreference"] = (key, value) =>
     setPreferences((current) => {
       const next = { ...current, [key]: value };
       try {

@@ -13,7 +13,7 @@ import { fileURLToPath } from "node:url";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const out = resolve(root, "out");
 const site = JSON.parse(
-  readFileSync(resolve(root, "personal-site.json"), "utf8")
+  readFileSync(resolve(root, "lifeos.json"), "utf8")
 );
 for (const file of [
   "content/profile.json",

@@ -20,7 +20,7 @@ yarn preview:local
 
 - `components/`、`contexts/`、`pages/`、`utils/`、`public/`：保留上游布局，产品源码的唯一维护位置。
 - `components/apps/Portfolio`、`AppStore`：自有业务和系统应用。
-- `components/system/PersonalOS`、`personal-site.json`：站点配置、设置与接入。
+- `components/system/LifeOS`、`lifeos.json`：站点配置、设置与接入。
 - `server/`：本地开发 API 与合成数据测试；生产实现另行推进。
 - `scripts/product/`：干净构建、站点资源检查、上游差异检查。
 - `maintenance/upstream/`：固定基线、维护说明和升级演练证据。

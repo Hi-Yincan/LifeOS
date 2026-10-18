@@ -1,4 +1,5 @@
 {
+  "namingNote": "2026-10-18：名称和路径已统一为 LifeOS；其余数据为历史观察，未重新验证。",
   "upstreamSHA": "f017b393d4175eb396a741a7562299423843f1b1",
   "originalProcessEntries": 33,
   "originalEntriesIdentical": true,
@@ -14,7 +15,7 @@
     "Portfolio"
   ],
   "newProcess": "AppStore",
-  "startMenuShortcut": "[InternetShortcut]\nBaseURL=AppStore\nComment=App Store\nIconFile=/System/PersonalOS/store.svg\n",
+  "startMenuShortcut": "[InternetShortcut]\nBaseURL=AppStore\nComment=App Store\nIconFile=/System/LifeOS/store.svg\n",
   "desktopStoreShortcutAdded": false,
   "settingsSidebarRecipeChanged": false,
   "powerActionChanged": false,

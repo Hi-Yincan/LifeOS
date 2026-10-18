@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { type Project } from "components/system/PersonalOS/context";
+import { type Project } from "components/system/LifeOS/context";
 
 test("plain visits show the desktop; portfolio remains opt-in", async ({
   page,
@@ -133,7 +133,7 @@ test("site metadata uses the owner identity and old assets stay absent", async (
   await page.goto("/");
   await expect(page.locator('link[rel="icon"]')).toHaveAttribute(
     "href",
-    "/System/PersonalOS/avatar.png"
+    "/System/LifeOS/avatar.png"
   );
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
     "content",
@@ -141,7 +141,7 @@ test("site metadata uses the owner identity and old assets stay absent", async (
   );
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
     "content",
-    "https://hyc.ac/System/PersonalOS/avatar.png"
+    "https://hyc.ac/System/LifeOS/avatar.png"
   );
   expect((await request.get("/favicon.ico")).status()).toBe(404);
   expect((await request.get("/screenshot.png")).status()).toBe(404);

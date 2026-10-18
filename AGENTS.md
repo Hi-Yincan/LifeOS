@@ -47,7 +47,7 @@ LifeOS 是基于 daedalOS 的个人网站，展示名称为 **Yincan Huang**，�
 | --------------------------------------------------------- | -------------------------------------------- |
 | `components/`、`contexts/`、`pages/`、`utils/`、`public/` | 正式前端与资源，保留上游目录布局。           |
 | `components/apps/Portfolio`、`components/apps/AppStore`   | 自有应用与应用商店。                         |
-| `components/system/PersonalOS`、`personal-site.json`      | 个人站设置、语言、部署模式和系统接入。       |
+| `components/system/LifeOS`、`lifeos.json`      | 个人站设置、语言、部署模式和系统接入。       |
 | `server/`                                                 | 内容服务、本地管理流程、种子内容及服务测试。 |
 | `scripts/product/`                                        | 产品构建、公开内容导出、资源检查与上游检查。 |
 | `specs/`                                                  | 需求、设计、架构、验收与开发记录。           |

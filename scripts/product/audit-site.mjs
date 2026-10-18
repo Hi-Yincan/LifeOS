@@ -4,7 +4,7 @@ import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const checkout = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const site = JSON.parse(readFileSync(resolve(checkout, 'personal-site.json'), 'utf8'));
+const site = JSON.parse(readFileSync(resolve(checkout, 'lifeos.json'), 'utf8'));
 const textExtensions = new Set(['.txt', '.json', '.xml', '.html', '.js', '.cjs', '.mjs', '.ts', '.tsx', '.css', '.svg', '.md', '.url', '.ini']);
 const leftovers = [];
 const baseline = JSON.parse(readFileSync(resolve(checkout, 'maintenance/upstream/baseline.json'), 'utf8'));
@@ -28,7 +28,7 @@ for (const name of ['public', 'out', 'components', 'contexts', 'utils', 'hooks',
 assert.deepEqual(leftovers, [], 'Old site identity must not reach runtime sources or output');
 assert.equal(JSON.parse(readFileSync(resolve(checkout, 'package.json'), 'utf8')).author.url, site.url);
 for (const tree of ['public', 'out']) {
-  for (const name of ['favicon.ico', 'screenshot.png', 'rss.xml', 'System/PersonalOS/settings.svg', 'System/PersonalOS/capture.js']) {
+  for (const name of ['favicon.ico', 'screenshot.png', 'rss.xml', 'System/LifeOS/settings.svg', 'System/LifeOS/capture.js']) {
     assert.equal(existsSync(resolve(checkout, tree, name)), false, `Retired artifact: ${tree}/${name}`);
   }
   const robots = readFileSync(resolve(checkout, tree, 'robots.txt'), 'utf8');
