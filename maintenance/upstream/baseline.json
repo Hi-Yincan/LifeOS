@@ -44,7 +44,8 @@
   "productProcesses": [
     "Portfolio",
     "SystemSettings",
-    "AppStore"
+    "AppStore",
+    "Dashboard"
   ],
   "decisionIssue": 11,
   "implementationIssue": 21,

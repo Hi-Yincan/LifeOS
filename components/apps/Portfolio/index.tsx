@@ -1,4 +1,3 @@
-/* eslint-disable no-alert -- Native confirmations protect unsaved editor content. */
 import site from "lifeos.json";
 import { useEffect, useState } from "react";
 import { Back } from "components/apps/FileExplorer/NavigationIcons";
@@ -6,7 +5,6 @@ import StyledAddressBar from "components/apps/FileExplorer/StyledAddressBar";
 import StyledNavigation from "components/apps/FileExplorer/StyledNavigation";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
 import StyledStatusBar from "components/system/Files/FileManager/StyledStatusBar";
-import { registerCloseGuard } from "components/system/LifeOS/closeGuards";
 import {
   type Locale,
   type Profile,
@@ -64,379 +62,12 @@ const Cover = ({
   );
 };
 
-const Editor = ({
-  item,
-  onChange,
-  onClose,
-  processId,
-}: {
-  item: Project;
-  onChange: () => void;
-  onClose: () => void;
-  processId: string;
-}): React.ReactNode => {
-  const { errorText, locale, request, t } = useLifeOS();
-  const [busy, setBusy] = useState(false);
-  const [dirty, setDirty] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [form, setForm] = useState(item);
-  const [notice, setNotice] = useState("");
-  useEffect(
-    () =>
-      registerCloseGuard(processId, () => !dirty || confirm(t("leaveConfirm"))),
-    [processId, dirty, t]
-  );
-  useEffect(() => {
-    const guard = (event: BeforeUnloadEvent): void => {
-      if (dirty) {
-        event.preventDefault();
-        // eslint-disable-next-line no-param-reassign, typescript/no-deprecated -- Required by older supported browsers for the unsaved-changes prompt.
-        event.returnValue = "";
-      }
-    };
-    addEventListener("beforeunload", guard);
-    return () => removeEventListener("beforeunload", guard);
-  }, [dirty]);
-  const update = <K extends keyof Project>(key: K, value: Project[K]): void => {
-    setForm((current) => ({ ...current, [key]: value }));
-    setDirty(true);
-    setNotice("");
-  };
-  const updateText = (key: keyof ProjectText, value: string): void => {
-    setForm((current) => ({
-      ...current,
-      translations: {
-        ...current.translations,
-        [locale]: { ...current.translations[locale], [key]: value },
-      },
-    }));
-    setDirty(true);
-    setNotice("");
-  };
-  const save = async (): Promise<Project> => {
-    const {
-      accent,
-      kind,
-      order,
-      privateNote,
-      repository,
-      technology,
-      translations,
-      version,
-      video,
-      website,
-    } = form;
-    const saved = await request<Project>(`/api/admin/projects/${item.id}`, {
-      body: JSON.stringify({
-        accent,
-        kind,
-        order,
-        privateNote: privateNote || "",
-        repository,
-        technology,
-        translations,
-        version,
-        video,
-        website,
-      }),
-      method: "PATCH",
-    });
-    setForm(saved);
-    setDirty(false);
-    onChange();
-    return saved;
-  };
-  const act = async (operation: () => Promise<void>): Promise<void> => {
-    setBusy(true);
-    setErrorMessage("");
-    try {
-      await operation();
-    } catch (error) {
-      setErrorMessage(errorText(error));
-    }
-    setBusy(false);
-  };
-  const text = projectText(form, locale);
-  return (
-    <div aria-label={t("edit")} className="hyc-editor">
-      <div className="hyc-editor-top">
-        <button
-          className="hyc-text-button"
-          onClick={() => {
-            if (!dirty || confirm(t("leaveConfirm"))) onClose();
-          }}
-          type="button"
-        >
-          <Icon name="back" size={16} />
-          {t("preview")}
-        </button>
-        <span className={`hyc-status-chip ${dirty ? "hyc-is-dirty" : ""}`}>
-          {dirty ? t("unsaved") : form.published ? t("published") : t("draft")}
-        </span>
-      </div>
-      <div className="hyc-heading-line">
-        <div>
-          <span className="hyc-eyebrow">
-            {locale === "zh" ? "中文内容" : "ENGLISH CONTENT"}
-          </span>
-          <h1>{t("edit")}</h1>
-        </div>
-        <span className="hyc-editor-language">{locale.toUpperCase()}</span>
-      </div>
-      <p className="hyc-muted">{t("draftExplanation")}</p>
-      {notice && (
-        <div className="hyc-notice" role="status">
-          <Icon name="check" size={18} />
-          {notice}
-        </div>
-      )}
-      {errorMessage && (
-        <div className="hyc-error" role="alert">
-          {errorMessage}
-        </div>
-      )}
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          act(async () => {
-            await save();
-            setNotice(t("saved"));
-          });
-        }}
-      >
-        <div className="hyc-form-grid">
-          <label>
-            {t("title")}
-            <input
-              maxLength={100}
-              name="project-title"
-              onChange={(event) => updateText("title", event.target.value)}
-              value={text.title}
-              required
-            />
-          </label>
-          <label>
-            {t("category")}
-            <select
-              name="project-kind"
-              onChange={(event) =>
-                update("kind", event.target.value as Project["kind"])
-              }
-              value={form.kind}
-            >
-              {Object.entries(projectCategories).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {t(label)}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <label>
-          {t("summary")}
-          <textarea
-            name="project-summary"
-            onChange={(event) => updateText("summary", event.target.value)}
-            rows={2}
-            value={text.summary}
-          />
-        </label>
-        <label>
-          {t("background")}
-          <textarea
-            name="project-background"
-            onChange={(event) => updateText("background", event.target.value)}
-            rows={3}
-            value={text.background}
-          />
-        </label>
-        <label>
-          {t("contribution")}
-          <textarea
-            name="project-contribution"
-            onChange={(event) => updateText("contribution", event.target.value)}
-            rows={3}
-            value={text.contribution}
-          />
-        </label>
-        <label>
-          {t("detail")}
-          <textarea
-            name="project-detail"
-            onChange={(event) => updateText("detail", event.target.value)}
-            rows={4}
-            value={text.detail}
-          />
-        </label>
-        <div className="hyc-form-grid">
-          <label>
-            {t("repository")}
-            <input
-              name="project-repository"
-              onChange={(event) => update("repository", event.target.value)}
-              type="url"
-              value={form.repository}
-            />
-          </label>
-          <label>
-            {t("website")}
-            <input
-              name="project-website"
-              onChange={(event) => update("website", event.target.value)}
-              type="url"
-              value={form.website}
-            />
-          </label>
-          <label>
-            {t("stack")}
-            <input
-              name="project-stack"
-              onChange={(event) =>
-                update(
-                  "technology",
-                  event.target.value
-                    .split(",")
-                    .map((x) => x.trim())
-                    .filter(Boolean)
-                )
-              }
-              value={form.technology.join(", ")}
-            />
-          </label>
-          <label>
-            {t("order")}
-            <input
-              max={10000}
-              min={0}
-              name="project-order"
-              onChange={(event) => update("order", Number(event.target.value))}
-              type="number"
-              value={form.order}
-            />
-          </label>
-        </div>
-        <label>
-          {t("video")}
-          <input
-            name="project-video"
-            onChange={(event) => update("video", event.target.value)}
-            type="url"
-            value={form.video}
-          />
-        </label>
-        <label className="hyc-upload">
-          <Icon name="upload" />
-          {t("upload")}
-          <small>{t("imageHint")}</small>
-          <input
-            accept="image/png,image/jpeg,image/webp"
-            disabled={busy}
-            name="project-cover"
-            onChange={(event) => {
-              const file = event.target.files?.[0];
-              if (!file) return;
-              act(async () => {
-                if (file.size > 3000000) throw new Error("IMAGE_TOO_LARGE");
-                const current = dirty ? await save() : form;
-                const bytes = new Uint8Array(await file.arrayBuffer());
-                let binary = "";
-                for (const byte of bytes) binary += String.fromCodePoint(byte);
-                const updated = await request<Project>(
-                  `/api/admin/projects/${item.id}/image`,
-                  {
-                    body: JSON.stringify({
-                      base64: btoa(binary),
-                      version: current.version,
-                    }),
-                    method: "POST",
-                  }
-                );
-                setForm(updated);
-                onChange();
-                setNotice(t("uploaded"));
-              });
-            }}
-            type="file"
-          />
-          {form.imageUrl && <img alt="" src={form.imageUrl} />}
-        </label>
-        <label>
-          {t("note")}
-          <textarea
-            name="project-private-note"
-            onChange={(event) => update("privateNote", event.target.value)}
-            rows={2}
-            value={form.privateNote || ""}
-          />
-        </label>
-        <div className="hyc-editor-actions">
-          <button className="hyc-primary" disabled={busy} type="submit">
-            <Icon name="check" size={17} />
-            {t("save")}
-          </button>
-          <button
-            disabled={busy}
-            onClick={() => {
-              if (dirty) {
-                setErrorMessage(t("publishDirty"));
-                return;
-              }
-              act(async () => {
-                setForm(
-                  await request<Project>(
-                    `/api/admin/projects/${item.id}/publish`,
-                    {
-                      body: JSON.stringify({ version: form.version }),
-                      method: "POST",
-                    }
-                  )
-                );
-                onChange();
-                setNotice(t("publishedNotice"));
-              });
-            }}
-            type="button"
-          >
-            {t("publish")}
-          </button>
-          {form.published && (
-            <button
-              className="hyc-danger"
-              disabled={busy}
-              onClick={() =>
-                act(async () => {
-                  setForm(
-                    await request<Project>(
-                      `/api/admin/projects/${item.id}/unpublish`,
-                      {
-                        body: JSON.stringify({ version: form.version }),
-                        method: "POST",
-                      }
-                    )
-                  );
-                  onChange();
-                  setNotice(t("unpublishedNotice"));
-                })
-              }
-              type="button"
-            >
-              {t("unpublish")}
-            </button>
-          )}
-        </div>
-      </form>
-    </div>
-  );
-};
-
 const Card = ({
-  admin,
   go,
   item,
   locale,
   t,
 }: {
-  admin: boolean;
   go: (route: string) => void;
   item: Project;
   locale: Locale;
@@ -456,19 +87,12 @@ const Card = ({
       <div className="hyc-card-body">
         <div className="hyc-card-kicker">
           <span>{t(projectCategories[item.kind])}</span>
-          {admin && (
-            <span
-              className={`hyc-status-chip ${item.published ? "" : "hyc-is-dirty"}`}
-            >
-              {item.published ? t("published") : t("draft")}
-            </span>
-          )}
         </div>
         <h3>
           {text.title}
           <Icon name="arrow" size={19} />
         </h3>
-        <p>{text.summary || t("draft")}</p>
+        <p>{text.summary}</p>
         <div className="hyc-tags">
           {item.technology.slice(0, 3).map((tag) => (
             <span key={tag}>{tag}</span>
@@ -480,18 +104,15 @@ const Card = ({
 };
 
 const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
-  const { errorText, locale, navigate, request, route, session, t } =
-    useLifeOS();
+  const { errorText, locale, navigate, request, route, t } = useLifeOS();
   const { title: setTitle } = useProcessesActions();
   const [errorMessage, setErrorMessage] = useState("");
   const [items, setItems] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<Profile>();
-  const [editing, setEditing] = useState(false);
   const [filter, setFilter] = useState<"" | Project["kind"]>("");
   const [revision, setRevision] = useState(0);
   const [search, setSearch] = useState("");
-  const admin = session.role === "admin";
   const selected = route.startsWith("project/")
     ? items.find((item) => item.id === route.slice(8))
     : undefined;
@@ -500,11 +121,11 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
   }, [id, setTitle, t]);
   useEffect(() => {
     let valid = true;
-    // eslint-disable-next-line react/set-state-in-effect -- Reset request state when the account or retry generation changes.
+    // eslint-disable-next-line react/set-state-in-effect -- 用户重试时重置读取状态。
     setErrorMessage("");
     setLoading(true);
     Promise.all([
-      request<Project[]>(admin ? "/api/admin/projects" : "/api/projects"),
+      request<Project[]>("/api/projects"),
       request<Profile>("/api/profile"),
     ])
       .then(([projects, person]) => {
@@ -522,17 +143,9 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
     return () => {
       valid = false;
     };
-    // eslint-disable-next-line react/exhaustive-effect-dependencies -- revision is the explicit user-triggered refetch generation.
-  }, [admin, revision, request, errorText]);
-  useEffect(() => {
-    // eslint-disable-next-line react/set-state-in-effect -- Losing the author session closes the editor.
-    if (!admin) setEditing(false);
-  }, [admin]);
-  const go = (next: string): void => {
-    if (editing && !confirm(t("leaveConfirm"))) return;
-    setEditing(false);
-    navigate(next);
-  };
+    // eslint-disable-next-line react/exhaustive-effect-dependencies -- revision 只用于用户触发重新读取。
+  }, [revision, request, errorText]);
+  const go = navigate;
   const active = route.startsWith("project/") ? "projects" : route;
   const featured = items.filter((item) => item.featured === true);
   const visible = items.filter(
@@ -547,25 +160,12 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
         .toLowerCase()
         .includes(search.toLowerCase())
   );
-  const create = async (): Promise<void> => {
-    try {
-      const item = await request<Project>("/api/admin/projects", {
-        body: "{}",
-        method: "POST",
-      });
-      setItems((current) => [...current, item]);
-      navigate(`project/${item.id}`);
-      setEditing(true);
-    } catch (error) {
-      setErrorMessage(errorText(error));
-    }
-  };
   return (
     <Surface aria-label={t("portfolio")} className="hyc-portfolio hyc-surface">
       <StyledNavigation as="header" className="hyc-toolbar">
         <Button
           aria-label={t("back")}
-          disabled={route === "overview" && !editing}
+          disabled={route === "overview"}
           onClick={() =>
             go(route.startsWith("project/") ? "projects" : "overview")
           }
@@ -612,7 +212,7 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
         </nav>
       </aside>
       <div className="hyc-workspace">
-        <main key={editing ? "editing" : route} className="hyc-main">
+        <main key={route} className="hyc-main">
           {errorMessage ? (
             <div className="hyc-empty" role="alert">
               <Icon name="globe" size={38} />
@@ -629,14 +229,6 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
               <div />
               <span>{t("loading")}</span>
             </div>
-          ) : editing && selected && admin ? (
-            <Editor
-              key={selected.id}
-              item={selected}
-              onChange={() => setRevision((x) => x + 1)}
-              onClose={() => setEditing(false)}
-              processId={id}
-            />
           ) : route.startsWith("project/") ? (
             selected ? (
               <article className="hyc-detail">
@@ -649,12 +241,6 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
                     <Icon name="back" size={16} />
                     {t("back")}
                   </button>
-                  {admin && (
-                    <button onClick={() => setEditing(true)} type="button">
-                      <Icon name="edit" size={16} />
-                      {t("edit")}
-                    </button>
-                  )}
                 </div>
                 <Cover item={selected} large />
                 <div className="hyc-detail-heading">
@@ -835,26 +421,15 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
                       </span>
                     </h2>
                   </div>
-                  {admin ? (
+                  {active === "overview" && (
                     <button
-                      className="hyc-primary"
-                      onClick={() => create()}
+                      className="hyc-text-button"
+                      onClick={() => go("projects")}
                       type="button"
                     >
-                      <Icon name="plus" size={16} />
-                      {t("newProject")}
+                      {t("viewAll")}
+                      <Icon name="arrow" size={16} />
                     </button>
-                  ) : (
-                    active === "overview" && (
-                      <button
-                        className="hyc-text-button"
-                        onClick={() => go("projects")}
-                        type="button"
-                      >
-                        {t("viewAll")}
-                        <Icon name="arrow" size={16} />
-                      </button>
-                    )
                   )}
                 </div>
                 {active === "projects" && (
@@ -895,7 +470,6 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
                   {(active === "overview" ? featured : visible).map((item) => (
                     <Card
                       key={item.id}
-                      admin={admin}
                       go={go}
                       item={item}
                       locale={locale}
@@ -929,12 +503,6 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
           {items.length} {t("projects")}
         </span>
         <span>{profile?.name}</span>
-        {admin && (
-          <span className="hyc-admin-chip">
-            <Icon name="lock" size={12} />
-            {t("admin")}
-          </span>
-        )}
       </StyledStatusBar>
     </Surface>
   );

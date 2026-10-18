@@ -12,7 +12,7 @@ yarn build
 yarn preview:local
 ```
 
-访问 `http://127.0.0.1:4392`。开发内容服务自动创建独立的 `server/.runtime/`，不会读取或迁移原型数据。管理员开发密钥在该忽略目录的 `key.json` 中；不要提交或发到 Issue。该服务仅供本地联调，不是生产后端。
+访问 `http://127.0.0.1:4392`。本地服务仅提供公开内容读取和静态文件：已有 `server/.runtime/data/content.json` 时读取其已发布快照，否则读取种子内容；不会创建或写入运行目录，也不生成或读取管理员密钥。已有运行数据原样保留，不迁移研究原型数据。该服务仅供本地联调。
 
 `yarn dev` 保留上游 Next 开发服务器能力；它本身不提供内容 API。完整同源体验使用上述构建＋本地服务命令。
 
@@ -21,7 +21,7 @@ yarn preview:local
 - `components/`、`contexts/`、`pages/`、`utils/`、`public/`：保留上游布局，产品源码的唯一维护位置。
 - `components/apps/Portfolio`、`AppStore`：自有业务和系统应用。
 - `components/system/LifeOS`、`lifeos.json`：站点配置、设置与接入。
-- `server/`：本地开发 API 与合成数据测试；生产实现另行推进。
+- `server/`：本地只读 API、公开种子内容与合成数据测试。
 - `scripts/product/`：干净构建、站点资源检查、上游差异检查。
 - `maintenance/upstream/`：固定基线、维护说明和升级演练证据。
 - `specs/`、`research/`：规格及历史研究；不作为运行时依赖。
@@ -35,13 +35,13 @@ yarn e2e:product
 yarn upstream:check
 ```
 
-构建从当前仓库直接生成 `out/`，不会覆盖上游源码、下载移动分支或调用研究 overlay。Product checks 只检查；独立发布仓库的手动工作流 Publish visitor OS 发布通过验收的访客版产物。生产数据库、媒体、会话与多节点仍待后续验收。Messenger 支持本地头像编辑、背景图预设和 Yincan Huang 预置联系人；实际收发与跨设备验证继续由 #20 跟踪，详见 [Messenger 资料编辑](specs/development/messenger-picture.md)。
+构建从当前仓库直接生成 `out/`，不会覆盖上游源码、下载移动分支或调用研究 overlay。Product checks 只检查；独立发布仓库的手动工作流 Publish visitor OS 发布通过验收的静态产物。LifeOS 已取消站点管理功能；所有浏览者看到同一内容，站长后续通过独立的信息源系统维护，见 [可行性报告](specs/architecture/source-managed-content.md)。原生编辑器、文件工具和商店本机清单继续保留。Messenger 支持本地头像编辑、背景图预设和 Yincan Huang 预置联系人；实际收发与跨设备验证继续由 #20 跟踪，详见 [Messenger 资料编辑](specs/development/messenger-picture.md)。
 
 ## 访客版发布
 
-`node scripts/product/build.mjs --public` 生成 Pages 访客版，作品集读取公开快照；它不会读取 server/.runtime，在线内容管理暂未开放。默认 `yarn build` 继续提供本地完整 API 模式。
+`node scripts/product/build.mjs --public` 生成 Pages 静态展示版，作品集读取公开快照，不读取 `server/.runtime`。默认 `yarn build` 使用本地只读 API。两种模式都没有站点登录、管理员会话或内容编辑；看板目前继续使用明确标记的合成数据。
 
-源码、Issues 和 PR 统一在 `Hi-Yincan/LifeOS` 维护；`Hi-Yincan/Hi-Yincan.github.io` 仅保存发布配置和工作流，不使用模板或 Git submodule。发布仓库的 `deployment.json` 固定 LifeOS 的完整提交 SHA；在该仓库 main 手动执行 `Publish visitor OS`，临时检出指定源码、构建、测试、上传包含 `.index` 的产物，再部署到 hyc.ac。推送代码不会自动上线。内容更新目前需修改已提交的 `server/content/seed.json` 中明确 published=true 的内容并重新发布，本地管理界面的改动不会自动同步到线上。
+源码、Issues 和 PR 统一在 `Hi-Yincan/LifeOS` 维护；`Hi-Yincan/Hi-Yincan.github.io` 仅保存发布配置和工作流，不使用模板或 Git submodule。发布仓库的 `deployment.json` 固定 LifeOS 的完整提交 SHA；在该仓库 main 手动执行 `Publish visitor OS`，临时检出指定源码、构建、测试、上传包含 `.index` 的产物，再部署到 hyc.ac。推送代码不会自动上线。作品内容更新目前需修改已提交的 `server/content/seed.json` 中明确 published=true 的内容并重新发布；独立源管理、公开数据出口和自动更新仅完成方案研究。
 
 发布步骤、限制与回退见 [Pages 发布手册](specs/deployment/pages.md)。
 

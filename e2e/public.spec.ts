@@ -48,8 +48,8 @@ test("public snapshot excludes management fields and local service data", async 
   expect(
     (
       await request.post("/api/session", { data: { key: "not-a-credential" } })
-    ).ok()
-  ).toBe(false);
+    ).status()
+  ).toBe(501);
   expect((await request.get("/.index/fs.9p.json")).ok()).toBe(true);
   const release = (await (await request.get("/release.json")).json()) as {
     commit: string;
@@ -59,7 +59,7 @@ test("public snapshot excludes management fields and local service data", async 
   expect(release.commit).toMatch(/^[a-f0-9]{40}$/);
 });
 
-test("public settings explain management availability without calling an API", async ({
+test("public settings only expose preferences and never request a session", async ({
   page,
 }) => {
   const apiRequests: string[] = [];
@@ -69,13 +69,19 @@ test("public settings explain management availability without calling an API", a
     }
   });
   await page.goto("/?app=SystemSettings");
-  await page.locator("summary").filter({ hasText: "Site maintenance" }).click();
+  const settings = page.locator(".hyc-settings");
+  await expect(settings.locator('select[name="os-language"]')).toBeVisible();
+  await expect(settings.locator("summary")).toHaveCount(0);
+  await expect(settings.getByRole("button")).toHaveCount(0);
   await expect(
-    page.getByText("Online content management is not available yet.")
-  ).toBeVisible();
+    settings.getByText(/maintenance|management|Administrator|Visitor/i)
+  ).toHaveCount(0);
   await expect(page.locator('input[name="administrator-key"]')).toHaveCount(0);
   await page.locator('select[name="os-language"]').selectOption("zh");
-  await expect(page.getByText("在线内容管理暂未开放。")).toBeVisible();
+  await expect(
+    settings.getByRole("heading", { name: "系统设置" })
+  ).toBeVisible();
+  await expect(settings.getByText(/维护|管理|访客|密钥/)).toHaveCount(0);
   await page.goto("/?app=Portfolio&project=aipm");
   await expect(
     page.getByRole("heading", { exact: true, name: "AIPM" })

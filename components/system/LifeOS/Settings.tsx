@@ -1,33 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
-import {
-  type Session,
-  useLifeOS,
-} from "components/system/LifeOS/context";
-import { STATIC_CONTENT } from "components/system/LifeOS/deployment";
+import { useLifeOS } from "components/system/LifeOS/context";
 import Icon from "components/system/LifeOS/Icon";
 import Surface from "components/system/LifeOS/Surface";
-import useLaunch from "components/system/LifeOS/useLaunch";
 import { useProcessesActions } from "contexts/process";
 
 const Settings = ({ id }: ComponentProcessProps): React.ReactNode => {
-  const {
-    applySession,
-    errorText,
-    preferences,
-    request,
-    session,
-    setPreference,
-    t,
-  } = useLifeOS();
-  const open = useLaunch();
+  const { preferences, setPreference, t } = useLifeOS();
   const { title } = useProcessesActions();
   useEffect(() => {
     title(id, t("settings"));
   }, [id, t, title]);
-  const [busy, setBusy] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [key, setKey] = useState("");
   return (
     <Surface
       aria-label={t("settings")}
@@ -73,76 +56,6 @@ const Settings = ({ id }: ComponentProcessProps): React.ReactNode => {
           <span>{new Intl.DateTimeFormat().resolvedOptions().timeZone}</span>
         </div>
       </section>
-      <details className="hyc-maintenance">
-        <summary>
-          <Icon name="lock" size={16} />
-          {t("manageSection")}
-        </summary>
-        <p>{t("privateHint")}</p>
-        {STATIC_CONTENT ? (
-          <p>{t("readOnly")}</p>
-        ) : session.role === "admin" ? (
-          <div className="hyc-actions">
-            <button
-              className="hyc-primary"
-              onClick={() => open("Portfolio")}
-              type="button"
-            >
-              {t("management")}
-            </button>
-            <button
-              onClick={async () => {
-                applySession(
-                  await request<Session>("/api/session", {
-                    body: "{}",
-                    method: "DELETE",
-                  })
-                );
-              }}
-              type="button"
-            >
-              {t("logout")}
-            </button>
-          </div>
-        ) : (
-          <form
-            onSubmit={async (event) => {
-              event.preventDefault();
-              setBusy(true);
-              setErrorMessage("");
-              try {
-                applySession(
-                  await request<Session>("/api/session", {
-                    body: JSON.stringify({ key }),
-                    method: "POST",
-                  })
-                );
-                setKey("");
-                open("Portfolio");
-              } catch (error) {
-                setErrorMessage(errorText(error));
-              }
-              setBusy(false);
-            }}
-          >
-            <label>
-              {t("key")}
-              <input
-                autoComplete="off"
-                name="administrator-key"
-                onChange={(event) => setKey(event.target.value)}
-                type="password"
-                value={key}
-                required
-              />
-            </label>
-            <button className="hyc-primary" disabled={busy} type="submit">
-              {busy ? t("loading") : t("enter")}
-            </button>
-          </form>
-        )}
-        {errorMessage && <p role="alert">{errorMessage}</p>}
-      </details>
     </Surface>
   );
 };

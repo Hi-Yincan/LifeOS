@@ -1,0 +1,63 @@
+const messages = {
+  en: {
+    back: "Back",
+    backToList: "Back to list",
+    demo: "Sample data",
+    demoDetails: "Sample details",
+    demoHint: "All records are fictional. All samples are available to read.",
+    details: "Details",
+    missing: "This sample record does not exist.",
+    modules: {
+      memberships: "Memberships",
+      overview: "Overview",
+      personal: "Personal",
+      servers: "Servers",
+      services: "Services",
+    },
+    navigation: "Dashboard views",
+    navigationShort: {
+      memberships: "Members",
+      overview: "Overview",
+      personal: "Personal",
+      servers: "Servers",
+      services: "Services",
+    },
+    personalNavigation: "Personal views",
+    readOnly: "Read only",
+    sampleTime: "Sample time",
+    title: "Dashboard",
+    unknownModule:
+      "This view is not recognized. The overview is shown instead.",
+  },
+  zh: {
+    back: "返回",
+    backToList: "返回列表",
+    demo: "示例数据",
+    demoDetails: "示例说明",
+    demoHint: "所有记录均为虚构，当前展示全部示例，只供浏览。",
+    details: "详情",
+    missing: "找不到这条示例记录。",
+    modules: {
+      memberships: "会员",
+      overview: "总览",
+      personal: "个人",
+      servers: "服务器",
+      services: "服务",
+    },
+    navigation: "看板视图",
+    navigationShort: {
+      memberships: "会员",
+      overview: "总览",
+      personal: "个人",
+      servers: "服务器",
+      services: "服务",
+    },
+    personalNavigation: "个人状况视图",
+    readOnly: "只读浏览",
+    sampleTime: "示例时间",
+    title: "综合看板",
+    unknownModule: "无法识别这个视图，已显示总览。",
+  },
+};
+
+export default messages;

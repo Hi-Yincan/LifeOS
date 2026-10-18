@@ -1,88 +1,51 @@
-# 内容与权限模型
+# 内容读取与信息源管理边界
 
-版本：1.0 概念交付稿。模型服务于单作者作品集，可扩展但不引入访客账户。
+2026-10-18 · v2。用户已取消 LifeOS 管理员功能。本文替代此前 LifeOS 内单密钥会话、编辑、上传与发布的设计；历史研究只用于追溯。后续方案见 [信息源管理报告](../architecture/source-managed-content.md)。
 
-## 领域词汇
+## 统一展示
 
-- **Project**：作品实体，有稳定 ID 和可分享标识，分为产品、工具、贡献与其他。
-- **ProjectDraft**：管理中的最新草稿，可与已发布内容不同。
-- **PublishedSnapshot**：明确发布时复制的公开快照；访客只读此版本。
-- **Profile**：姓名、简介、教育/履历、联系方式；只存作者明确愿意公开的信息。
-- **MediaAsset**：图片或视频资源，状态由草稿/发布引用与授权决定，文件名不是访问许可。
-- **Visitor**：未获得作者管理会话的浏览者；能使用原 OS 工具，但无服务器内容写权限。
-- **AdminSession**：通过单密钥校验得到的有期限作者会话，不创建用户账户。
+所有人在 LifeOS 中读取同一展示数据。LifeOS 不识别站长身份，不提供登录、登出、草稿读取、内容编辑或发布入口。语言、时区、筛选和窗口状态仍是每个浏览器的本机偏好，不改变内容授权。
 
-## 数据字段
+站长在独立的信息源应用中鉴权并维护权威记录。该应用与 LifeOS 通过版本化数据契约连接，不共享管理员令牌、数据库口令或 OS 运行时。源系统生成可供所有人读取的展示数据；LifeOS 仅消费这一结果。
 
-| 实体 | 字段 | 规则 |
+## 当前作品内容模型
+
+| 对象 | 当前展示字段与规则 |
+| --- | --- |
+| Project | `id`、`kind`、`featured`、`order`、`technology`、`accent`、`repository`、`website`、`video`、`translations`、`imageUrl`；分类保留 project/tool/contribution/other；稳定 ID 和双语正文继续使用 |
+| ProjectTranslation | `title`、`summary`、`background`、`contribution`、`detail`，按 zh/en 白名单输出；缺少证据的个人贡献不可编造 |
+| Profile | `name`、`email`、`github`，以及双语 `headline`、`bio`、`education`；额外源字段不透传 |
+| PublishedSnapshot | 当前本地运行文件中的 `published` 对象，或构建时明确 `published=true` 的种子内容；草稿变化不改变它 |
+| Media | 仅允许已发布作品引用的合法媒体被读取；已有未发布文件保留在原目录，不因取消身份区分而公开 |
+
+客户端 Project 类型已移除 `privateNote`、`published` 和编辑 `version`。源文件可以保留历史管理字段，但展示输出仍按白名单生成。所有人看到相同内容不改变既有资料的公开决定。
+
+## 当前读取接口
+
+| 路径 | 当前行为 |
+| --- | --- |
+| `GET /api/profile` | 本地只读公开资料 |
+| `GET /api/projects` | 本地只读已发布作品列表 |
+| `GET /api/projects/:id` | 本地只读已发布详情，未发布与不存在均不可用 |
+| `/media/:id` | 只提供已发布作品引用的受支持媒体，不使用任何管理员 Cookie 放行 |
+| `/api/session`、`/api/admin`、`/api/admin/*` | 本地服务所有方法返回 404，无会话 Cookie，无写入能力 |
+| Pages `/content/*.json` | 构建导出的公开快照；LifeOS 请求映射到这些静态资源 |
+
+前端共享 `request<T>(path)` 只发 GET，使用 `credentials: "omit"`。本地服务完全忽略旧身份信息；它不会生成或读取管理员密钥，不创建或修改运行目录。静态文件服务器没有写 API；测试环境对不支持的方法可能返回 501，这与本地服务的明确 404 分别验收。
+
+## 信息源中的后续管理
+
+创建、编辑、排序、上传、并发版本检查、发布和备份由独立源系统承担。本轮只评估可行性，没有建设这些能力。源端是否需要草稿和发布确认，按其业务确定；LifeOS 始终只有一个展示出口。
+
+| 能力 | LifeOS 中的所有浏览者 | 独立源系统中的站长 |
 | --- | --- | --- |
-| Project | id、slug、kind、featured、order、status、version、createdAt、updatedAt | kind 为 project（产品）/tool（工具）/contribution（贡献）/other（其他）；保留原 project 值以兼容已有内容；featured=true 才进入精选，不影响作品发布状态与分类；稳定 ID 不因标题翻译变化；排序是显式内容配置；版本用于并发检查 |
-| ProjectTranslation | locale、title、summary、background、contribution、detail | 首发 zh-CN/en，数据库与字典按可扩展 locale 键组织；标题和摘要为发布必填，贡献说明无证据可留空 |
-| ProjectLink | sourceUrl、websiteUrl、videoUrl、linkKind、lastCheckedAt | HTTPS 协议白名单；官网、文档、Demo 明确区分；有 URL 不等于可在线试用 |
-| Technology | label、optional category | 基于实际项目资料；不自动变成个人技能评级 |
-| MediaAsset | id、storageKey、mime、bytes、width/height、alt[locale]、ownerRef | 上传后私有；发布才允许公共读取；原始文件和转换版本分别记录 |
-| Private metadata | privateNote、provenance、editor version | 不进入公开序列化白名单；provenance 可有单独公开来源字段，但不可全量透传管理记录 |
-| ProfileTranslation | headline、bio、education、experience、contactLabels | 缺失经历不展示假占位，待补资料进入管理待办 |
-| AdminSession | tokenHash、csrfSecret、createdAt、expiresAt、lastSeenAt、keyVersion | Token 只发 HttpOnly Cookie，服务端只保存哈希；轮换密钥能整体失效 |
+| 阅读 LifeOS 展示内容 | 相同内容与字段 | 返回 LifeOS 时也相同 |
+| 编辑源记录、处理付款记录、发布 | 无入口、无写 API | 后续经源端认证与逐项授权实现 |
+| 访问旧草稿、私有备注或管理凭据 | 不提供 | 由源系统自行控制，不进入 LifeOS |
+| 原生编辑器、文件工具、游戏、商店本机清单 | 保留原有能力 | 同样保留，无额外站点特权 |
 
-## 状态与生命周期
+看板目前全部是明确标记的合成记录；没有连接真实健康、会员或服务器数据。全部样本直接显示，前端已删除角色、逐项可见性和隐私预览模型。真实来源接入时由来源确定统一展示数据，不在 LifeOS 恢复管理员分支。
 
-```mermaid
-stateDiagram-v2
-  [*] --> Draft: 新建
-  Draft --> Published: 校验并发布
-  Published --> PublishedWithDraft: 编辑草稿
-  PublishedWithDraft --> Published: 再次发布
-  Published --> Unpublished: 下架
-  PublishedWithDraft --> Unpublished: 下架
-  Unpublished --> Published: 再发布
-```
+## 验证与历史记录
 
-草稿保存不改变公开快照；“已发布且有新草稿”需要明确展示。下架同时关闭公开详情与媒体的新请求，但无法收回访客已经下载的文件；生产缓存需有失效策略。首版以“下架”承担移除公开展示，不引入难以恢复的永久删除作为主要操作。
-
-公开排序以已发布快照为准，编辑草稿排序须发布才生效。并发修改提交版本，版本过期返回 409，保留用户编辑内容并引导重新加载/比较，不静默覆盖。
-
-个人资料使用同样的草稿与显式发布原则；正式管理界面需支持简介、教育/履历、联系方式的编辑。原型只证明项目编辑流程，资料目前来自 seed。生产作品媒体模型采用一张封面加可排序图片集合、可选视频外链及双语 alt；原型的单封面不作为生产媒体上限。
-
-## 权限矩阵
-
-| 能力 | Visitor | Admin |
-| --- | --- | --- |
-| 浏览已发布作品/公开简介 | 允许 | 允许 |
-| 查看作品草稿、私有备注 | 拒绝 | 允许 |
-| 读取未发布封面 | 拒绝 | 允许 |
-| 新建、编辑、排序、上传 | 拒绝 | 允许 |
-| 发布、下架 | 拒绝 | 允许，检查 CSRF/Origin/版本 |
-| 使用原生编辑器、文件工具、游戏 | 允许 | 允许；不额外赋予后端写权限 |
-| 改语言、布局等本地偏好 | 允许 | 允许；不改变任何内容授权 |
-| 管理密钥生成/轮换 | 不在公开界面提供 | 运维途径配置；不以页面按钮泄露原密钥 |
-
-## 建议接口契约
-
-| 接口 | 功能 | 访问 |
-| --- | --- | --- |
-| GET /api/profile | 公开个人资料 | 公共，只含公开字段 |
-| GET /api/projects | 已发布列表 | 公共，分页/筛选可逐步补齐 |
-| GET /api/projects/:id | 已发布详情 | 公共，未发布/下架/不存在统一不可用 |
-| GET /api/session | 当前管理状态与受保护写入校验信息 | 当前浏览器会话，禁止缓存 |
-| POST /api/session | 单密钥登录 | 限速、Origin 检查；成功签发会话 |
-| DELETE /api/session | 注销当前会话 | 已登录＋CSRF |
-| GET/POST /api/admin/projects | 草稿列表/创建 | Admin |
-| PATCH /api/admin/projects/:id | 更新草稿 | Admin＋版本 |
-| POST .../:id/publish、unpublish | 发布/下架 | Admin＋版本 |
-| POST .../:id/media | 上传/关联媒体 | Admin，真实内容检测 |
-| /media/:id | 媒体访问 | 已发布引用或 Admin，不能只依靠猜不到 URL |
-
-研究原型只实现单封面和视频外链，不代表生产媒体画廊、转换、持久对象存储和配置化个人资料编辑已经完成。生产接口需补审计、统一错误码、上传实际解码、尺寸约束、反向代理/HTTPS 设置和多实例会话；这些见计划任务。
-
-## 密钥与故障处理
-
-开始菜单左侧栏→系统设置里的“站点维护”折叠区域放密钥入口；普通访客无需看到登录引导。密钥本身不保存在浏览器偏好中。验证失败显示统一提示并限速；会话失效则切回访客模式，正在编辑的内容先保留在内存以便重新验证后继续。
-
-生产单密钥通过服务端 secret 配置，采用合适的密码派生算法存储验证值，HTTPS Cookie 设置 Secure/HttpOnly/SameSite；不将实验夹具中的本地口令文件发布。API 副本共享数据库中的会话记录，不能把实例内存作为唯一会话来源。
-
-原型目前的固定期限内存会话仅验证流程；生产空闲超时、会话最长时长和轮换流程须作为安全实现任务测试。原生 App 导入或执行代码的同源风险单列门禁，详见 PRD。
-
-## 应用商店增补（#19）
-
-商店的本机应用库与作品内容库分离：本机 URL 清单不进入公开 API，不获得 admin 会话，也不触发站点发布。当前访客可添加入口属于研究假设，正式权限和站点上架流程待确认；见 [app-store.md](app-store.md)。内置代码存在、原生进程注册、商店收藏、本机网页入口和公开目录发布分别建模。
+本次验证见 [管理员功能移除验收](../development/validation/lifeos-admin-removal.md)。旧原型、旧单密钥实现报告及当时的验收留在历史记录中，不构成当前功能要求。已有运行数据与密钥文件没有删除或迁移；源码修改也不会自动替换已启动的旧进程或线上发布。

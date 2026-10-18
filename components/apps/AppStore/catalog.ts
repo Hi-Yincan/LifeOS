@@ -29,6 +29,10 @@ const descriptions: Record<string, [string, string]> = {
     "在方块世界中放置和拆除方块，建造建筑并探索地图的沙盒游戏。",
     "Build structures and explore block worlds in a sandbox game by placing and removing blocks.",
   ],
+  Dashboard: [
+    "在统一看板中查看个人状况、会员、服务与服务器，使用合成示例体验筛选、详情和编辑。",
+    "Explore personal status, memberships, services and servers in one dashboard with interactive sample records.",
+  ],
   DevTools: [
     "查看本站的 JavaScript 控制台、页面元素和网络请求，辅助调试网页。",
     "Inspect this site's JavaScript console, page elements, and network requests to debug the page.",
@@ -155,7 +159,9 @@ export const catalog: CatalogApp[] = Object.entries(directory)
       icon: process.icon,
       id,
       name: process.title,
-      source: ["AppStore", "Portfolio"].includes(id) ? "adapted" : "native",
+      source: ["AppStore", "Dashboard", "Portfolio"].includes(id)
+        ? "adapted"
+        : "native",
     };
   })
   .sort(

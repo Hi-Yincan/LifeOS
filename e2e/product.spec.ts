@@ -1,5 +1,25 @@
-import { expect, test } from "@playwright/test";
-import { type Project } from "components/system/LifeOS/context";
+import { expect, type Locator, type Request, test } from "@playwright/test";
+
+const expectNoManagement = async (scope: Locator): Promise<void> => {
+  await expect(
+    scope.getByRole("button", {
+      name: /^(?:Enter management|New project|Edit project|Save draft|Publish saved version|Unpublish|Sign out|Manage content|Management|进入管理|新建作品|编辑作品|保存草稿|发布已保存版本|下架|退出管理|内容管理|管理模式)$/,
+    })
+  ).toHaveCount(0);
+  await expect(
+    scope.locator(
+      'input[type="password"], input[name="administrator-key"], .hyc-editor, .hyc-maintenance, input[name="project-title"]'
+    )
+  ).toHaveCount(0);
+  await expect(
+    scope.locator("summary").filter({ hasText: /Site maintenance|站点维护/ })
+  ).toHaveCount(0);
+  await expect(
+    scope.getByText(
+      /^(?:Administrator|Visitor|Management|管理员|访客|管理模式)$/
+    )
+  ).toHaveCount(0);
+};
 
 test("plain visits show the desktop; portfolio remains opt-in", async ({
   page,
@@ -110,7 +130,7 @@ test("store defaults to all and toggles its three categories", async ({
   await page.goto("/?app=AppStore");
   const cards = page.locator(".hyc-store-card");
   const categories = page.locator(".hyc-segments button");
-  await expect(cards).toHaveCount(30);
+  await expect(cards).toHaveCount(31);
   await expect(categories).toHaveText([
     "System software",
     "Application software",
@@ -122,12 +142,15 @@ test("store defaults to all and toggles its three categories", async ({
   await categories.nth(0).click();
   await expect(cards).toHaveCount(28);
   await categories.nth(1).click();
-  await expect(cards).toHaveCount(2);
+  await expect(cards).toHaveCount(3);
   await expect(
     page.locator('.hyc-store-card[data-app="AppStore"]')
   ).toBeVisible();
+  await expect(
+    page.locator('.hyc-store-card[data-app="Dashboard"]')
+  ).toBeVisible();
   await categories.nth(1).click();
-  await expect(cards).toHaveCount(30);
+  await expect(cards).toHaveCount(31);
   await page.getByRole("textbox", { name: "Search apps" }).fill("Paint");
   await expect(cards).toHaveCount(1);
   await categories.nth(1).click();
@@ -220,66 +243,147 @@ test("site metadata uses the owner identity and old assets stay absent", async (
   expect((await request.get("/favicon.ico")).status()).toBe(404);
   expect((await request.get("/screenshot.png")).status()).toBe(404);
   expect((await request.get("/rss.xml")).status()).toBe(404);
-  expect((await request.get("/api/admin/projects")).status()).toBe(
-    process.env.PUBLIC_DEPLOYMENT ? 404 : 401
-  );
+  expect((await request.get("/api/admin/projects")).status()).toBe(404);
 });
 
-test("author can save a private draft, publish it and unpublish it", async ({
+test("retired browser identity keeps the same portfolio and cannot reveal management", async ({
+  context,
   page,
+}) => {
+  const reads: Request[] = [];
+  page.on("request", (request) => {
+    if (["fetch", "xhr"].includes(request.resourceType())) reads.push(request);
+  });
+  await page.goto("/?app=Portfolio&view=projects");
+  const portfolio = page.locator(".hyc-portfolio");
+  const cards = portfolio.locator(".hyc-project-card h3");
+  await expect(cards).toHaveCount(16);
+  const titles = await cards.allTextContents();
+  await expectNoManagement(portfolio);
+  await context.addCookies([
+    {
+      name: "hyc_concept_session",
+      url: new URL(page.url()).origin,
+      value: "synthetic-retired-session",
+    },
+    { name: "role", url: new URL(page.url()).origin, value: "admin" },
+  ]);
+  await page.reload();
+  await expect(cards).toHaveText(titles);
+  await expectNoManagement(portfolio);
+  await portfolio.locator('a[href="/?app=Portfolio&project=aipm"]').click();
+  await expect(portfolio.getByRole("heading", { name: "AIPM" })).toBeVisible();
+  await expectNoManagement(portfolio);
+  await page.goto("/?app=SystemSettings");
+  const settings = page.locator(".hyc-settings");
+  await expect(settings.locator('select[name="os-language"]')).toBeVisible();
+  await expectNoManagement(settings);
+  await settings.locator('select[name="os-language"]').selectOption("zh");
+  await expect(
+    settings.getByRole("heading", { name: "系统设置" })
+  ).toBeVisible();
+  await expectNoManagement(settings);
+  expect(
+    (await context.cookies()).find(({ name }) => name === "hyc_concept_session")
+      ?.value
+  ).toBe("synthetic-retired-session");
+  expect(
+    reads.filter((request) =>
+      /\/api\/(?:session|admin)(?:\/|$)/.test(new URL(request.url()).pathname)
+    )
+  ).toHaveLength(0);
+  const contentReads = reads.filter((request) =>
+    /\/(?:api|content)\/(?:projects|profile)(?:\.json)?$/.test(
+      new URL(request.url()).pathname
+    )
+  );
+  expect(contentReads.length).toBeGreaterThanOrEqual(4);
+  expect(
+    [
+      ...new Set(
+        contentReads.map((request) => new URL(request.url()).pathname)
+      ),
+    ].sort()
+  ).toEqual(
+    process.env.PUBLIC_DEPLOYMENT
+      ? ["/content/profile.json", "/content/projects.json"]
+      : ["/api/profile", "/api/projects"]
+  );
+  const headers = await Promise.all(
+    contentReads.map((request) => request.allHeaders())
+  );
+  expect(contentReads.every((request) => request.method() === "GET")).toBe(
+    true
+  );
+  expect(
+    headers.every((value) => !value.cookie && !value["x-csrf-token"])
+  ).toBe(true);
+});
+
+test("retired endpoints reject old credentials and never change public content", async ({
   request,
 }) => {
-  test.skip(
-    Boolean(process.env.PUBLIC_DEPLOYMENT),
-    "Public releases have no write API"
+  const paths = process.env.PUBLIC_DEPLOYMENT
+    ? ["/content/projects.json", "/content/profile.json"]
+    : ["/api/projects", "/api/profile"];
+  const readSnapshot = async (
+    path: string,
+    headers: Record<string, string> = {}
+  ): Promise<unknown> => {
+    const response = await request.get(path, { headers });
+    expect(response.status()).toBe(200);
+    return (await response.json()) as unknown;
+  };
+  const before = await Promise.all(paths.map((path) => readSnapshot(path)));
+  const oldIdentity = {
+    Authorization: "Bearer synthetic-retired-credential",
+    Cookie: "hyc_concept_session=synthetic-retired-session; role=admin",
+    "X-CSRF-Token": "synthetic-retired-csrf",
+    "X-Role": "admin",
+  };
+  const claimed = await Promise.all(
+    paths.map((path) => readSnapshot(path, oldIdentity))
   );
-  await page.goto("/?app=SystemSettings");
-  await page.locator("summary").filter({ hasText: "Site maintenance" }).click();
-  await page
-    .locator('input[name="administrator-key"]')
-    .fill("product-e2e-only-not-a-real-credential");
-  await page.getByRole("button", { name: "Enter management" }).click();
-  const portfolio = page.getByRole("dialog", {
-    exact: true,
-    name: "Portfolio",
-  });
-  await expect(portfolio).toBeVisible();
-  await portfolio.locator('a[href="/?app=Portfolio&project=aipm"]').click();
-  await portfolio
-    .getByRole("button", { exact: true, name: "Edit project" })
-    .click();
-  await portfolio
-    .locator('input[name="project-title"]')
-    .fill("AIPM integration test");
-  const category = portfolio.locator('select[name="project-kind"]');
-  await expect(category.locator("option")).toHaveText([
-    "Products",
-    "Tools",
-    "Contributions",
-    "Other",
-  ]);
-  await category.selectOption("other");
-  await portfolio
-    .getByRole("button", { exact: true, name: "Save draft" })
-    .click();
-  await expect(portfolio.getByRole("status")).toContainText("Draft saved");
-  const draftPublic = await request.get("/api/projects/aipm");
-  expect(((await draftPublic.json()) as Project).translations.en.title).toBe(
-    "AIPM"
+  expect(claimed).toEqual(before);
+  expect(JSON.stringify(claimed)).not.toMatch(
+    /privateNote|updatedAt|"draft"|"version"|"published"/
   );
-  expect(((await draftPublic.json()) as Project).kind).toBe("project");
-  await portfolio
-    .getByRole("button", { exact: true, name: "Publish saved version" })
-    .click();
-  await expect(portfolio.getByRole("status")).toContainText("Published");
-  const published = await request.get("/api/projects/aipm");
-  expect(((await published.json()) as Project).translations.en.title).toBe(
-    "AIPM integration test"
+  const attempts = await Promise.all(
+    ["GET", "HEAD", "POST", "PATCH", "DELETE"].flatMap((method) =>
+      [
+        "/api/session",
+        "/api/admin",
+        "/api/admin/projects",
+        "/api/admin/projects/aipm",
+        "/api/admin/projects/aipm/publish",
+        "/api/admin/projects/aipm/unpublish",
+        "/api/admin/projects/aipm/image",
+      ].map(async (path) => ({
+        method,
+        response: await request.fetch(path, {
+          headers: oldIdentity,
+          method,
+          ...(["GET", "HEAD"].includes(method)
+            ? {}
+            : {
+                data: {
+                  key: "synthetic-retired-credential",
+                  role: "admin",
+                  version: 1,
+                },
+              }),
+        }),
+      }))
+    )
   );
-  expect(((await published.json()) as Project).kind).toBe("other");
-  await portfolio
-    .getByRole("button", { exact: true, name: "Unpublish" })
-    .click();
-  await expect(portfolio.getByRole("status")).toContainText("Unpublished");
-  expect((await request.get("/api/projects/aipm")).status()).toBe(404);
+  for (const { method, response } of attempts) {
+    expect(response.status()).toBe(
+      process.env.PUBLIC_DEPLOYMENT && !["GET", "HEAD"].includes(method)
+        ? 501
+        : 404
+    );
+    expect(response.headers()["set-cookie"]).toBeUndefined();
+  }
+  const after = await Promise.all(paths.map((path) => readSnapshot(path)));
+  expect(after).toEqual(before);
 });
