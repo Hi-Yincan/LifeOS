@@ -697,11 +697,6 @@ const Servers = ({
       searchable.includes(normalizedQuery)
     );
   });
-  const resetFilters = (): void => {
-    setQuery("");
-    setHealth("all");
-    setFreshness("all");
-  };
 
   if (selectedId) {
     return selected ? (
@@ -811,9 +806,6 @@ const Servers = ({
             <option value="unknown">{freshnessLabel("unknown", locale)}</option>
           </select>
         </Field>
-        <ActionButton onClick={resetFilters} type="button">
-          {isZh ? "清除筛选" : "Clear filters"}
-        </ActionButton>
       </Filters>
       {hosts.length === 0 ? (
         <EmptyState
@@ -823,8 +815,8 @@ const Servers = ({
                 ? "当前视图没有可展示的主机示例。"
                 : "There are no host examples in the current view."
               : isZh
-                ? "尝试其他条件，或清除筛选。"
-                : "Try another search or clear the filters."
+                ? "请调整搜索内容或筛选条件。"
+                : "Try adjusting the search or filters."
           }
           title={isZh ? "没有匹配的主机" : "No matching hosts"}
         />

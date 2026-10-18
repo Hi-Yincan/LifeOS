@@ -137,10 +137,6 @@ const MembershipContent = ({
     setPaymentId("");
     onDirtyChange?.(false);
   };
-  const clear = (): void => {
-    onCategoryChange("");
-    onSearchChange("");
-  };
   const back = (): void => {
     setNotice("");
     setDecision(undefined);
@@ -574,19 +570,12 @@ const MembershipContent = ({
           </MembershipTable>
         </TableRegion>
       ) : (
-        <Stack>
-          <EmptyState
-            description={
-              data.memberships.length > 0 ? t.noMatchHint : t.emptyHint
-            }
-            title={data.memberships.length > 0 ? t.noMatch : t.empty}
-          />
-          {(search || category) && (
-            <ActionButton onClick={clear} type="button">
-              {t.clear}
-            </ActionButton>
-          )}
-        </Stack>
+        <EmptyState
+          description={
+            data.memberships.length > 0 ? t.noMatchHint : t.emptyHint
+          }
+          title={data.memberships.length > 0 ? t.noMatch : t.empty}
+        />
       )}
       <RowMeta>
         {t.estimateHint} {t.paidHint}
