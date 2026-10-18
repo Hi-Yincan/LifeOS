@@ -81,3 +81,61 @@ export const Disclosure = styled.details`
     margin-bottom: 10px;
   }
 `;
+
+export const HealthGrid = styled.div`
+  align-items: start;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  min-width: 0;
+`;
+
+export const HealthValue = styled.div`
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  font-variant-numeric: tabular-nums;
+  gap: 5px;
+
+  strong {
+    font-size: 24px;
+    font-weight: 400;
+  }
+
+  > p {
+    margin-left: auto;
+  }
+`;
+
+export const HealthSampleCounts = styled.div`
+  color: var(--hyc-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  gap: 4px 12px;
+
+  strong {
+    color: var(--hyc-text);
+    font-weight: 400;
+  }
+`;
+
+export const HealthRecordDetails = styled.details`
+  color: var(--hyc-muted);
+  font-size: 11px;
+
+  summary {
+    cursor: pointer;
+    width: fit-content;
+
+    &:focus-visible {
+      outline: 1px solid var(--hyc-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  &[open] > summary {
+    margin-bottom: 8px;
+  }
+`;
