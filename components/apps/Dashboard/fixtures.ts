@@ -4,10 +4,36 @@ import {
   type DashboardDemoData,
   type DemoPrivacyPolicy,
   type LocalizedText,
+  type ServiceHealthDay,
+  type ServiceHealthHistory,
 } from "components/apps/Dashboard/model";
 
 export const DEMO_NOW = "2026-10-18T12:00:00.000Z";
 export const DEMO_TIME_ZONE = "UTC";
+// 每项为一个完整 UTC 日的合成检查计数；不从响应延迟推断健康。
+const healthHistory = (
+  overrides: Record<number, Partial<Omit<ServiceHealthDay, "date">>> = {},
+  expectedSamplesPerDay = 1440
+): ServiceHealthHistory => ({
+  days: Array.from({ length: 90 }, (_, index) => {
+    const override = overrides[index] || {};
+    const degraded = override.degraded || 0;
+    const down = override.down || 0;
+
+    return {
+      date: new Date(
+        Date.parse(`${DEMO_NOW.slice(0, 10)}T00:00:00Z`) -
+          (90 - index) * 86_400_000
+      )
+        .toISOString()
+        .slice(0, 10),
+      degraded,
+      down,
+      up: override.up ?? expectedSamplesPerDay - degraded - down,
+    };
+  }),
+  expectedSamplesPerDay,
+});
 const text = (zh: string, en: string): LocalizedText => ({ en, zh });
 const points = (
   values: (null | number)[],
@@ -671,6 +697,7 @@ export const makeDemoData = (): DashboardDemoData => ({
       fetchedAt: DEMO_NOW,
       freshness: "unknown",
       health: "pending",
+      healthHistory: { days: [], expectedSamplesPerDay: 1440 },
       history: [],
       id: "demo-pending-service",
       latencyMs: null,
@@ -684,7 +711,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       serverId: "demo-node-a",
       sourceId: "demo-monitor",
       sourceUpdatedAt: null,
-      uptimePercent: null,
       url: null,
       visibility: "public",
     },
@@ -707,6 +733,7 @@ export const makeDemoData = (): DashboardDemoData => ({
       fetchedAt: DEMO_NOW,
       freshness: "fresh",
       health: "up",
+      healthHistory: healthHistory({ 12: { up: 720 }, 89: { down: 10 } }),
       history: points([85, 92, 80, 96, 88, 84, 91, 89, 95, 87, 90, 86]),
       id: "demo-notebook",
       latencyMs: 86,
@@ -720,7 +747,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       serverId: "demo-node-a",
       sourceId: "demo-monitor",
       sourceUpdatedAt: "2026-10-18T11:59:00Z",
-      uptimePercent: 99.9,
       url: null,
       visibility: "public",
     },
@@ -746,6 +772,12 @@ export const makeDemoData = (): DashboardDemoData => ({
       fetchedAt: DEMO_NOW,
       freshness: "fresh",
       health: "degraded",
+      healthHistory: healthHistory({
+        12: { degraded: 144 },
+        30: { down: 216 },
+        45: { degraded: 144 },
+        78: { degraded: 144 },
+      }),
       history: points([
         180, 190, 205, 220, 210, 260, 310, 430, 610, 740, 820, 860,
       ]),
@@ -761,7 +793,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       serverId: "demo-node-a",
       sourceId: "demo-monitor",
       sourceUpdatedAt: "2026-10-18T11:59:00Z",
-      uptimePercent: 99.2,
       url: null,
       visibility: "public",
     },
@@ -787,6 +818,10 @@ export const makeDemoData = (): DashboardDemoData => ({
       fetchedAt: DEMO_NOW,
       freshness: "fresh",
       health: "maintenance",
+      healthHistory: healthHistory({
+        20: { degraded: 60 },
+        40: { degraded: 60 },
+      }),
       history: points([
         120,
         125,
@@ -813,7 +848,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       serverId: "demo-node-a",
       sourceId: "demo-monitor",
       sourceUpdatedAt: "2026-10-18T11:30:00Z",
-      uptimePercent: null,
       url: null,
       visibility: "public",
     },
@@ -827,6 +861,20 @@ export const makeDemoData = (): DashboardDemoData => ({
       fetchedAt: DEMO_NOW,
       freshness: "stale",
       health: "up",
+      healthHistory: healthHistory(
+        {
+          16: { degraded: 24 },
+          42: { down: 48 },
+          83: { up: 0 },
+          84: { up: 0 },
+          85: { up: 0 },
+          86: { up: 0 },
+          87: { up: 0 },
+          88: { up: 0 },
+          89: { up: 0 },
+        },
+        480
+      ),
       history: points([
         140,
         146,
@@ -853,7 +901,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       serverId: "demo-node-b",
       sourceId: "demo-monitor-stale",
       sourceUpdatedAt: "2026-10-18T06:00:00Z",
-      uptimePercent: 99.6,
       url: null,
       visibility: "public",
     },
@@ -867,6 +914,7 @@ export const makeDemoData = (): DashboardDemoData => ({
       fetchedAt: null,
       freshness: "unknown",
       health: "unknown",
+      healthHistory: null,
       history: [],
       id: "demo-private-service",
       latencyMs: null,
@@ -876,7 +924,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       serverId: "demo-node-private",
       sourceId: "demo-agent-missing",
       sourceUpdatedAt: null,
-      uptimePercent: null,
       url: null,
       visibility: "private",
     },

@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { ActionButton } from "components/apps/Dashboard/shared";
+import { type HealthDayState } from "components/apps/Dashboard/views/Services/health";
 
 export const ServiceGrid = styled.ul`
   display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 0;
   list-style: none;
   margin: 0;
   min-width: 0;
@@ -13,12 +13,11 @@ export const ServiceGrid = styled.ul`
 
 export const ServiceCard = styled.li`
   background: var(--hyc-bg);
-  border: 1px solid var(--hyc-line);
+  border-bottom: 1px solid var(--hyc-line);
   display: grid;
-  gap: 10px;
-  grid-template-rows: auto 1fr auto auto;
+  gap: 8px;
   min-width: 0;
-  padding: 12px;
+  padding: 14px 0;
 
   &:focus-within {
     border-color: var(--hyc-selected-border);
@@ -26,15 +25,22 @@ export const ServiceCard = styled.li`
 `;
 
 export const ServiceHeader = styled.div`
-  align-items: baseline;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 10px;
-  justify-content: space-between;
+  align-items: start;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) auto;
 
   h3 {
     min-width: 0;
   }
+`;
+
+export const ServiceIdentity = styled.div`
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  min-width: 0;
 `;
 
 export const ServiceName = styled(ActionButton)`
@@ -51,22 +57,95 @@ export const ServiceName = styled(ActionButton)`
   }
 `;
 
-export const ServiceDescription = styled.p`
+export const ServiceObservation = styled.div`
   color: var(--hyc-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  gap: 3px 12px;
+  justify-content: space-between;
   line-height: 1.5;
   overflow-wrap: anywhere;
 `;
 
-export const ServiceObservation = styled.div`
-  border-top: 1px solid var(--hyc-line);
-  color: var(--hyc-muted);
+export const UptimeSummary = styled.div`
   display: grid;
-  font-size: 11px;
   font-variant-numeric: tabular-nums;
-  gap: 3px;
+  gap: 2px;
+  text-align: right;
+  white-space: nowrap;
+
+  strong {
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  span {
+    color: var(--hyc-muted);
+    font-size: 11px;
+  }
+`;
+
+export const HealthTrack = styled.div`
+  min-width: 0;
+  position: relative;
+`;
+
+export const HealthStrip = styled.div`
+  box-sizing: border-box;
+  cursor: pointer;
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(90, minmax(0, 1fr));
+  height: 28px;
+  outline-offset: 2px;
+  padding: 4px 0;
+
+  &:focus-visible {
+    outline: 1px solid var(--hyc-accent);
+  }
+`;
+
+export const HealthBar = styled.span<{
+  $active: boolean;
+  $state: HealthDayState;
+}>`
+  background: ${({ $state }) => ({ degraded: "#d9b85c", down: "#d88585", unknown: "#686868", up: "#79b889" })[$state]};
+  border-radius: 1px;
+  min-width: 0;
+  outline: ${({ $active }) => ($active ? "1px solid var(--hyc-text)" : "none")};
+  outline-offset: 1px;
+`;
+
+export const HealthTooltip = styled.div`
+  background: var(--hyc-panel);
+  border: 1px solid var(--hyc-line);
+  bottom: calc(100% + 4px);
+  font-size: 11px;
+  left: 0;
   line-height: 1.5;
   overflow-wrap: anywhere;
-  padding-top: 8px;
+  padding: 6px 8px;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  z-index: 2;
+`;
+
+export const HealthHelp = styled.details`
+  color: var(--hyc-muted);
+  font-size: 11px;
+  line-height: 1.6;
+
+  summary {
+    cursor: pointer;
+    width: fit-content;
+  }
+
+  p {
+    margin-top: 6px;
+  }
 `;
 
 export const Facts = styled.dl`
