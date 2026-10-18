@@ -64,11 +64,15 @@ describe("overview action queue", () => {
     data.servers[0].expiresAt = "2026-10-18T00:00:00Z";
     const queue = getOverviewQueue(data, "en");
 
-    expect(queue.find(({ id }) => id === "demo-cinema")).toMatchObject({
-      isOverdue: false,
-      timePrecision: "date",
-    });
-    expect(queue.find(({ id }) => id === "demo-node-a")).toMatchObject({
+    expect(queue.find(({ id }) => id === data.memberships[0].id)).toMatchObject(
+      {
+        at: "2026-10-18T00:00:00Z",
+        isOverdue: false,
+        timePrecision: "date",
+      }
+    );
+    expect(queue.find(({ id }) => id === data.servers[0].id)).toMatchObject({
+      at: "2026-10-18T00:00:00Z",
       isOverdue: false,
       timePrecision: "date",
     });
