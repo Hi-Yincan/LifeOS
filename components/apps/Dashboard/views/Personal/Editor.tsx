@@ -85,9 +85,9 @@ const Editor = ({
   const [form, setForm] = useState(() => {
     const initial = makeDraft(data, target, locale);
 
-    return { draft: initial, initial };
+    return { draft: initial, editingLocale: locale, initial };
   });
-  const { draft, initial } = form;
+  const { draft, editingLocale, initial } = form;
   const [error, setError] = useState("");
   const zh = locale === "zh";
   const checkup = data.personal.checkups.find(({ id }) => id === target.id);
@@ -171,7 +171,7 @@ const Editor = ({
                 category: draft.category,
                 endedAt: end === null ? null : new Date(end).toISOString(),
                 startedAt: new Date(start).toISOString(),
-                title: { ...item.title, [locale]: draft.title.trim() },
+                title: { ...item.title, [editingLocale]: draft.title.trim() },
               }
             : item
         );
@@ -184,7 +184,7 @@ const Editor = ({
                 endsAt: new Date(end as number).toISOString(),
                 startsAt: new Date(start).toISOString(),
                 status: draft.status,
-                title: { ...item.title, [locale]: draft.title.trim() },
+                title: { ...item.title, [editingLocale]: draft.title.trim() },
               }
             : item
         );
@@ -192,7 +192,10 @@ const Editor = ({
       if (target.kind === "location" && personal.location) {
         personal.location = {
           ...personal.location,
-          label: { ...personal.location.label, [locale]: draft.title.trim() },
+          label: {
+            ...personal.location.label,
+            [editingLocale]: draft.title.trim(),
+          },
         };
       }
       if (target.kind === "health") {
@@ -234,8 +237,8 @@ const Editor = ({
                   ...entry,
                   value: values[index],
                 })),
-                note: { ...item.note, [locale]: draft.note },
-                title: { ...item.title, [locale]: draft.title.trim() },
+                note: { ...item.note, [editingLocale]: draft.note },
+                title: { ...item.title, [editingLocale]: draft.title.trim() },
               }
             : item
         );
@@ -272,8 +275,18 @@ const Editor = ({
           </SectionHeading>
           <Notice>
             {zh
-              ? "只修改本窗口的合成记录，关闭应用后重置。文字修改当前语言版本。"
-              : "Edits affect this window's synthetic records and reset when the app closes. Text edits apply to the current language."}
+              ? "只修改本窗口的合成记录，关闭应用后重置。当前编辑文字语言："
+              : "Edits affect this window's synthetic records and reset when the app closes. Text language: "}
+            {editingLocale === "zh"
+              ? zh
+                ? "中文"
+                : "Chinese"
+              : zh
+                ? "英文"
+                : "English"}
+            {zh
+              ? "。切换界面语言会保留草稿和编辑语言。"
+              : ". Changing the interface language preserves the draft and its text language."}
           </Notice>
           {target.kind !== "health" && (
             <Field>

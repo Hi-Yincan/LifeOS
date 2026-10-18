@@ -8,9 +8,14 @@ import Personal from "components/apps/Dashboard/views/Personal/index";
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 
-const changeInput = (input: HTMLInputElement, value: string): void => {
+const changeInput = (
+  input: HTMLInputElement | HTMLTextAreaElement,
+  value: string
+): void => {
   const setValue = Object.getOwnPropertyDescriptor(
-    HTMLInputElement.prototype,
+    input instanceof HTMLTextAreaElement
+      ? HTMLTextAreaElement.prototype
+      : HTMLInputElement.prototype,
     "value"
   )?.set;
 
@@ -152,6 +157,73 @@ describe("personal sample editing", () => {
     expect(onUpdate).not.toHaveBeenCalled();
     expect(onClose).toHaveBeenCalledWith(false);
     expect(onDirtyChange).toHaveBeenLastCalledWith(false);
+  });
+
+  it("preserves the draft language when the interface language changes before saving", () => {
+    const state = { data: makeDemoData() };
+    const original = state.data.personal.checkups[0];
+    const onClose = jest.fn();
+    const onDirtyChange = jest.fn();
+    const onNavigate = jest.fn();
+    const onUpdate = (
+      update: (data: DashboardDemoData) => DashboardDemoData
+    ): void => {
+      state.data = update(state.data);
+    };
+
+    act(() =>
+      root.render(
+        <Editor
+          data={state.data}
+          locale="en"
+          onClose={onClose}
+          onDirtyChange={onDirtyChange}
+          onNavigate={onNavigate}
+          onUpdate={onUpdate}
+          target={{ id: original.id, kind: "checkup" }}
+        />
+      )
+    );
+    const title = container.querySelector<HTMLInputElement>("input");
+    const note = container.querySelector<HTMLTextAreaElement>("textarea");
+
+    if (!title || !note) throw new Error("MISSING_TEXT_FIELDS");
+    changeInput(title, "Edited English checkup");
+    changeInput(note, "Edited English note");
+    act(() =>
+      root.render(
+        <Editor
+          data={state.data}
+          locale="zh"
+          onClose={onClose}
+          onDirtyChange={onDirtyChange}
+          onNavigate={onNavigate}
+          onUpdate={onUpdate}
+          target={{ id: original.id, kind: "checkup" }}
+        />
+      )
+    );
+    expect(container.querySelector<HTMLInputElement>("input")?.value).toBe(
+      "Edited English checkup"
+    );
+    expect(
+      container.querySelector<HTMLTextAreaElement>("textarea")?.value
+    ).toBe("Edited English note");
+    expect(container.textContent).toContain("当前编辑文字语言：英文");
+    expect(onDirtyChange).toHaveBeenLastCalledWith(true);
+    const save = container.querySelector<HTMLButtonElement>(
+      "button[type=submit]"
+    );
+
+    if (!save) throw new Error("MISSING_SAVE_BUTTON");
+    act(() => save.click());
+    const updated = state.data.personal.checkups[0];
+
+    expect(updated.title.en).toBe("Edited English checkup");
+    expect(updated.note.en).toBe("Edited English note");
+    expect(updated.title.zh).toBe(original.title.zh);
+    expect(updated.note.zh).toBe(original.note.zh);
+    expect(onClose).toHaveBeenCalledWith(true);
   });
 
   it("renders the visitor preview without editing or policy controls", () => {
