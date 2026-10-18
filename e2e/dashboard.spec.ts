@@ -159,7 +159,10 @@ test("membership filters, sample edits and explicit payment/renewal decisions re
     .getByRole("searchbox", { name: "Search memberships" })
     .fill("not-a-member");
   await expect(app.getByText("No matching memberships")).toBeVisible();
-  await app.getByRole("button", { name: "Clear filters" }).click();
+  await expect(app.getByRole("button", { name: "Clear filters" })).toHaveCount(
+    0
+  );
+  await app.getByRole("searchbox", { name: "Search memberships" }).fill("");
   await app
     .getByRole("combobox", { exact: true, name: "Category" })
     .selectOption("cloud");
@@ -422,7 +425,10 @@ test("services distinguish pending, stale and unmonitored and edit directory sam
     .getByRole("searchbox", { name: "Search service names" })
     .fill("missing-service");
   await expect(app.getByText("No services match these filters")).toBeVisible();
-  await app.getByRole("button", { name: "Clear filters" }).click();
+  await expect(app.getByRole("button", { name: "Clear filters" })).toHaveCount(
+    0
+  );
+  await app.getByRole("searchbox", { name: "Search service names" }).fill("");
   await app
     .getByRole("combobox", { exact: true, name: "Status" })
     .selectOption("pending");
@@ -455,7 +461,9 @@ test("services distinguish pending, stale and unmonitored and edit directory sam
   await expect(
     app.getByRole("button", { exact: true, name: "Demo notebook" })
   ).toHaveCount(0);
-  await app.getByRole("button", { name: "Clear filters" }).click();
+  await app
+    .getByRole("combobox", { exact: true, name: "Status" })
+    .selectOption("all");
   await app.getByRole("button", { exact: true, name: "Demo notebook" }).click();
   await app.getByRole("button", { name: "Last 6 sample hours" }).click();
   await app.locator("summary").filter({ hasText: "View samples" }).click();
@@ -489,7 +497,10 @@ test("server filtering, metric windows and missing observations keep units and l
   const app = await openDashboard(page, "servers");
   await app.getByRole("searchbox", { name: "Search hosts" }).fill("no-host");
   await expect(app.getByText("No matching hosts")).toBeVisible();
-  await app.getByRole("button", { name: "Clear filters" }).click();
+  await expect(app.getByRole("button", { name: "Clear filters" })).toHaveCount(
+    0
+  );
+  await app.getByRole("searchbox", { name: "Search hosts" }).fill("");
   await app
     .getByRole("combobox", { name: "Data status" })
     .selectOption("stale");
@@ -501,7 +512,7 @@ test("server filtering, metric windows and missing observations keep units and l
   await expect(app.getByRole("combobox", { name: "Data status" })).toHaveValue(
     "stale"
   );
-  await app.getByRole("button", { name: "Clear filters" }).click();
+  await app.getByRole("combobox", { name: "Data status" }).selectOption("all");
   await app.getByRole("button", { name: "View Demo node A details" }).click();
   await app
     .getByRole("combobox", { name: "Trend metric" })
@@ -932,7 +943,13 @@ test("service and host detail round trips preserve combined filters", async ({
       .getByRole("table", { name: "Host resources and status" })
       .locator("tbody tr")
   ).toHaveCount(1);
-  await app.getByRole("button", { name: "Clear filters" }).click();
+  await app.getByRole("searchbox", { name: "Search hosts" }).fill("");
+  await app
+    .getByRole("combobox", { exact: true, name: "Host status" })
+    .selectOption("all");
+  await app
+    .getByRole("combobox", { exact: true, name: "Data status" })
+    .selectOption("all");
   await expect(
     app
       .getByRole("table", { name: "Host resources and status" })
@@ -970,6 +987,187 @@ test("overview disclosures retain complete costs, actions and source evidence", 
   ).toBeVisible();
   await expect(
     source.locator("..").getByText("Source updated (UTC)", { exact: true })
+  ).toBeVisible();
+});
+
+test("service health rows preserve 90 UTC days, observed uptime and accessible day inspection", async ({
+  page,
+}) => {
+  const app = await openDashboard(page, "services");
+  const sliders = app.getByRole("slider");
+  await expect(sliders).toHaveCount(6);
+  const drive = app.getByRole("listitem").filter({
+    has: page.getByRole("button", { exact: true, name: "Demo drive" }),
+  });
+  const driveSlider = drive.getByRole("slider", {
+    name: "Demo drive · 90-day health history",
+  });
+  const days = driveSlider.locator("[data-date]");
+  await expect(days).toHaveCount(90);
+  await expect(days.first()).toHaveAttribute("data-date", "2026-07-20");
+  await expect(days.last()).toHaveAttribute("data-date", "2026-10-17");
+  await expect(driveSlider.locator('[data-date="2026-10-18"]')).toHaveCount(0);
+  await expect(driveSlider.locator('[data-health="degraded"]')).toHaveCount(3);
+  await expect(driveSlider.locator('[data-health="down"]')).toHaveCount(1);
+  await expect(driveSlider.locator('[data-health="up"]')).toHaveCount(86);
+  const rate = drive.locator('[aria-label="90-day uptime"]');
+  await expect(rate).toContainText("Uptime 99.50%");
+  await expect(rate).toContainText("Coverage 100.00%");
+  await expect(rate.locator("[title]")).toHaveAttribute(
+    "title",
+    "129600 / 129600 observed / expected checks"
+  );
+  await expect(driveSlider).toHaveAttribute("tabindex", "0");
+  await expect(driveSlider.locator("[tabindex], button")).toHaveCount(0);
+  await driveSlider.focus();
+  await driveSlider.press("Home");
+  await expect(driveSlider).toHaveAttribute("aria-valuenow", "1");
+  await expect(driveSlider).toHaveAttribute("aria-valuetext", /2026-07-20 UTC/);
+  await driveSlider.press("ArrowRight");
+  await expect(driveSlider).toHaveAttribute("aria-valuetext", /2026-07-21 UTC/);
+  await driveSlider.press("End");
+  await expect(driveSlider).toHaveAttribute("aria-valuenow", "90");
+  await expect(driveSlider).toHaveAttribute("aria-valuetext", /2026-10-17 UTC/);
+  await expect(driveSlider.locator("..").getByRole("status")).toBeVisible();
+  await driveSlider.press("Escape");
+  await expect(driveSlider.locator("..").getByRole("status")).toHaveCount(0);
+  await driveSlider.press("ArrowLeft");
+  await expect(driveSlider.locator("..").getByRole("status")).toContainText(
+    "2026-10-16"
+  );
+  await page.keyboard.press("Tab");
+  await expect(
+    app.getByRole("button", { exact: true, name: "Demo code service" })
+  ).toBeFocused();
+  const notebook = app.getByRole("slider", {
+    name: "Demo notebook · 90-day health history",
+  });
+  const partial = notebook.locator('[data-date="2026-08-01"]');
+  await expect(partial).toHaveAttribute("data-health", "unknown");
+  await partial.hover();
+  await expect(notebook).toHaveAttribute(
+    "aria-valuetext",
+    /2026-08-01 UTC · Missing samples.*720\/720.*Coverage 720\/1440/
+  );
+  const pending = app.getByRole("listitem").filter({
+    has: page.getByRole("button", {
+      exact: true,
+      name: "Demo search service",
+    }),
+  });
+  await expect(pending.locator('[data-health="unknown"]')).toHaveCount(90);
+  await expect(pending.locator('[aria-label="90-day uptime"]')).toContainText(
+    "Uptime —"
+  );
+  await expect(pending.locator('[aria-label="90-day uptime"]')).toContainText(
+    "Coverage 0.00%"
+  );
+  await app
+    .locator("summary")
+    .filter({ hasText: "90-day health history" })
+    .click();
+  await expect(app.getByText(/Missing checks are excluded/)).toBeVisible();
+  await expect(
+    app.getByText(/Gray: no checks or incomplete healthy coverage/)
+  ).toBeVisible();
+  await drive.getByRole("button", { exact: true, name: "Demo drive" }).click();
+  await expect(app.locator('[aria-label="90-day uptime"]')).toContainText(
+    "Uptime 99.50%"
+  );
+  await expect(app.locator('[aria-label="90-day uptime"]')).toContainText(
+    "Coverage 100.00%"
+  );
+  await expect(app.getByRole("slider").locator("[data-date]")).toHaveCount(90);
+  await app.getByRole("button", { name: "Last 6 sample hours" }).click();
+  await app.locator("summary").filter({ hasText: "View samples" }).click();
+  await expect(app.getByRole("table").locator("tbody tr")).toHaveCount(6);
+  await app.getByRole("button", { name: "Last 12 sample hours" }).click();
+  await expect(app.getByRole("table").locator("tbody tr")).toHaveCount(12);
+});
+
+test.describe("service health touch inspection", () => {
+  test.use({ hasTouch: true, viewport: { height: 844, width: 390 } });
+  test("touch selects a day and remains readable in Chinese at 390px", async ({
+    page,
+  }, testInfo) => {
+    const app = await openDashboard(page, "services");
+    const slider = app.getByRole("slider", {
+      name: "Demo drive · 90-day health history",
+    });
+    await slider.scrollIntoViewIfNeeded();
+    const bounds = await slider.boundingBox();
+    if (!bounds) throw new Error("Health history bounds missing");
+    await slider.tap({
+      position: { x: (bounds.width * 30.5) / 90, y: bounds.height / 2 },
+    });
+    await expect(slider).toHaveAttribute("aria-valuenow", "31");
+    await expect(slider).toHaveAttribute(
+      "aria-valuetext",
+      /2026-08-19 UTC · Failed checks/
+    );
+    await expect(slider.locator("..").getByRole("status")).toContainText(
+      "Coverage 1440/1440"
+    );
+    await setLocale(page, "zh");
+    const chinese = app.getByRole("slider", {
+      name: "演示文件服务 · 90 日健康历史",
+    });
+    await chinese.scrollIntoViewIfNeeded();
+    await chinese.tap({ position: { x: 1, y: 10 } });
+    await expect(chinese).toHaveAttribute(
+      "aria-valuetext",
+      /2026-07-20 UTC · 正常/
+    );
+    await expect(chinese.locator("..").getByRole("status")).toBeVisible();
+    const row = app.getByRole("listitem").filter({
+      has: page.getByRole("slider", { name: "演示文件服务 · 90 日健康历史" }),
+    });
+    await expect(row.locator('[aria-label="90 日可用率"]')).toContainText(
+      "可用率 99.50%"
+    );
+    expect(
+      await app
+        .locator(".dashboard-content")
+        .evaluate((node) => node.scrollWidth <= node.clientWidth + 1)
+    ).toBe(true);
+    await expect(app.getByRole("button", { name: /清除筛选/ })).toHaveCount(0);
+    await page.screenshot({
+      path: testInfo.outputPath("services-health-touch-390-zh.png"),
+    });
+  });
+});
+
+test("checkup filters recover through the original selector without clear buttons", async ({
+  page,
+}) => {
+  const app = await openDashboard(page, "personal", "checkups");
+  const type = app.getByRole("combobox", { name: "Checkup type" });
+  await type.selectOption("blood");
+  await expect(
+    app.getByRole("button", { name: /^Sample blood test ·/ })
+  ).toBeVisible();
+  await expect(
+    app.getByRole("button", { name: /^Sample vision check ·/ })
+  ).toHaveCount(0);
+  await type.selectOption("general");
+  await expect(app.getByText("No matching checkup records")).toBeVisible();
+  await expect(
+    app.getByRole("button", { name: /^Clear filters?$/ })
+  ).toHaveCount(0);
+  await type.selectOption("all");
+  await expect(
+    app.getByRole("button", { name: /^Sample blood test ·/ })
+  ).toBeVisible();
+  await expect(
+    app.getByRole("button", { name: /^Sample vision check ·/ })
+  ).toBeVisible();
+  await setLocale(page, "zh");
+  await app.getByRole("combobox", { name: "检查类型" }).selectOption("general");
+  await expect(app.getByText("没有符合条件的检查记录")).toBeVisible();
+  await expect(app.getByRole("button", { name: "清除筛选" })).toHaveCount(0);
+  await app.getByRole("combobox", { name: "检查类型" }).selectOption("all");
+  await expect(
+    app.getByRole("button", { name: /^血常规示例 ·/ })
   ).toBeVisible();
 });
 
