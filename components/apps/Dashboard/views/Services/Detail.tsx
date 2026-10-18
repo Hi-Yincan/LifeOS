@@ -130,11 +130,6 @@ const Detail = ({
               label={localize(categories[service.category], locale)}
             />
             <ServiceStatus locale={locale} service={service} />
-            <Muted>
-              {service.visibility === "public"
-                ? t.previewPublic
-                : t.previewPrivate}
-            </Muted>
           </Toolbar>
           {observationHint && <Notice>{observationHint}</Notice>}
           <Card>

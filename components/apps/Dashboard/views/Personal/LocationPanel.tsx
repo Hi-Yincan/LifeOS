@@ -60,9 +60,7 @@ const LocationPanel = ({
               />
             </>
           ) : (
-            <EmptyState
-              title={zh ? "此预览没有位置记录" : "No location in this preview"}
-            />
+            <EmptyState title={zh ? "暂无位置记录" : "No location records"} />
           )}
         </Stack>
       </Card>
@@ -158,14 +156,7 @@ const LocationPanel = ({
           </Card>
         </Split>
       ) : (
-        <EmptyState
-          description={
-            zh
-              ? "位置规则可能隐藏了路线，返回全部示例可查看。"
-              : "Preview rules may hide the route; return to all samples to view it."
-          }
-          title={zh ? "没有可见轨迹点" : "No visible route points"}
-        />
+        <EmptyState title={zh ? "暂无轨迹点" : "No route points"} />
       )}
     </Section>
   );

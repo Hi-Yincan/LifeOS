@@ -235,7 +235,6 @@ const Overview = ({
   data,
   locale,
   onNavigate,
-  previewMode,
 }: DashboardViewProps): ReactNode => {
   const [queueFilter, setQueueFilter] = useState<"all" | QueueItem["kind"]>(
     "all"
@@ -370,8 +369,8 @@ const Overview = ({
               </Count>
               <SmallText>
                 {text(
-                  "有数值 / 可见健康指标",
-                  "With values / visible health metrics"
+                  "有数值 / 全部健康指标",
+                  "With values / all health metrics"
                 )}
               </SmallText>
             </SummaryButton>
@@ -471,8 +470,8 @@ const Overview = ({
               </span>
               <span>
                 {text(
-                  "服务和主机分子仅计入有效样本且正常的记录，分母为全部可见记录。",
-                  "Services and hosts count only current, operational samples over all visible records."
+                  "服务和主机分子仅计入有效样本且正常的记录，分母为全部记录。",
+                  "Services and hosts count only current, operational samples over all records."
                 )}
               </span>
               <span>
@@ -561,10 +560,7 @@ const Overview = ({
                   </>
                 ) : (
                   <SmallText>
-                    {text(
-                      "没有可见的进行中活动",
-                      "No visible current activity"
-                    )}
+                    {text("暂无进行中的活动", "No current activity")}
                   </SmallText>
                 )}
               </Detail>
@@ -628,7 +624,7 @@ const Overview = ({
                   </>
                 ) : (
                   <SmallText>
-                    {text("没有可见的后续日程", "No visible upcoming events")}
+                    {text("暂无后续日程", "No upcoming events")}
                   </SmallText>
                 )}
               </Detail>
@@ -808,15 +804,10 @@ const Overview = ({
             {text("查看来源状态与时间", "View source statuses and timestamps")}
           </summary>
           <SmallText>
-            {previewMode === "visitor"
-              ? text(
-                  "访客预览隐藏来源时间细节；此处只演示可见结果。",
-                  "Visitor preview hides source timestamps; this only demonstrates the visible result."
-                )
-              : text(
-                  "测量、来源更新和抓取时间分别记录；较新的抓取时间不会刷新旧样本。",
-                  "Observation, source update and fetch times are separate; a recent fetch does not make an old sample current."
-                )}
+            {text(
+              "测量、来源更新和抓取时间分别记录；较新的抓取时间不会刷新旧样本。",
+              "Observation, source update and fetch times are separate; a recent fetch does not make an old sample current."
+            )}
           </SmallText>
           {data.sources.length > 0 ? (
             data.sources.map((source) => (
@@ -870,9 +861,7 @@ const Overview = ({
               </SourceDetails>
             ))
           ) : (
-            <EmptyState
-              title={text("没有可见的数据来源", "No visible data sources")}
-            />
+            <EmptyState title={text("暂无数据来源", "No data sources")} />
           )}
         </Disclosure>
       </Panel>

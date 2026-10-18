@@ -907,8 +907,8 @@ export const makeDemoData = (): DashboardDemoData => ({
     {
       category: "development",
       description: text(
-        "用于访客预览过滤的私有示例。",
-        "A private sample excluded from visitor preview."
+        "尚未配置监控的服务示例，当前没有观测数据。",
+        "A service sample without configured monitoring or observations."
       ),
       events: [],
       fetchedAt: null,
