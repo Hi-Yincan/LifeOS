@@ -19,9 +19,7 @@ import { TableScroll } from "components/apps/Dashboard/views/Personal/styles";
 const CheckupsPanel = ({
   data,
   locale,
-  onEdit,
   onNavigate,
-  previewMode,
   selectedId,
 }: PanelProps): ReactNode => {
   const [filter, setFilter] = useState("all");
@@ -67,14 +65,6 @@ const CheckupsPanel = ({
           <Stack>
             <SectionHeading>
               <h3>{selected.title[locale]}</h3>
-              {previewMode !== "visitor" && (
-                <ActionButton
-                  onClick={() => onEdit({ id: selected.id, kind: "checkup" })}
-                  type="button"
-                >
-                  {zh ? "编辑检查示例" : "Edit sample checkup"}
-                </ActionButton>
-              )}
             </SectionHeading>
             <Muted>
               {formatDate(selected.date, locale, data.timeZone)} ·{" "}

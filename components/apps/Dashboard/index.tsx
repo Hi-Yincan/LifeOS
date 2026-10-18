@@ -1,4 +1,3 @@
-/* eslint-disable no-alert -- 沿用原生确认保护尚未保存的示例。 */
 import {
   Fragment,
   useCallback,
@@ -36,7 +35,6 @@ import StyledAddressBar from "components/apps/FileExplorer/StyledAddressBar";
 import StyledNavigation from "components/apps/FileExplorer/StyledNavigation";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
 import StyledStatusBar from "components/system/Files/FileManager/StyledStatusBar";
-import { registerCloseGuard } from "components/system/LifeOS/closeGuards";
 import { useLifeOS } from "components/system/LifeOS/context";
 import Icon from "components/system/LifeOS/Icon";
 import Surface from "components/system/LifeOS/Surface";
@@ -84,31 +82,6 @@ const readRoute = (): Route => {
       }
     : { invalidModule: true, module: "overview" };
 };
-const historyIndex = (value: unknown, session: string): number | undefined => {
-  if (
-    !value ||
-    typeof value !== "object" ||
-    !("lifeosDashboardIndex" in value) ||
-    !("lifeosDashboardSession" in value) ||
-    value.lifeosDashboardSession !== session
-  ) {
-    return undefined;
-  }
-  return typeof value.lifeosDashboardIndex === "number" &&
-    Number.isSafeInteger(value.lifeosDashboardIndex)
-    ? value.lifeosDashboardIndex
-    : undefined;
-};
-const historyState = (
-  index: number,
-  session: string
-): Record<string, unknown> => ({
-  ...(history.state && typeof history.state === "object"
-    ? (history.state as Record<string, unknown>)
-    : {}),
-  lifeosDashboardIndex: index,
-  lifeosDashboardSession: session,
-});
 const hasSelectedRecord = (data: DashboardDemoData, route: Route): boolean => {
   if (!route.selectedId) return true;
   if (route.module === "personal") {
@@ -350,33 +323,14 @@ const StatusBar = styled(StyledStatusBar)`
   }
 `;
 
-const rejectUpdate: DashboardViewProps["onUpdate"] = () => {
-  throw new Error("Dashboard is read-only.");
-};
-
 const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
   const { locale } = useLifeOS();
   const t = messages[locale];
   const { title } = useProcessesActions();
   const data = useMemo(() => makeDemoData(), []);
   const [route, setRoute] = useState<Route>(initialRoute);
-  const [dirty, setDirty] = useState(false);
-  const dirtyRef = useRef(false);
-  const currentRoute = useRef(route);
-  const currentDashboardUrl = useRef("");
-  const currentHistoryIndex = useRef(0);
-  const historySession = useRef("");
   const contentRef = useRef<HTMLElement>(null);
-  const onDirtyChange = useCallback((value: boolean): void => {
-    dirtyRef.current = value;
-    setDirty(value);
-  }, []);
-  const canLeave = useCallback(
-    (): boolean => !dirtyRef.current || confirm(t.leaveConfirm),
-    [t.leaveConfirm]
-  );
   const replaceRoute = useCallback((next: Route): void => {
-    currentRoute.current = next;
     setRoute(next);
     contentRef.current?.focus({ preventScroll: true });
     contentRef.current?.scrollTo({ left: 0, top: 0 });
@@ -390,71 +344,23 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
     // 初次挂载后读取浏览器路由，服务端始终使用可复现的总览状态。
     // eslint-disable-next-line react/set-state-in-effect -- 浏览器路由在挂载后初始化。
     replaceRoute(next);
-    currentDashboardUrl.current = location.href;
-    historySession.current = Array.from(
-      crypto.getRandomValues(new Uint32Array(4)),
-      (value) => value.toString(16)
-    ).join("-");
-    currentHistoryIndex.current = 0;
-    history.replaceState(
-      historyState(currentHistoryIndex.current, historySession.current),
-      "",
-      location.href
-    );
   }, [replaceRoute]);
   useEffect(() => {
     title(id, t.title);
   }, [id, t.title, title]);
-  useEffect(() => registerCloseGuard(id, canLeave), [canLeave, id]);
   useEffect(() => {
-    const guard = (e: BeforeUnloadEvent): void => {
-      if (!dirtyRef.current) return;
-      e.preventDefault();
-      // eslint-disable-next-line typescript/no-deprecated -- 兼容支持范围内旧浏览器的关闭确认。
-      e.returnValue = "";
-    };
-    addEventListener("beforeunload", guard);
-    return () => removeEventListener("beforeunload", guard);
-  }, []);
-  useEffect(() => {
-    const sync = (event: PopStateEvent): void => {
-      const targetIndex = historyIndex(event.state, historySession.current);
+    const sync = (): void => {
       const isDashboard =
         new URLSearchParams(location.search).get("app")?.toLowerCase() ===
         "dashboard";
       if (!isDashboard) {
         return;
       }
-      const next = readRoute();
-      const previous = currentRoute.current;
-      const changed =
-        next.module !== previous.module ||
-        next.selectedId !== previous.selectedId ||
-        next.invalidModule !== previous.invalidModule;
-      if (!changed) {
-        currentDashboardUrl.current = location.href;
-        currentHistoryIndex.current =
-          targetIndex ?? currentHistoryIndex.current;
-        return;
-      }
-      if (!canLeave()) {
-        // 本实例序号不等于全局历史距离；恢复草稿所在地址会截断当前前进分支。
-        currentHistoryIndex.current += 1;
-        history.pushState(
-          historyState(currentHistoryIndex.current, historySession.current),
-          "",
-          currentDashboardUrl.current
-        );
-        return;
-      }
-      onDirtyChange(false);
-      replaceRoute(next);
-      currentDashboardUrl.current = location.href;
-      currentHistoryIndex.current = targetIndex ?? currentHistoryIndex.current;
+      replaceRoute(readRoute());
     };
     addEventListener("popstate", sync);
     return () => removeEventListener("popstate", sync);
-  }, [canLeave, onDirtyChange, replaceRoute]);
+  }, [replaceRoute]);
 
   const writeRoute = (next: Route): void => {
     const url = new URL(location.href);
@@ -462,13 +368,7 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
     url.searchParams.set("dashboard", next.module);
     if (next.selectedId) url.searchParams.set("dashboardItem", next.selectedId);
     else url.searchParams.delete("dashboardItem");
-    currentHistoryIndex.current += 1;
-    history.pushState(
-      historyState(currentHistoryIndex.current, historySession.current),
-      "",
-      url
-    );
-    currentDashboardUrl.current = url.href;
+    history.pushState(history.state, "", url);
     replaceRoute(next);
   };
   const onNavigate: DashboardViewProps["onNavigate"] = (module, selectedId) => {
@@ -479,13 +379,11 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
     ) {
       return;
     }
-    if (!canLeave()) return;
-    onDirtyChange(false);
     writeRoute({ invalidModule: false, module, selectedId });
   };
   const View = views[route.module];
   const recordExists = hasSelectedRecord(data, route);
-  // 列表视图在实体间切换时保留筛选；临时编辑态由对应视图清理。
+  // 列表视图在实体间切换时保留筛选。
   const entityKey = route.module === "personal" ? route.selectedId || "" : "";
   const viewKey = `${route.module}:${entityKey}`;
   const personalTab = getPersonalTab(data.personal, route.selectedId);
@@ -595,10 +493,7 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
               key={viewKey}
               data={data}
               locale={locale}
-              onDirtyChange={onDirtyChange}
               onNavigate={onNavigate}
-              onUpdate={rejectUpdate}
-              previewMode="visitor"
               selectedId={route.selectedId}
             />
           ) : (
@@ -622,7 +517,7 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
         </time>
         <span className="dashboard-memory">{t.readOnly}</span>
         <span className="dashboard-status-end" role="status">
-          {dirty ? t.unsaved : t.modules[route.module]}
+          {t.modules[route.module]}
         </span>
         <details>
           <summary>{t.demoDetails}</summary>

@@ -2,7 +2,6 @@
 import {
   type ChartPoint,
   type DashboardDemoData,
-  type DemoPrivacyPolicy,
   type LocalizedText,
   type ServiceHealthDay,
   type ServiceHealthHistory,
@@ -46,14 +45,6 @@ const points = (
     ).toISOString(),
     value,
   }));
-const policy = (
-  visibility: DemoPrivacyPolicy["visibility"] = "private"
-): DemoPrivacyPolicy => ({
-  delayDays: 0,
-  history: "threeDays",
-  mode: "calendar",
-  visibility,
-});
 
 // 每次返回独立数据；所有人名、服务、位置和记录均为合成示例。
 export const makeDemoData = (): DashboardDemoData => ({
@@ -90,7 +81,6 @@ export const makeDemoData = (): DashboardDemoData => ({
         status: "active",
       },
       serviceId: null,
-      visibility: "public",
     },
     {
       amount: { currency: "USD", minor: 12000 },
@@ -124,7 +114,6 @@ export const makeDemoData = (): DashboardDemoData => ({
         status: "active",
       },
       serviceId: "demo-drive",
-      visibility: "public",
     },
     {
       amount: { currency: "CNY", minor: 3900 },
@@ -151,7 +140,6 @@ export const makeDemoData = (): DashboardDemoData => ({
         status: "active",
       },
       serviceId: null,
-      visibility: "private",
     },
     {
       amount: { currency: "CNY", minor: 6800 },
@@ -185,7 +173,6 @@ export const makeDemoData = (): DashboardDemoData => ({
         status: "cancelled",
       },
       serviceId: null,
-      visibility: "public",
     },
     {
       amount: null,
@@ -208,7 +195,6 @@ export const makeDemoData = (): DashboardDemoData => ({
         status: "unknown",
       },
       serviceId: null,
-      visibility: "private",
     },
     {
       amount: { currency: "CNY", minor: 0 },
@@ -235,7 +221,6 @@ export const makeDemoData = (): DashboardDemoData => ({
         status: "cancelled",
       },
       serviceId: "demo-notebook",
-      visibility: "public",
     },
   ],
   now: DEMO_NOW,
@@ -430,16 +415,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       observedAt: "2026-10-18T11:00:00Z",
       sourceId: "demo-manual",
     },
-    policies: {
-      activity: policy("public"),
-      checkups: policy(),
-      heartRate: policy(),
-      location: policy(),
-      schedule: policy("public"),
-      sleep: policy(),
-      steps: policy("public"),
-      weight: policy(),
-    },
     route: [
       {
         at: "2026-10-18T08:00:00Z",
@@ -537,7 +512,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       sampleWindowSeconds: 60,
       sourceId: "demo-agent",
       tags: ["demo", "offline"],
-      visibility: "public",
     },
     {
       cpuLabel: "2 vCPU",
@@ -587,7 +561,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       sampleWindowSeconds: 60,
       sourceId: "demo-agent",
       tags: ["demo", "web"],
-      visibility: "public",
     },
     {
       cpuLabel: "4 vCPU",
@@ -650,7 +623,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       sampleWindowSeconds: 60,
       sourceId: "demo-agent-stale",
       tags: ["demo", "archive"],
-      visibility: "public",
     },
     {
       cpuLabel: "—",
@@ -683,7 +655,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       sampleWindowSeconds: null,
       sourceId: "demo-agent-missing",
       tags: ["demo"],
-      visibility: "private",
     },
   ],
   services: [
@@ -712,7 +683,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       sourceId: "demo-monitor",
       sourceUpdatedAt: null,
       url: null,
-      visibility: "public",
     },
     {
       category: "productivity",
@@ -748,7 +718,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       sourceId: "demo-monitor",
       sourceUpdatedAt: "2026-10-18T11:59:00Z",
       url: null,
-      visibility: "public",
     },
     {
       category: "storage",
@@ -794,7 +763,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       sourceId: "demo-monitor",
       sourceUpdatedAt: "2026-10-18T11:59:00Z",
       url: null,
-      visibility: "public",
     },
     {
       category: "development",
@@ -849,7 +817,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       sourceId: "demo-monitor",
       sourceUpdatedAt: "2026-10-18T11:30:00Z",
       url: null,
-      visibility: "public",
     },
     {
       category: "media",
@@ -902,7 +869,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       sourceId: "demo-monitor-stale",
       sourceUpdatedAt: "2026-10-18T06:00:00Z",
       url: null,
-      visibility: "public",
     },
     {
       category: "development",
@@ -925,7 +891,6 @@ export const makeDemoData = (): DashboardDemoData => ({
       sourceId: "demo-agent-missing",
       sourceUpdatedAt: null,
       url: null,
-      visibility: "private",
     },
   ],
   sources: [
@@ -936,8 +901,8 @@ export const makeDemoData = (): DashboardDemoData => ({
       kind: "manual",
       name: text("演示手工记录", "Demo manual entries"),
       note: text(
-        "合成内容，只在当前窗口修改。",
-        "Synthetic content, edited only in this window."
+        "合成手工记录，仅用于展示。",
+        "Synthetic manual records for display only."
       ),
       observedAt: "2026-10-18T11:00:00Z",
       sourceUpdatedAt: "2026-10-18T11:00:00Z",

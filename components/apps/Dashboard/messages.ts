@@ -6,7 +6,6 @@ const messages = {
     demoDetails: "Sample details",
     demoHint: "All records are fictional. All samples are available to read.",
     details: "Details",
-    leaveConfirm: "Discard unsaved changes and continue?",
     missing: "This sample record does not exist.",
     modules: {
       memberships: "Memberships",
@@ -29,7 +28,6 @@ const messages = {
     title: "Dashboard",
     unknownModule:
       "This view is not recognized. The overview is shown instead.",
-    unsaved: "Unsaved changes",
   },
   zh: {
     back: "返回",
@@ -38,7 +36,6 @@ const messages = {
     demoDetails: "示例说明",
     demoHint: "所有记录均为虚构，当前展示全部示例，只供浏览。",
     details: "详情",
-    leaveConfirm: "放弃未保存的修改并继续？",
     missing: "找不到这条示例记录。",
     modules: {
       memberships: "会员",
@@ -60,7 +57,6 @@ const messages = {
     sampleTime: "示例时间",
     title: "综合看板",
     unknownModule: "无法识别这个视图，已显示总览。",
-    unsaved: "有未保存修改",
   },
 };
 

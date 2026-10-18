@@ -22,9 +22,7 @@ import {
 const LocationPanel = ({
   data,
   locale,
-  onEdit,
   onNavigate,
-  previewMode,
   selectedId,
 }: PanelProps): ReactNode => {
   const zh = locale === "zh";
@@ -37,14 +35,6 @@ const LocationPanel = ({
         <Stack>
           <SectionHeading>
             <h3>{zh ? "示例位置" : "Sample location"}</h3>
-            {location && previewMode !== "visitor" && (
-              <ActionButton
-                onClick={() => onEdit({ id: "location", kind: "location" })}
-                type="button"
-              >
-                {zh ? "编辑位置示例" : "Edit sample location"}
-              </ActionButton>
-            )}
           </SectionHeading>
           {location ? (
             <>
