@@ -354,7 +354,7 @@ test("all four health articles share the trend range and retain missing values a
   await expectHealthMetrics(app);
 });
 
-test("the default visitor reads every domain without visibility or mutation controls", async ({
+test("every domain is readable without visibility or mutation controls", async ({
   page,
 }) => {
   const app = await openDashboard(page, "services");
@@ -399,6 +399,70 @@ test("the default visitor reads every domain without visibility or mutation cont
     app.getByRole("button", { name: /^Sample vision check ·/ })
   ).toBeVisible();
   await expectReadOnly(app);
+});
+
+test("retired identity cookies cannot change dashboard content or expose editors", async ({
+  context,
+  page,
+}) => {
+  const app = await openDashboard(page, "memberships");
+  const readContent = async (): Promise<Record<string, string[]>> => {
+    await navigate(app, "Memberships");
+    const memberships = await app
+      .getByRole("table", { name: "Membership list" })
+      .locator("tbody tr")
+      .allTextContents();
+    await expectReadOnly(app);
+    await navigate(app, "Services");
+    const services = await app
+      .getByRole("slider")
+      .evaluateAll((nodes) =>
+        nodes.map((node) => node.getAttribute("aria-label") || "")
+      );
+    await expectReadOnly(app);
+    await navigate(app, "Servers");
+    const servers = await app
+      .getByRole("table", { name: "Host resources and status" })
+      .locator("tbody tr")
+      .allTextContents();
+    await expectReadOnly(app);
+    await navigate(app, "Personal");
+    await app
+      .getByRole("button", { exact: true, name: "Daily health" })
+      .click();
+    await expectHealthMetrics(app);
+    const health = await app
+      .getByRole("article")
+      .evaluateAll((nodes) =>
+        nodes.map(
+          (node) =>
+            `${node.dataset.healthMetric}:${node.querySelector("strong")?.textContent}`
+        )
+      );
+    await expectReadOnly(app);
+    return { health, memberships, servers, services };
+  };
+  const before = await readContent();
+  expect(before.memberships).toHaveLength(6);
+  expect(before.services).toHaveLength(6);
+  expect(before.servers).toHaveLength(4);
+  expect(before.health).toEqual([
+    "steps:6,420",
+    "heartRate:72",
+    "sleep:7.4",
+    "weight:—",
+  ]);
+  await context.addCookies([
+    {
+      name: "hyc_concept_session",
+      url: new URL(page.url()).origin,
+      value: "synthetic-retired-session",
+    },
+    { name: "role", url: new URL(page.url()).origin, value: "admin" },
+  ]);
+  await page.reload();
+  await expectHealthMetrics(app);
+  expect(await readContent()).toEqual(before);
 });
 
 test("service statuses, maintenance records, latency and linked hosts remain readable", async ({
