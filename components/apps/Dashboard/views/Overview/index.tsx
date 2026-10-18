@@ -424,8 +424,8 @@ const Overview = ({
         </Toolbar>
         <Muted>
           {text(
-            "未来 7 天日程、30 天内续费/到期及待核对记录。日期早于示例时钟表示已到期，未执行扣款或通知。",
-            "Next 7 days of events, renewals/expirations within 30 days, and records to review. Dates before the demo clock are overdue; no payment or notification is sent."
+            "日程按未来 7 天的时刻筛选；续费/到期按含今日的 30 个 UTC 日历日筛选，另保留已过日期与待核对记录。未执行扣款或通知。",
+            "Events use the next 7 days from the demo time. Renewals/expirations use 30 UTC calendar days including today; past dates and records to review remain listed. No payment or notification is sent."
           )}
         </Muted>
         {visibleQueue.length > 0 ? (
@@ -446,10 +446,12 @@ const Overview = ({
                     <span>{item.detail}</span>
                     <Muted>
                       {item.at
-                        ? `${formatDateTime(item.at, locale, data.timeZone)} (${data.timeZone})`
+                        ? item.timePrecision === "date"
+                          ? `${formatDate(item.at, locale, "UTC")} (UTC)`
+                          : `${formatDateTime(item.at, locale, data.timeZone)} (${data.timeZone})`
                         : text("日期待确认", "Date to be confirmed")}
                     </Muted>
-                    {item.at && Date.parse(item.at) < Date.parse(data.now) && (
+                    {item.isOverdue && (
                       <span>
                         <StatusBadge
                           label={text(

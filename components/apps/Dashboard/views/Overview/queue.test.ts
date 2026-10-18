@@ -44,6 +44,7 @@ describe("overview action queue", () => {
     const queue = getOverviewQueue(data, "en");
 
     expect(queue[0].at).toBe("2026-10-17T00:00:00Z");
+    expect(queue[0].isOverdue).toBe(true);
     expect(queue.find(({ id }) => id === "demo-cinema")?.detail).toContain(
       "CNY"
     );
@@ -54,5 +55,51 @@ describe("overview action queue", () => {
       "Review"
     );
     expect(JSON.stringify(data)).toBe(before);
+  });
+
+  it("keeps today's membership and host dates current after midnight", () => {
+    const data = makeDemoData();
+
+    data.memberships[0].renewal.cancelBy = "2026-10-18T00:00:00Z";
+    data.servers[0].expiresAt = "2026-10-18T00:00:00Z";
+    const queue = getOverviewQueue(data, "en");
+
+    expect(queue.find(({ id }) => id === "demo-cinema")).toMatchObject({
+      isOverdue: false,
+      timePrecision: "date",
+    });
+    expect(queue.find(({ id }) => id === "demo-node-a")).toMatchObject({
+      isOverdue: false,
+      timePrecision: "date",
+    });
+  });
+
+  it("includes the last calendar day and excludes the thirtieth-day boundary", () => {
+    const data = makeDemoData();
+    const membership = data.memberships[0];
+    const server = data.servers[0];
+
+    data.memberships = [
+      {
+        ...membership,
+        id: "last-day-membership",
+        renewal: { ...membership.renewal, cancelBy: "2026-11-16T23:59:59Z" },
+      },
+      {
+        ...membership,
+        id: "boundary-membership",
+        renewal: { ...membership.renewal, cancelBy: "2026-11-17T00:00:00Z" },
+      },
+    ];
+    data.servers = [
+      { ...server, expiresAt: "2026-11-16T23:59:59Z", id: "last-day-host" },
+      { ...server, expiresAt: "2026-11-17T00:00:00Z", id: "boundary-host" },
+    ];
+    const queue = getOverviewQueue(data, "en");
+
+    expect(queue.some(({ id }) => id === "last-day-membership")).toBe(true);
+    expect(queue.some(({ id }) => id === "last-day-host")).toBe(true);
+    expect(queue.some(({ id }) => id === "boundary-membership")).toBe(false);
+    expect(queue.some(({ id }) => id === "boundary-host")).toBe(false);
   });
 });
