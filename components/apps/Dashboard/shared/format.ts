@@ -38,11 +38,18 @@ export const formatMoney = (
 ): string => {
   if (!value || !isValidMoney(value)) return "—";
 
+  const scale = currencyScale(value.currency);
+  const fraction = String(value.minor % scale).padStart(2, "0");
+
+  // 分别格式化整数与最小货币单位，避免大额小数丢失末位。
   return new Intl.NumberFormat(localeTag(locale), {
     currency: value.currency,
     currencyDisplay: "code",
     style: "currency",
-  }).format(value.minor / currencyScale(value.currency));
+  })
+    .formatToParts(Math.floor(value.minor / scale))
+    .map(({ type, value: part }) => (type === "fraction" ? fraction : part))
+    .join("");
 };
 const dateFormat = (
   value: null | string,
