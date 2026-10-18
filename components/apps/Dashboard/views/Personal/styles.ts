@@ -102,7 +102,7 @@ export const HealthValue = styled.div`
     font-weight: 400;
   }
 
-  > p {
+  > span:last-child {
     margin-left: auto;
   }
 `;
