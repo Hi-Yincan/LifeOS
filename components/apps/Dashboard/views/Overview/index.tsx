@@ -384,7 +384,7 @@ const Overview = ({
               <Muted>{text("会员权益", "Memberships")}</Muted>
               <Count>
                 {membershipSummary.activeCount}
-                <small>{text("项", "plans")}</small>
+                <small>{text("项", "memberships")}</small>
               </Count>
               <SmallText>
                 {text("有效或试用权益", "Active or trial access")}
@@ -594,8 +594,9 @@ const Overview = ({
                         locale,
                         data.timeZone
                       )}{" "}
-                      – {formatTime(nextEvent.endsAt, locale, data.timeZone)} (
-                      {data.timeZone})
+                      –{" "}
+                      {formatDateTime(nextEvent.endsAt, locale, data.timeZone)}{" "}
+                      ({data.timeZone})
                     </SmallText>
                     <Disclosure>
                       <summary>{text("日程详情", "Schedule details")}</summary>
