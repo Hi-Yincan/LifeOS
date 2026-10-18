@@ -95,6 +95,22 @@ describe("dashboard value formatting", () => {
     expect(formatMoney({ currency: "USD", minor: 1.5 }, "en")).toBe("—");
   });
 
+  it("preserves every minor unit when displaying large safe integers", () => {
+    expect(
+      formatMoney({ currency: "CNY", minor: 9007199254740990 }, "zh")
+    ).toContain("90,071,992,547,409.90");
+    expect(
+      formatMoney({ currency: "USD", minor: Number.MAX_SAFE_INTEGER }, "en")
+    ).toContain("90,071,992,547,409.91");
+    expect(
+      formatMoney({ currency: "EUR", minor: 9007199254740899 }, "en")
+    ).toContain("90,071,992,547,408.99");
+    expect(
+      formatMoney({ currency: "JPY", minor: Number.MAX_SAFE_INTEGER }, "en")
+    ).toContain("9,007,199,254,740,991");
+    expect(formatMoney({ currency: "USD", minor: 1 }, "en")).toContain("0.01");
+  });
+
   it("rejects unsafe links and keeps invalid dates visibly missing", () => {
     // eslint-disable-next-line no-script-url -- 不执行该字符串，只检查拒绝危险协议。
     expect(safeExternalUrl("javascript:alert(1)")).toBeNull();
