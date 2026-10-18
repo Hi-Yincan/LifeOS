@@ -2,9 +2,9 @@ import { type ReactNode, useState } from "react";
 import { type DashboardViewProps } from "components/apps/Dashboard/model";
 import {
   ActionButton,
+  Muted,
   Notice,
   SectionHeading,
-  Toolbar,
 } from "components/apps/Dashboard/shared";
 import ActivityPanel from "components/apps/Dashboard/views/Personal/ActivityPanel";
 import CheckupsPanel from "components/apps/Dashboard/views/Personal/CheckupsPanel";
@@ -24,6 +24,7 @@ const PersonalContent = (props: DashboardViewProps): ReactNode => {
   const [editing, setEditing] = useState<EditTarget>();
   const [notice, setNotice] = useState("");
   const tab = getPersonalTab(data.personal, selectedId);
+  const tabLabel = tabs.find(({ id }) => id === tab)?.label[locale];
   const found =
     !selectedId ||
     tabs.some(({ id }) => id === selectedId) ||
@@ -45,20 +46,9 @@ const PersonalContent = (props: DashboardViewProps): ReactNode => {
   return (
     <PersonalLayout>
       <SectionHeading>
-        <h2>{zh ? "个人状况" : "Personal status"}</h2>
+        <h2>{tabLabel}</h2>
+        <Muted>{zh ? "个人状况" : "Personal status"}</Muted>
       </SectionHeading>
-      <Toolbar aria-label={zh ? "个人状况视图" : "Personal views"}>
-        {tabs.map(({ id, label }) => (
-          <ActionButton
-            key={id}
-            aria-pressed={tab === id}
-            onClick={() => onNavigate("personal", id)}
-            type="button"
-          >
-            {label[locale]}
-          </ActionButton>
-        ))}
-      </Toolbar>
       {!found && (
         <Notice role="status">
           {zh

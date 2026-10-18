@@ -4,10 +4,12 @@ const messages = {
     back: "Back",
     backToList: "Back to list",
     demo: "Sample data",
+    demoDetails: "Sample details",
     demoHint:
       "All records are fictional. Edits stay in this window and reset when it closes or reloads.",
     details: "Details",
     leaveConfirm: "Discard unsaved changes and continue?",
+    memoryHint: "Window only · resets on close or reload",
     missing: "This record is not available in the current preview.",
     modules: {
       memberships: "Memberships",
@@ -17,6 +19,14 @@ const messages = {
       services: "Services",
     },
     navigation: "Dashboard views",
+    navigationShort: {
+      memberships: "Members",
+      overview: "Overview",
+      personal: "Personal",
+      servers: "Servers",
+      services: "Services",
+    },
+    personalNavigation: "Personal views",
     preview: "Preview",
     previewHint:
       "Visitor preview demonstrates visibility only; it is not a security control or a publication.",
@@ -24,6 +34,7 @@ const messages = {
     resetConfirm:
       "Reset every sample in this window? Saved sample edits and unsaved changes will be discarded.",
     resetDone: "Initial samples restored in this window.",
+    resetShort: "Reset",
     sampleTime: "Sample time",
     title: "Dashboard",
     unknownModule:
@@ -37,10 +48,12 @@ const messages = {
     back: "返回",
     backToList: "返回列表",
     demo: "示例数据",
+    demoDetails: "示例说明",
     demoHint:
       "所有记录均为虚构。修改只在本窗口保留，关闭或刷新后恢复初始示例。",
     details: "详情",
     leaveConfirm: "放弃未保存的修改并继续？",
+    memoryHint: "仅当前窗口 · 关闭或刷新后重置",
     missing: "当前预览中找不到这条记录。",
     modules: {
       memberships: "会员",
@@ -50,12 +63,21 @@ const messages = {
       services: "服务",
     },
     navigation: "看板视图",
+    navigationShort: {
+      memberships: "会员",
+      overview: "总览",
+      personal: "个人",
+      servers: "服务器",
+      services: "服务",
+    },
+    personalNavigation: "个人状况视图",
     preview: "预览范围",
     previewHint: "访客预览只演示可见效果，不代表安全保护或内容发布。",
     reset: "重置示例",
     resetConfirm:
       "恢复本窗口的全部初始示例？已保存的示例修改和未保存内容都会被清除。",
     resetDone: "已恢复本窗口的初始示例。",
+    resetShort: "重置",
     sampleTime: "示例时间",
     title: "综合看板",
     unknownModule: "无法识别这个视图，已显示总览。",
