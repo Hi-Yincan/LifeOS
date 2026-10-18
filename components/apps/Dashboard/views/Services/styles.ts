@@ -189,22 +189,3 @@ export const EventDetails = styled.details`
     overflow-wrap: anywhere;
   }
 `;
-
-export const ServiceForm = styled.form`
-  display: grid;
-  gap: 12px;
-  min-width: 0;
-
-  input,
-  select,
-  textarea {
-    box-sizing: border-box;
-    min-width: 0;
-    width: 100%;
-  }
-
-  textarea {
-    min-height: 72px;
-    resize: vertical;
-  }
-`;

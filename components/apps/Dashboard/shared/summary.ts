@@ -1,12 +1,9 @@
-/* eslint-disable unicorn/no-null -- 关联与时间字段缺失时使用显式 null。 */
 import {
-  type DashboardDemoData,
   type Membership,
   type Money,
   type Service,
 } from "components/apps/Dashboard/model";
 import { isValidMoney } from "components/apps/Dashboard/shared/format";
-import { selectPersonalDemoPreview } from "components/apps/Dashboard/shared/preview";
 
 export const sumMoneyByCurrency = (amounts: Money[]): Money[] => {
   const totals = new Map<Money["currency"], number>();
@@ -114,60 +111,3 @@ export const summarizeServices = (services: Service[]): ServiceSummary => ({
   ).length,
   unmonitored: services.filter((item) => item.monitor === null).length,
 });
-
-// 仅用于合成数据的访客视图演示，不能作为真实数据授权或公开导出规则。
-export const selectVisibleDemoData = (
-  data: DashboardDemoData,
-  mode: "all" | "visitor" = "all"
-): DashboardDemoData => {
-  if (mode === "all") return data;
-
-  const servers = data.servers.filter((item) => item.visibility === "public");
-  const serverIds = new Set(servers.map(({ id }) => id));
-  const services = data.services
-    .filter((item) => item.visibility === "public")
-    .map((item) => ({
-      ...item,
-      serverId:
-        item.serverId && serverIds.has(item.serverId) ? item.serverId : null,
-    }));
-  const serviceIds = new Set(services.map(({ id }) => id));
-  const memberships = data.memberships
-    .filter((item) => item.visibility === "public")
-    .map((item) => ({
-      ...item,
-      serviceId:
-        item.serviceId && serviceIds.has(item.serviceId)
-          ? item.serviceId
-          : null,
-    }));
-  const selectedPersonal = selectPersonalDemoPreview(data.personal, data.now);
-  const sourceIds = new Set([
-    ...servers.map(({ sourceId }) => sourceId),
-    ...services.map(({ sourceId }) => sourceId),
-    ...selectedPersonal.activities.map(({ sourceId }) => sourceId),
-    ...selectedPersonal.health.map(({ sourceId }) => sourceId),
-    ...(selectedPersonal.location ? [selectedPersonal.location.sourceId] : []),
-  ]);
-
-  return {
-    ...data,
-    memberships,
-    personal: selectedPersonal,
-    servers,
-    services,
-    sources: data.sources
-      .filter(({ id }) => sourceIds.has(id))
-      .map((source) => ({
-        ...source,
-        fetchedAt: null,
-        freshness: "unknown",
-        note: {
-          en: "Visitor preview hides source timing details.",
-          zh: "访客预览隐藏来源时间细节。",
-        },
-        observedAt: null,
-        sourceUpdatedAt: null,
-      })),
-  };
-};

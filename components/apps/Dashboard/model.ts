@@ -5,7 +5,6 @@ export type DashboardModule =
 export type Freshness = "fresh" | "stale" | "unavailable" | "unknown";
 export type HealthStatus =
   "degraded" | "down" | "maintenance" | "pending" | "unknown" | "up";
-export type Visibility = "private" | "public";
 export type Currency = "CNY" | "EUR" | "JPY" | "USD";
 export type Money = { currency: Currency; minor: number };
 export type ChartPoint = { at: string; value: null | number };
@@ -49,21 +48,6 @@ export type RoutePoint = {
   x: number;
   y: number;
 };
-export type PersonalMetricId =
-  | "activity"
-  | "checkups"
-  | "heartRate"
-  | "location"
-  | "schedule"
-  | "sleep"
-  | "steps"
-  | "weight";
-export type DemoPrivacyPolicy = {
-  delayDays: 0 | 1 | 7;
-  history: "all" | "day" | "month" | "threeDays";
-  mode: "calendar";
-  visibility: Visibility;
-};
 export type HealthMetric = {
   freshness: Freshness;
   goal: null | number;
@@ -94,7 +78,6 @@ export type PersonalData = {
   checkups: CheckupRecord[];
   health: HealthMetric[];
   location: DemoLocation | null;
-  policies: Record<PersonalMetricId, DemoPrivacyPolicy>;
   route: RoutePoint[];
   schedule: ScheduleEvent[];
 };
@@ -127,7 +110,6 @@ export type Membership = {
     status: "active" | "cancelled" | "paused" | "unknown";
   };
   serviceId: null | string;
-  visibility: Visibility;
 };
 
 export type ServiceEvent = {
@@ -171,7 +153,6 @@ export type Service = {
   sourceId: string;
   sourceUpdatedAt: null | string;
   url: null | string;
-  visibility: Visibility;
 };
 export type ServerMetrics = {
   // 整机全部逻辑核心的使用比例，取值为 0–100%。
@@ -208,7 +189,6 @@ export type Server = {
   sampleWindowSeconds: null | number;
   sourceId: string;
   tags: string[];
-  visibility: Visibility;
 };
 
 export type DashboardDemoData = {
@@ -221,15 +201,9 @@ export type DashboardDemoData = {
   timeZone: string;
 };
 export type DashboardViewProps = {
-  // 由外壳统一选择可见数据，视图不能再次筛选整份数据集。
+  // 所有视图读取同一份展示数据，不包含编辑或身份权限接口。
   data: DashboardDemoData;
   locale: DashboardLocale;
-  onDirtyChange?: (dirty: boolean) => void;
   onNavigate: (module: DashboardModule, id?: string) => void;
-  onUpdate: (
-    update: (previous: DashboardDemoData) => DashboardDemoData
-  ) => void;
-  // visitor 仅为演示预览并禁止编辑；onUpdate 始终更新外壳的原始内存数据。
-  previewMode?: "all" | "visitor";
   selectedId?: string;
 };

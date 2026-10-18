@@ -26,9 +26,7 @@ import {
 const ActivityPanel = ({
   data,
   locale,
-  onEdit,
   onNavigate,
-  previewMode,
   selectedId,
 }: PanelProps): ReactNode => {
   const [range, setRange] = useState("all");
@@ -155,16 +153,6 @@ const ActivityPanel = ({
           <Stack>
             <SectionHeading>
               <h3>{selectedActivity.title[locale]}</h3>
-              {previewMode !== "visitor" && (
-                <ActionButton
-                  onClick={() =>
-                    onEdit({ id: selectedActivity.id, kind: "activity" })
-                  }
-                  type="button"
-                >
-                  {zh ? "编辑活动示例" : "Edit sample activity"}
-                </ActionButton>
-              )}
             </SectionHeading>
             <DetailsGrid>
               <dt>{zh ? "类别" : "Category"}</dt>
@@ -202,16 +190,6 @@ const ActivityPanel = ({
           <Stack>
             <SectionHeading>
               <h3>{selectedSchedule.title[locale]}</h3>
-              {previewMode !== "visitor" && (
-                <ActionButton
-                  onClick={() =>
-                    onEdit({ id: selectedSchedule.id, kind: "schedule" })
-                  }
-                  type="button"
-                >
-                  {zh ? "编辑日程示例" : "Edit sample event"}
-                </ActionButton>
-              )}
             </SectionHeading>
             <DetailsGrid>
               <dt>{zh ? "状态" : "Status"}</dt>

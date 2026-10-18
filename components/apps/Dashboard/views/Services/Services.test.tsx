@@ -14,7 +14,6 @@ const renderView = (overrides: Partial<DashboardViewProps> = {}): void => {
         data={makeDemoData()}
         locale="zh"
         onNavigate={jest.fn()}
-        onUpdate={jest.fn()}
         {...overrides}
       />
     );
@@ -63,41 +62,22 @@ test("pending checks without an observation remain selectable and unmonitored en
   expect(container.textContent).not.toContain("演示检索服务");
 });
 
-test("saving directory edits updates shared memory without changing observations", () => {
+test("reading details and changing the chart window preserves observations", () => {
   const data = makeDemoData();
   const original = data.services.find(({ id }) => id === "demo-notebook");
-  const onUpdate = jest.fn<void, Parameters<DashboardViewProps["onUpdate"]>>();
-  const onDirtyChange = jest.fn();
 
   if (!original) throw new Error("Missing notebook fixture");
-  renderView({ data, onDirtyChange, onUpdate, selectedId: original.id });
-  act(() => button("编辑示例").click());
-  const input = container.querySelector("input");
-  const setValue = Object.getOwnPropertyDescriptor(
-    HTMLInputElement.prototype,
-    "value"
-  )?.set;
+  const snapshot = JSON.stringify(data);
+  const onNavigate = jest.fn();
 
-  if (!input || !setValue) throw new Error("Missing editable name");
-  act(() => {
-    setValue.call(input, "修改后的演示服务");
-    input.dispatchEvent(new Event("input", { bubbles: true }));
-  });
-  expect(onDirtyChange).toHaveBeenLastCalledWith(true);
-  const save = button("保存示例");
-
-  expect(save.type).toBe("submit");
-  act(() => save.click());
-  expect(onUpdate).toHaveBeenCalledTimes(1);
-  const [update] = onUpdate.mock.calls[0];
-  const updated = update(data).services.find(({ id }) => id === original.id);
-
-  expect(updated?.name.zh).toBe("修改后的演示服务");
-  expect(updated?.observedAt).toBe(original.observedAt);
-  expect(updated?.monitor).toBe(original.monitor);
-  expect(updated?.events).toBe(original.events);
-  expect(onDirtyChange).toHaveBeenLastCalledWith(false);
-  expect(container.textContent).toContain("示例已保存在本窗口");
+  renderView({ data, onNavigate, selectedId: original.id });
+  expect(container.querySelector("form")).toBeNull();
+  expect(container.textContent).not.toContain("编辑示例");
+  act(() => button("最近 6 个示例小时").click());
+  expect(button("最近 6 个示例小时").getAttribute("aria-pressed")).toBe("true");
+  act(() => button("返回服务列表").click());
+  expect(onNavigate).toHaveBeenCalledWith("services");
+  expect(JSON.stringify(data)).toBe(snapshot);
 });
 
 test("read-only browsing cannot edit and source failure does not establish a target outage", () => {
@@ -106,43 +86,13 @@ test("read-only browsing cannot edit and source failure does not establish a tar
 
   if (!original) throw new Error("Missing notebook fixture");
   data.services = [{ ...original, freshness: "unavailable" }];
-  renderView({ data, previewMode: "visitor", selectedId: original.id });
+  renderView({ data, selectedId: original.id });
   expect(container.textContent).toContain(
     "监测来源不可用，不能据此判断目标服务宕机"
   );
   expect(container.textContent).toContain("上次观测状态: 正常");
-  expect(container.textContent).toContain("只读浏览");
   expect(container.textContent).not.toContain("编辑示例");
   expect(container.querySelector("a")).toBeNull();
-});
-
-test("cancelling offers a way to keep editing or discard without saving", () => {
-  const onUpdate = jest.fn();
-  const onDirtyChange = jest.fn();
-
-  renderView({ onDirtyChange, onUpdate, selectedId: "demo-notebook" });
-  act(() => button("编辑示例").click());
-  const input = container.querySelector("input");
-  const setValue = Object.getOwnPropertyDescriptor(
-    HTMLInputElement.prototype,
-    "value"
-  )?.set;
-
-  if (!input || !setValue) throw new Error("Missing editable name");
-  act(() => {
-    setValue.call(input, "尚未保存的服务名称");
-    input.dispatchEvent(new Event("input", { bubbles: true }));
-  });
-  act(() => button("取消").click());
-  expect(container.textContent).toContain("放弃此示例尚未保存的修改");
-  act(() => button("继续编辑").click());
-  expect(input.value).toBe("尚未保存的服务名称");
-  act(() => button("取消").click());
-  act(() => button("放弃修改").click());
-  expect(onUpdate).not.toHaveBeenCalled();
-  expect(onDirtyChange).toHaveBeenLastCalledWith(false);
-  expect(container.textContent).toContain("演示笔记服务");
-  expect(container.textContent).not.toContain("尚未保存的服务名称");
 });
 
 test("list and detail use the same health counts and expose no clear-filter action", () => {

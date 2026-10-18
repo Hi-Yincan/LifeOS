@@ -1,10 +1,5 @@
 import styled from "styled-components";
 
-export const Fields = styled.div`
-  display: grid;
-  gap: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
-`;
 export const Facts = styled.dl`
   display: grid;
   gap: 8px 12px;
@@ -171,24 +166,6 @@ export const RowStates = styled.div`
   display: flex;
   flex-direction: column;
   gap: 3px;
-`;
-export const Form = styled.form`
-  display: grid;
-  gap: 16px;
-
-  input,
-  select,
-  textarea {
-    box-sizing: border-box;
-    max-width: 100%;
-    min-width: 0;
-    width: 100%;
-  }
-
-  textarea {
-    min-height: 64px;
-    resize: vertical;
-  }
 `;
 export const MoneyList = styled.span`
   display: grid;

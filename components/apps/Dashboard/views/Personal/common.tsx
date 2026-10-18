@@ -13,13 +13,7 @@ import {
 } from "components/apps/Dashboard/shared";
 
 export type PersonalTab = "activity" | "checkups" | "health" | "location";
-export type EditTarget = {
-  id: string;
-  kind: "activity" | "checkup" | "health" | "location" | "schedule";
-};
-export type PanelProps = DashboardViewProps & {
-  onEdit: (target: EditTarget) => void;
-};
+export type PanelProps = DashboardViewProps;
 export const tabs: {
   id: PersonalTab;
   label: LocalizedText;
