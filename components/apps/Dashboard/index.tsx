@@ -185,6 +185,7 @@ const StyledDashboard = styled(Surface)`
     overflow: auto;
     padding: 8px 4px;
     ${ScrollBars()}
+    scrollbar-gutter: auto;
   }
 
   .dashboard-modules {
