@@ -110,7 +110,7 @@ test("store defaults to all and toggles its three categories", async ({
   await page.goto("/?app=AppStore");
   const cards = page.locator(".hyc-store-card");
   const categories = page.locator(".hyc-segments button");
-  await expect(cards).toHaveCount(30);
+  await expect(cards).toHaveCount(31);
   await expect(categories).toHaveText([
     "System software",
     "Application software",
@@ -122,12 +122,15 @@ test("store defaults to all and toggles its three categories", async ({
   await categories.nth(0).click();
   await expect(cards).toHaveCount(28);
   await categories.nth(1).click();
-  await expect(cards).toHaveCount(2);
+  await expect(cards).toHaveCount(3);
   await expect(
     page.locator('.hyc-store-card[data-app="AppStore"]')
   ).toBeVisible();
+  await expect(
+    page.locator('.hyc-store-card[data-app="Dashboard"]')
+  ).toBeVisible();
   await categories.nth(1).click();
-  await expect(cards).toHaveCount(30);
+  await expect(cards).toHaveCount(31);
   await page.getByRole("textbox", { name: "Search apps" }).fill("Paint");
   await expect(cards).toHaveCount(1);
   await categories.nth(1).click();
