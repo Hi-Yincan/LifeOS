@@ -20,14 +20,11 @@
   "projects": [
     {
       "id": "aipm",
+      "featured": true,
       "kind": "project",
       "order": 0,
       "accent": "blue",
-      "technology": [
-        "MkDocs",
-        "Python",
-        "JavaScript"
-      ],
+      "technology": ["MkDocs", "Python", "JavaScript"],
       "repository": "https://github.com/AI-PM-Wiki/AIPM",
       "website": "https://aipm.ac/",
       "video": "",
@@ -54,14 +51,11 @@
     },
     {
       "id": "videonote",
-      "kind": "project",
+      "featured": true,
+      "kind": "tool",
       "order": 1,
       "accent": "violet",
-      "technology": [
-        "Python",
-        "MCP",
-        "Video Processing"
-      ],
+      "technology": ["Python", "MCP", "Video Processing"],
       "repository": "https://github.com/HuangYincan/VideoNote-MCP",
       "website": "",
       "video": "",
@@ -88,13 +82,11 @@
     },
     {
       "id": "agentero",
+      "featured": true,
       "kind": "contribution",
       "order": 2,
       "accent": "teal",
-      "technology": [
-        "TypeScript",
-        "Research Tools"
-      ],
+      "technology": ["TypeScript", "Research Tools"],
       "repository": "https://github.com/poco-ai/Agentero",
       "website": "https://agentero.app",
       "video": "",
@@ -121,14 +113,11 @@
     },
     {
       "id": "multica",
+      "featured": false,
       "kind": "contribution",
       "order": 3,
       "accent": "amber",
-      "technology": [
-        "Go",
-        "AI Agents",
-        "Collaboration"
-      ],
+      "technology": ["Go", "AI Agents", "Collaboration"],
       "repository": "https://github.com/multica-ai/multica",
       "website": "https://multica.ai",
       "video": "",
@@ -152,6 +141,378 @@
         }
       },
       "source": "https://github.com/HuangYincan/HuangYincan"
+    },
+    {
+      "id": "jobmap",
+      "kind": "project",
+      "featured": false,
+      "order": 4,
+      "accent": "blue",
+      "technology": ["TypeScript", "Next.js", "PostGIS"],
+      "repository": "https://github.com/HuangYincan/JobMap",
+      "website": "https://jobmap.nvc.ac",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "JobMap",
+          "summary": "在地图上探索公司办公地点与招聘岗位。",
+          "background": "将办公地点、岗位信息和 AI 搜索组织到地图界面中。",
+          "contribution": "",
+          "detail": "公开 README 描述了基于 Next.js 与 PostGIS 的岗位地图。招聘目录通过经审核的数据源导入；仓库介绍标注仍在修复问题。"
+        },
+        "en": {
+          "title": "JobMap",
+          "summary": "Explore company offices and job openings on a map.",
+          "background": "Combines office locations, job listings and AI-assisted search in a map interface.",
+          "contribution": "",
+          "detail": "The public README describes a Next.js and PostGIS job explorer with reviewed recruitment data imports. The repository description notes ongoing bug fixes."
+        }
+      },
+      "source": "https://github.com/HuangYincan/JobMap"
+    },
+    {
+      "id": "ocrsnip",
+      "kind": "tool",
+      "featured": false,
+      "order": 5,
+      "accent": "violet",
+      "technology": ["Swift", "Apple Vision", "ScreenCaptureKit"],
+      "repository": "https://github.com/HuangYincan/ocrsnip",
+      "website": "",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "ocrsnip",
+          "summary": "macOS 菜单栏截图、文字识别与截图置顶工具。",
+          "background": "通过快捷键框选屏幕区域，将识别文字放入剪贴板，或将截图置顶作为参考。",
+          "contribution": "",
+          "detail": "使用 Swift、Apple Vision 和 ScreenCaptureKit，支持截图窗口拖动、缩放及应用内更新。安装说明和公开安装包见源码仓库。"
+        },
+        "en": {
+          "title": "ocrsnip",
+          "summary": "A macOS menu bar utility for screenshots, OCR and pinned images.",
+          "background": "Select a screen region with a shortcut, copy recognized text or pin the capture as a reference.",
+          "contribution": "",
+          "detail": "Built with Swift, Apple Vision and ScreenCaptureKit, with movable and resizable pinned captures and in-app updates. Installation instructions and releases are available in the repository."
+        }
+      },
+      "source": "https://github.com/HuangYincan/ocrsnip"
+    },
+    {
+      "id": "bililive-recorder-gui",
+      "kind": "tool",
+      "featured": false,
+      "order": 6,
+      "accent": "teal",
+      "technology": ["Rust", "Tauri", "BililiveRecorder"],
+      "repository": "https://github.com/HuangYincan/BililiveRecorder-GUI",
+      "website": "",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "BililiveRecorder GUI",
+          "summary": "为录播姬官方 CLI 与 WebUI 提供 Tauri 桌面封装。",
+          "background": "在桌面应用中分发和启动录播后端，并管理进程生命周期与更新。",
+          "contribution": "",
+          "detail": "主窗口直接加载 BililiveRecorder 官方 CLI 内嵌的 WebUI。公开 README 记录了 macOS 验证与 Windows、Linux 的验证边界；录制核心和界面来自上游项目。"
+        },
+        "en": {
+          "title": "BililiveRecorder GUI",
+          "summary": "A Tauri desktop wrapper for the official BililiveRecorder CLI and WebUI.",
+          "background": "Packages and starts the recording backend while managing its lifecycle and desktop updates.",
+          "contribution": "",
+          "detail": "The main window loads the WebUI embedded in the official CLI. The README records macOS validation and platform limitations. Recording functionality and the WebUI come from upstream BililiveRecorder."
+        }
+      },
+      "source": "https://github.com/HuangYincan/BililiveRecorder-GUI"
+    },
+    {
+      "id": "epay-observer-android",
+      "kind": "tool",
+      "featured": false,
+      "order": 7,
+      "accent": "amber",
+      "technology": ["Kotlin", "Android", "HTTPS"],
+      "repository": "https://github.com/HuangYincan/epay-observer-android",
+      "website": "",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "EPay Observer Android",
+          "summary": "对接 epay-go 的 Android 收款通知观察器原型。",
+          "background": "研究微信与支付宝收款通知的持久采集、签名上报及测试订单匹配。",
+          "contribution": "",
+          "detail": "公开 README 记录了模拟器合成通知与隔离 New API 测试环境的闭环验证。真实微信、支付宝通知与真机兼容性尚未验证，生产自动匹配保持关闭。"
+        },
+        "en": {
+          "title": "EPay Observer Android",
+          "summary": "An Android payment-notification observer prototype for epay-go.",
+          "background": "Explores persistent notification capture, signed reporting and test-order matching for WeChat and Alipay notifications.",
+          "contribution": "",
+          "detail": "The README reports a validated loop using synthetic emulator notifications and an isolated New API test environment. Real payment notifications and physical-device compatibility remain unverified; production automatic matching is disabled."
+        }
+      },
+      "source": "https://github.com/HuangYincan/epay-observer-android"
+    },
+    {
+      "id": "neptune-aircon-client",
+      "kind": "tool",
+      "featured": false,
+      "order": 8,
+      "accent": "blue",
+      "technology": ["Python", "CLI", "IoT"],
+      "repository": "https://github.com/HuangYincan/neptune-aircon-client",
+      "website": "",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "Neptune Aircon Client",
+          "summary": "查询与控制尼普顿空调的非官方 Python 客户端。",
+          "background": "提供命令行入口，也可接入自建后端，查询设备状态与管理临时授权。",
+          "contribution": "",
+          "detail": "项目提供温度、模式、风速、开关和授权续期接口。公开 README 分别说明已验证和未实测的能力；当前授权导入适配特定 Mac 微信遥控入口。"
+        },
+        "en": {
+          "title": "Neptune Aircon Client",
+          "summary": "An unofficial Python client for Neptune air-conditioner queries and controls.",
+          "background": "Provides a CLI and backend integration for device status and temporary authorization management.",
+          "contribution": "",
+          "detail": "Includes temperature, mode, fan speed, power and authorization-renewal interfaces. The README distinguishes verified behavior from untested controls and documents the supported Mac WeChat authorization workflow."
+        }
+      },
+      "source": "https://github.com/HuangYincan/neptune-aircon-client"
+    },
+    {
+      "id": "fanfan",
+      "kind": "contribution",
+      "featured": false,
+      "order": 9,
+      "accent": "violet",
+      "technology": ["Swift", "macOS"],
+      "repository": "https://github.com/HuangYincan/fanfan",
+      "website": "https://hoobnn.github.io/fanfan/",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "FanFan",
+          "summary": "macOS 温度监控与风扇控制工具的维护分支。",
+          "background": "上游 hoobnn/fanfan 提供菜单栏温度监控与风扇调速。",
+          "contribution": "公开分支包含恢复系统风扇控制失败后的重试修复。",
+          "detail": "源码入口指向个人维护分支；公开提交可核验该修复。这里记录分支修改，不表示该修改已被上游接收。"
+        },
+        "en": {
+          "title": "FanFan",
+          "summary": "A maintenance fork of a macOS temperature and fan-control utility.",
+          "background": "Upstream hoobnn/fanfan provides menu bar temperature monitoring and fan controls.",
+          "contribution": "The public fork includes a fix that retries failed restoration of system fan control.",
+          "detail": "The source link points to the personal maintenance fork and its public commit history. This records fork changes without claiming upstream acceptance."
+        }
+      },
+      "source": "https://github.com/HuangYincan/fanfan/commit/8053fe24332aba4e049fb56779679aea16f2a990"
+    },
+    {
+      "id": "epay-go",
+      "kind": "contribution",
+      "featured": false,
+      "order": 10,
+      "accent": "teal",
+      "technology": ["Go", "Vue", "PostgreSQL"],
+      "repository": "https://github.com/HuangYincan/epay-go",
+      "website": "",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "epay-go",
+          "summary": "扩展通知观察器协议与充值测试链路的支付网关维护分支。",
+          "background": "基于 zengxiang1/epay-go 的 Go 支付系统进行维护。",
+          "contribution": "公开分支记录了账本原子性与幂等修复、观察器签名校验、事件匹配及回调处理。",
+          "detail": "源码入口保留个人维护分支，修改依据可在提交记录中查阅。相关通知自动充值验证使用隔离合成场景，不据此宣称真实收款已可用于生产。"
+        },
+        "en": {
+          "title": "epay-go",
+          "summary": "A payment-gateway maintenance fork with observer protocol and recharge-test integration.",
+          "background": "Maintains and extends the Go payment system from zengxiang1/epay-go.",
+          "contribution": "Public commits record atomic and idempotent ledger fixes, signed observer validation, event matching and callback handling.",
+          "detail": "The source link preserves the personal fork and its change history. Notification-based recharge validation uses isolated synthetic scenarios and does not establish production readiness for real payments."
+        }
+      },
+      "source": "https://github.com/HuangYincan/epay-go"
+    },
+    {
+      "id": "aris-geo",
+      "kind": "contribution",
+      "featured": false,
+      "order": 11,
+      "accent": "amber",
+      "technology": ["Python", "QGIS", "MCP"],
+      "repository": "https://github.com/HuangYincan/Auto-claude-code-research-in-sleep",
+      "website": "",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "ARIS · 地学扩展",
+          "summary": "为 ARIS 自动研究工作流补充地学技能与 QGIS 接入。",
+          "background": "基于 wanshuiyin/Auto-claude-code-research-in-sleep 的个人扩展分支。",
+          "contribution": "公开分支包含地学技能、QGIS MCP、视觉审查循环与坐标参考规范相关修改。",
+          "detail": "分支差异和公开提交记录可用于核验扩展范围；不将整个上游研究系统归为个人原创，也不表示这些修改已被上游合并。"
+        },
+        "en": {
+          "title": "ARIS · Geoscience extensions",
+          "summary": "Geoscience skills and QGIS integration for ARIS research workflows.",
+          "background": "A personal extension fork of wanshuiyin/Auto-claude-code-research-in-sleep.",
+          "contribution": "Public fork changes include geoscience skills, QGIS MCP, visual review loops and coordinate-reference guidance.",
+          "detail": "The fork comparison and public commits document the extension scope. This does not claim authorship of the upstream research system or upstream acceptance of the changes."
+        }
+      },
+      "source": "https://github.com/HuangYincan/Auto-claude-code-research-in-sleep/commit/d2d5241cc18dc2196810a3b7d0f5b459f4139136"
+    },
+    {
+      "id": "vertical-hdd-power-mount",
+      "kind": "other",
+      "featured": false,
+      "order": 12,
+      "accent": "blue",
+      "technology": ["FreeCAD", "Blender", "STL"],
+      "repository": "https://github.com/HuangYincan/vertical-hdd-power-mount",
+      "website": "",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "竖置硬盘电源挂架",
+          "summary": "包含打印模型、设计源文件与装配动画的硬件资料包。",
+          "background": "整理竖置硬盘、电源与挂架的装配关系和机械尺寸参考。",
+          "contribution": "",
+          "detail": "公开仓库包含 STL、FreeCAD 和 Blender 文件，以及装配动画与硬盘尺寸参考。作为设计资料展示，具体打印与装配要求以仓库说明为准。"
+        },
+        "en": {
+          "title": "Vertical HDD Power Mount",
+          "summary": "A hardware design bundle with printable models, source files and assembly animation.",
+          "background": "Documents the mounting relationship between a vertical hard drive, power supply and bracket.",
+          "contribution": "",
+          "detail": "The public repository contains STL, FreeCAD and Blender files, assembly animation and drive-dimension references. Refer to the repository for printing and assembly requirements."
+        }
+      },
+      "source": "https://github.com/HuangYincan/vertical-hdd-power-mount"
+    },
+    {
+      "id": "idea",
+      "kind": "other",
+      "featured": false,
+      "order": 13,
+      "accent": "violet",
+      "technology": [],
+      "repository": "https://github.com/HuangYincan/idea",
+      "website": "",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "idea",
+          "summary": "记录日常产品想法与个人上下文系统构想。",
+          "background": "为尚待实现的产品想法保留公开讨论与整理入口。",
+          "contribution": "",
+          "detail": "README 列出 HealthContext 与 PersonalContextOS 两项构想。这里作为创意资料收录，不将想法描述为已交付产品。"
+        },
+        "en": {
+          "title": "idea",
+          "summary": "Product ideas and concepts for personal context systems.",
+          "background": "A public place to collect and discuss ideas awaiting implementation.",
+          "contribution": "",
+          "detail": "The README lists HealthContext and PersonalContextOS. These are presented as concept materials rather than delivered products."
+        }
+      },
+      "source": "https://github.com/HuangYincan/idea"
+    },
+    {
+      "id": "agents-guidelines",
+      "kind": "other",
+      "featured": false,
+      "order": 14,
+      "accent": "teal",
+      "technology": ["Markdown"],
+      "repository": "https://github.com/HuangYincan/AGENTS.md",
+      "website": "",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "AGENTS.md",
+          "summary": "面向个人开发流程定制的 Agent 协作约定。",
+          "background": "基于 Da1sypetals/AGENTS.md 整理个人协作与代码修改要求。",
+          "contribution": "",
+          "detail": "公开分支含个人约束修改。按文档与配置资料归入其他，保留上游来源，不将其作为独立软件产品。"
+        },
+        "en": {
+          "title": "AGENTS.md",
+          "summary": "Agent collaboration guidelines customized for a personal development workflow.",
+          "background": "Adapts Da1sypetals/AGENTS.md into personal collaboration and coding conventions.",
+          "contribution": "",
+          "detail": "The public fork includes custom restrictions. It is classified as documentation and configuration material with upstream attribution."
+        }
+      },
+      "source": "https://github.com/HuangYincan/AGENTS.md/commit/e005a25a617c82ada50ab693e983fa32ff1e47bd"
+    },
+    {
+      "id": "github-stats",
+      "kind": "other",
+      "featured": false,
+      "order": 15,
+      "accent": "amber",
+      "technology": ["Python", "GitHub Actions", "SVG"],
+      "repository": "https://github.com/HuangYincan/github-stats",
+      "website": "",
+      "video": "",
+      "imageId": null,
+      "privateNote": "",
+      "published": true,
+      "translations": {
+        "zh": {
+          "title": "GitHub Stats",
+          "summary": "用于个人主页的 GitHub 统计图片配置。",
+          "background": "基于 jstrieb/github-stats 生成个人 GitHub 活动与语言统计图片。",
+          "contribution": "",
+          "detail": "README 明确指向上游 GitHub Stats Visualization，并展示个人生成结果。作为个人展示配置收录，保留原项目署名，不主张统计生成器为个人原创。"
+        },
+        "en": {
+          "title": "GitHub Stats",
+          "summary": "GitHub statistics image configuration for a personal profile.",
+          "background": "Uses jstrieb/github-stats to generate personal activity and language visualizations.",
+          "contribution": "",
+          "detail": "The README credits upstream GitHub Stats Visualization and shows personalized output. This entry represents profile configuration and does not claim authorship of the statistics generator."
+        }
+      },
+      "source": "https://github.com/HuangYincan/github-stats"
     }
   ]
 }

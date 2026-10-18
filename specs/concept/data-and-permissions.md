@@ -4,7 +4,7 @@
 
 ## 领域词汇
 
-- **Project**：作品实体，有稳定 ID 和可分享标识，区分作者项目与参与贡献。
+- **Project**：作品实体，有稳定 ID 和可分享标识，分为产品、工具、贡献与其他。
 - **ProjectDraft**：管理中的最新草稿，可与已发布内容不同。
 - **PublishedSnapshot**：明确发布时复制的公开快照；访客只读此版本。
 - **Profile**：姓名、简介、教育/履历、联系方式；只存作者明确愿意公开的信息。
@@ -16,7 +16,7 @@
 
 | 实体 | 字段 | 规则 |
 | --- | --- | --- |
-| Project | id、slug、kind、order、status、version、createdAt、updatedAt | kind 为 project/contribution；稳定 ID 不因标题翻译变化；排序是显式内容配置；版本用于并发检查 |
+| Project | id、slug、kind、featured、order、status、version、createdAt、updatedAt | kind 为 project（产品）/tool（工具）/contribution（贡献）/other（其他）；保留原 project 值以兼容已有内容；featured=true 才进入精选，不影响作品发布状态与分类；稳定 ID 不因标题翻译变化；排序是显式内容配置；版本用于并发检查 |
 | ProjectTranslation | locale、title、summary、background、contribution、detail | 首发 zh-CN/en，数据库与字典按可扩展 locale 键组织；标题和摘要为发布必填，贡献说明无证据可留空 |
 | ProjectLink | sourceUrl、websiteUrl、videoUrl、linkKind、lastCheckedAt | HTTPS 协议白名单；官网、文档、Demo 明确区分；有 URL 不等于可在线试用 |
 | Technology | label、optional category | 基于实际项目资料；不自动变成个人技能评级 |

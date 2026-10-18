@@ -8,7 +8,7 @@ const root = dirname(fileURLToPath(import.meta.url));
 const clone = value => JSON.parse(JSON.stringify(value));
 const seed = JSON.parse(readFileSync(resolve(root, 'content/seed.json'), 'utf8'));
 const safeUrl = value => !value || /^https:\/\//.test(value);
-const publicFields = item => ({ id: item.id, kind: item.kind, order: item.order, accent: item.accent, technology: item.technology, repository: item.repository, website: item.website, video: item.video, translations: item.translations, imageId: item.imageId, imageUrl: item.imageId ? `/media/${item.imageId}` : null });
+const publicFields = item => ({ id: item.id, kind: item.kind, featured: item.featured === true, order: item.order, accent: item.accent, technology: item.technology, repository: item.repository, website: item.website, video: item.video, translations: item.translations, imageId: item.imageId, imageUrl: item.imageId ? `/media/${item.imageId}` : null });
 const initial = () => ({ profile: clone(seed.profile), projects: seed.projects.map(item => ({ id: item.id, draft: clone(item), published: item.published ? publicFields(item) : null, version: 1, updatedAt: new Date().toISOString() })) });
 
 export function createDevelopmentServer({ dataDir, key, staticDir, secureCookies = false }) {
@@ -29,7 +29,8 @@ export function createDevelopmentServer({ dataDir, key, staticDir, secureCookies
   };
   const invalid = message => Object.assign(new Error(message), { status: 400 });
   const validate = item => {
-    if (!['project', 'contribution'].includes(item.kind) || !Number.isInteger(item.order) || item.order < 0 || item.order > 10000) throw invalid('INVALID_FIELDS');
+    if (!['project', 'tool', 'contribution', 'other'].includes(item.kind) || !Number.isInteger(item.order) || item.order < 0 || item.order > 10000) throw invalid('INVALID_FIELDS');
+    if (item.featured !== undefined && typeof item.featured !== 'boolean') throw invalid('INVALID_FIELDS');
     if (!Array.isArray(item.technology) || item.technology.length > 15 || item.technology.some(x => typeof x !== 'string' || x.length > 80)) throw invalid('INVALID_TECHNOLOGY');
     if (!['blue', 'violet', 'teal', 'amber'].includes(item.accent)) throw invalid('INVALID_ACCENT');
     for (const field of ['repository', 'website', 'video']) if (typeof item[field] !== 'string' || item[field].length > 2000 || !safeUrl(item[field])) throw invalid('INVALID_URL');
@@ -89,7 +90,7 @@ export function createDevelopmentServer({ dataDir, key, staticDir, secureCookies
         const input = await body(req);
         if (input.version !== item.version) return send(res, 409, { error: 'VERSION_CONFLICT' });
         if (req.method === 'PATCH' && !match[2]) {
-          const allowed = ['version', 'translations', 'kind', 'order', 'accent', 'technology', 'repository', 'website', 'video', 'privateNote'];
+          const allowed = ['version', 'translations', 'kind', 'featured', 'order', 'accent', 'technology', 'repository', 'website', 'video', 'privateNote'];
           if (Object.keys(input).some(x => !allowed.includes(x))) return send(res, 400, { error: 'INVALID_FIELDS' });
           const { version, ...fields } = input; const next = { ...item.draft, ...fields }; validate(next); item.draft = next;
         } else if (req.method === 'POST' && match[2] === 'publish') {
