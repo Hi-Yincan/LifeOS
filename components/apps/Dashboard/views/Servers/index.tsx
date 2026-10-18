@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex -- 资源表格的横向滚动区域需要键盘焦点。 */
 import { type ReactNode, useState } from "react";
 import styled from "styled-components";
 import {
@@ -83,10 +84,221 @@ const SeriesControls = styled(Toolbar)`
   }
 `;
 
+const HostSummary = styled.dl`
+  border-bottom: 1px solid var(--hyc-line);
+  border-top: 1px solid var(--hyc-line);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr));
+  margin: 0;
+
+  > div {
+    min-width: 0;
+    padding: 10px 8px;
+  }
+
+  dt {
+    color: var(--hyc-muted);
+    font-size: 12px;
+  }
+
+  dd {
+    font-size: 22px;
+    font-variant-numeric: tabular-nums;
+    margin: 3px 0 0;
+  }
+`;
+
+const ResourceList = styled.div`
+  container-type: inline-size;
+  min-width: 0;
+
+  .server-table-scroll {
+    overflow-x: auto;
+  }
+
+  .server-table-scroll:focus-visible {
+    outline: 1px solid var(--hyc-accent);
+    outline-offset: 2px;
+  }
+
+  table {
+    border-collapse: collapse;
+    font-size: 12px;
+    min-width: 650px;
+    text-align: left;
+    width: 100%;
+  }
+
+  thead {
+    background: var(--hyc-panel);
+    color: var(--hyc-muted);
+  }
+
+  td,
+  th {
+    border-bottom: 1px solid var(--hyc-line);
+    font-weight: 400;
+    padding: 11px 8px;
+    vertical-align: middle;
+  }
+
+  tbody th {
+    width: 24%;
+  }
+
+  tbody tr:hover {
+    background: var(--hyc-hover);
+  }
+
+  .server-cell-label {
+    display: none;
+  }
+
+  .server-identity,
+  .server-network,
+  .server-status {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  .server-identity > span,
+  .server-status > span {
+    font-size: 11px;
+    overflow-wrap: anywhere;
+  }
+
+  .server-network {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .server-status > div {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  @container (max-width: 650px) {
+    table {
+      min-width: 0;
+    }
+
+    thead {
+      clip-path: inset(50%);
+      height: 1px;
+      overflow: hidden;
+      position: absolute;
+      width: 1px;
+    }
+
+    tbody {
+      display: block;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--hyc-line);
+      display: grid;
+      gap: 10px 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding: 12px 4px;
+    }
+
+    td,
+    tbody th {
+      border: 0;
+      min-width: 0;
+      padding: 0;
+      width: auto;
+    }
+
+    tbody th,
+    td:nth-child(4),
+    td:last-child {
+      grid-column: 1 / -1;
+    }
+
+    .server-cell-label {
+      color: var(--hyc-muted);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .server-network,
+    .server-status > div {
+      display: flex;
+      flex-flow: row wrap;
+      gap: 5px 12px;
+    }
+  }
+`;
+
+const HostLink = styled(ActionButton)`
+  background: transparent;
+  border: 0;
+  color: var(--hyc-text);
+  font-size: 13px;
+  justify-self: start;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  padding: 0;
+  text-align: left;
+  white-space: normal;
+
+  &:hover {
+    background: transparent;
+    color: var(--hyc-accent);
+    text-decoration: underline;
+  }
+`;
+
+const UsageValue = styled.div`
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  font-variant-numeric: tabular-nums;
+  gap: 5px 8px;
+
+  .server-meter {
+    background: var(--hyc-line);
+    flex: 0 0 42px;
+    height: 3px;
+  }
+
+  .server-meter > span {
+    background: var(--hyc-accent);
+    display: block;
+    height: 100%;
+  }
+`;
+
 const percent = (value: null | number, locale: DashboardLocale): string =>
   value === null || !Number.isFinite(value)
     ? "—"
     : `${formatNumber(value, locale)}%`;
+
+const ResourceUsage = ({
+  active,
+  locale,
+  value,
+}: {
+  active: boolean;
+  locale: DashboardLocale;
+  value: null | number;
+}): ReactNode =>
+  active &&
+  value !== null &&
+  Number.isFinite(value) &&
+  value >= 0 &&
+  value <= 100 ? (
+    <UsageValue>
+      <span aria-hidden="true" className="server-meter">
+        <span style={{ width: `${value}%` }} />
+      </span>
+      <span>{percent(value, locale)}</span>
+    </UsageValue>
+  ) : (
+    <Muted>—</Muted>
+  );
 
 const rate = (value: null | number, locale: DashboardLocale): string =>
   value === null || !Number.isFinite(value)
@@ -454,6 +666,18 @@ const Servers = ({
   const isZh = locale === "zh";
   const selected = data.servers.find(({ id }) => id === selectedId);
   const normalizedQuery = query.trim().toLocaleLowerCase();
+  const summary = {
+    offline: data.servers.filter(
+      (server) => server.freshness === "fresh" && server.health === "down"
+    ).length,
+    online: data.servers.filter(
+      (server) => server.freshness === "fresh" && server.health === "up"
+    ).length,
+    stale: data.servers.filter((server) => server.freshness === "stale").length,
+    unavailable: data.servers.filter(
+      (server) => server.freshness === "unavailable"
+    ).length,
+  };
   const hosts = data.servers.filter((server) => {
     const searchable = [
       server.name.zh,
@@ -515,11 +739,26 @@ const Servers = ({
             : `${hosts.length} / ${data.servers.length} hosts`}
         </Muted>
       </SectionHeading>
-      <Notice>
-        {isZh
-          ? "合成主机示例。主机状态与样本新鲜度分别显示，未连接实际探针。"
-          : "Synthetic hosts. Host status and sample freshness are shown separately; no real agents are connected."}
-      </Notice>
+      <HostSummary aria-label={isZh ? "全部主机摘要" : "All hosts summary"}>
+        <div>
+          <dt>{isZh ? "有效在线" : "Current online"}</dt>
+          <dd>
+            {summary.online} / {data.servers.length}
+          </dd>
+        </div>
+        <div>
+          <dt>{isZh ? "明确离线" : "Reported offline"}</dt>
+          <dd>{summary.offline}</dd>
+        </div>
+        <div>
+          <dt>{isZh ? "样本过期" : "Stale samples"}</dt>
+          <dd>{summary.stale}</dd>
+        </div>
+        <div>
+          <dt>{isZh ? "来源不可用" : "Source unavailable"}</dt>
+          <dd>{summary.unavailable}</dd>
+        </div>
+      </HostSummary>
       <Filters>
         <Field>
           <span>{isZh ? "搜索主机" : "Search hosts"}</span>
@@ -590,48 +829,134 @@ const Servers = ({
           title={isZh ? "没有匹配的主机" : "No matching hosts"}
         />
       ) : (
-        <CardGrid>
-          {hosts.map((server) => (
-            <Card key={server.id}>
-              <Stack>
-                <SectionHeading>
-                  <h3>{localize(server.name, locale)}</h3>
-                  <Muted>{localize(server.region, locale)}</Muted>
-                </SectionHeading>
-                <ServerState locale={locale} server={server} />
-                <Facts>
-                  <dt>CPU</dt>
-                  <dd>{percent(server.metrics.cpuPercent, locale)}</dd>
-                  <dt>{isZh ? "内存已用" : "Memory used"}</dt>
-                  <dd>{formatBytes(server.metrics.memoryUsedBytes, locale)}</dd>
-                  <dt>{isZh ? "磁盘已用" : "Disk used"}</dt>
-                  <dd>{formatBytes(server.metrics.diskUsedBytes, locale)}</dd>
-                  <dt>{isZh ? "入站速率" : "Inbound rate"}</dt>
-                  <dd>
-                    {rate(server.metrics.networkInBytesPerSecond, locale)}
-                  </dd>
-                  <dt>{isZh ? "最后报告" : "Last report"}</dt>
-                  <dd>
-                    {formatDateTime(server.lastSeenAt, locale, data.timeZone)}
-                  </dd>
-                </Facts>
-                <Muted>{localize(server.note, locale)}</Muted>
-                <ActionButton
-                  aria-label={
-                    isZh
-                      ? `查看${localize(server.name, locale)}详情`
-                      : `View ${localize(server.name, locale)} details`
-                  }
-                  onClick={() => onNavigate("servers", server.id)}
-                  type="button"
-                >
-                  {isZh ? "查看详情" : "View details"}
-                </ActionButton>
-              </Stack>
-            </Card>
-          ))}
-        </CardGrid>
+        <ResourceList>
+          <div
+            aria-label={
+              isZh
+                ? "主机资源比较，可横向滚动"
+                : "Host resource comparison, horizontally scrollable"
+            }
+            className="server-table-scroll"
+            role="region"
+            tabIndex={0}
+          >
+            <table
+              aria-label={isZh ? "主机资源与状态" : "Host resources and status"}
+            >
+              <thead>
+                <tr>
+                  <th scope="col">{isZh ? "主机" : "Host"}</th>
+                  <th scope="col">CPU</th>
+                  <th scope="col">{isZh ? "内存" : "Memory"}</th>
+                  <th scope="col">{isZh ? "网络" : "Network"}</th>
+                  <th scope="col">{isZh ? "状态" : "Status"}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {hosts.map((server) => {
+                  const active =
+                    server.freshness === "fresh" &&
+                    ["degraded", "maintenance", "up"].includes(server.health);
+
+                  return (
+                    <tr key={server.id}>
+                      <th scope="row">
+                        <div className="server-identity">
+                          <HostLink
+                            aria-label={
+                              isZh
+                                ? `查看${localize(server.name, locale)}详情`
+                                : `View ${localize(server.name, locale)} details`
+                            }
+                            onClick={() => onNavigate("servers", server.id)}
+                            type="button"
+                          >
+                            {localize(server.name, locale)}
+                          </HostLink>
+                          <Muted>
+                            {localize(server.region, locale)} ·{" "}
+                            {server.cpuLabel}
+                          </Muted>
+                        </div>
+                      </th>
+                      <td>
+                        <span aria-hidden="true" className="server-cell-label">
+                          CPU
+                        </span>
+                        <ResourceUsage
+                          active={active}
+                          locale={locale}
+                          value={server.metrics.cpuPercent}
+                        />
+                      </td>
+                      <td>
+                        <span aria-hidden="true" className="server-cell-label">
+                          {isZh ? "内存" : "Memory"}
+                        </span>
+                        <ResourceUsage
+                          active={active}
+                          locale={locale}
+                          value={percentage(
+                            server.metrics.memoryUsedBytes,
+                            server.metrics.memoryTotalBytes
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <span aria-hidden="true" className="server-cell-label">
+                          {isZh ? "网络" : "Network"}
+                        </span>
+                        <div className="server-network">
+                          <span>
+                            {isZh ? "接收" : "In"}{" "}
+                            {active
+                              ? rate(
+                                  server.metrics.networkInBytesPerSecond,
+                                  locale
+                                )
+                              : "—"}
+                          </span>
+                          <Muted>
+                            {isZh ? "发送" : "Out"}{" "}
+                            {active
+                              ? rate(
+                                  server.metrics.networkOutBytesPerSecond,
+                                  locale
+                                )
+                              : "—"}
+                          </Muted>
+                        </div>
+                      </td>
+                      <td>
+                        <span aria-hidden="true" className="server-cell-label">
+                          {isZh ? "状态" : "Status"}
+                        </span>
+                        <div className="server-status">
+                          <ServerState locale={locale} server={server} />
+                          <Muted>
+                            {isZh ? "最后报告" : "Last report"}{" "}
+                            {formatDateTime(
+                              server.lastSeenAt,
+                              locale,
+                              data.timeZone
+                            )}{" "}
+                            ({data.timeZone})
+                          </Muted>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </ResourceList>
       )}
+      <Muted>
+        {isZh
+          ? "列表只比较有效资源样本；CPU 的 100% 表示整机总容量，网络单位为 bytes/s。— 表示当前无有效样本。点击主机查看过期值、磁盘容量与历史。"
+          : "The list compares current resource samples only. CPU 100% is total host capacity; network rates use bytes/s. — means no current sample. Open a host for older values, disk capacity and history."}
+      </Muted>
     </Section>
   );
 };
