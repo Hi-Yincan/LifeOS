@@ -9,7 +9,7 @@ The helper is optional infrastructure, not a host-specific agent framework. An a
 | Field | Meaning |
 | --- | --- |
 | version / id / goal | Protocol 1, unique lowercase batch ID, intended result |
-| max_workers | Concurrent running claims, including nested writers; initially 2 |
+| max_workers | Concurrent running claims, including nested writers; integer 1–16, chosen for the batch rather than fixed at 2 |
 | tasks | Topologically ordered tasks; this is also integration order |
 | task.id / goal / acceptance | Unique task ID, deliverable, observable acceptance |
 | task.owns | Exact repository paths or directory prefixes ending in `/`; no globs |
@@ -17,6 +17,8 @@ The helper is optional infrastructure, not a host-specific agent framework. An a
 | task.gates / integration_gates | Nonempty arrays of `{name, argv, timeout?}`; timeout defaults to 120 seconds |
 
 Owned paths cannot overlap inside a batch, even for dependent tasks. Keep a shared file with one owner or make another serial batch. Namespace ports/databases/build directories explicitly in the task goal/acceptance when needed. Missing gate commands are blockers, never invented passes. Shell expansion is intentionally absent: list test files explicitly or use the package manager's existing script.
+
+The host's agent limit and `max_workers` count different resources. Read-only reviewers consume host capacity without holding write claims. Choose the batch budget from independent tasks and actual host capacity, reserving room for review; do not treat a configured host limit as proof that the current session exposes it. The example plan uses 2 because it has two audit tasks. See [tool adapters](adapters.md) for the local Codex configuration. Do not edit an active batch's immutable plan to change its budget; create a new batch after preserving existing work.
 
 Path comparisons conservatively ignore case to prevent overlapping writers on case-insensitive macOS/Windows filesystems. Task ID `integration` is reserved.
 

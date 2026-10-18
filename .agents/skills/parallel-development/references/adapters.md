@@ -10,6 +10,19 @@ One canonical skill lives at `.agents/skills/parallel-development/`. This reposi
 | Other CLI/IDE agents | Read SKILL.md and the worker packet; claim, edit, commit, check and submit with the same Python commands. Markdown/JSON/Git are the compatibility contract, regardless of native skills support |
 | Chat-only agents | Return a patch, analysis or review to the coordinator. They cannot independently claim a filesystem writer slot without a terminal bridge |
 
+## Local Codex concurrency
+
+On 2026-10-18 the user selected a limit of 12 concurrently open spawned agent threads, excluding the root agent. The user-level configuration in `~/.codex/config.toml` is:
+
+```toml
+[agents]
+max_concurrent_threads_per_session = 12
+```
+
+This key and its positive-integer constraint were checked against the [official configuration schema](https://developers.openai.com/codex/config-schema.json). Keep this user preference out of provider-neutral helper code. A configured value does not establish that an already-running session has adopted it; after restarting the app and opening a new session, check the host-provided capacity. Respect a lower effective limit and report it.
+
+The plan's `max_workers` counts running write claims, not all agents. Size it for independent tasks and the effective host capacity, with room for independent reviewers. Twelve is the configured ceiling, not a requirement to launch twelve workers. Nested writers use the same batch budget. The two-task audit example remains at 2.
+
 ## Starting workers
 
 Use native tool delegation when available and authorized. Give the full packet, not only a task name; pass the assigned worktree as the working directory and preserve the owner identity/attempt. For a headless CLI, inspect the locally installed `--help` and supported input/output flags before invoking it. Send the packet via stdin or an explicitly supported file argument; do not insert file contents into a shell command or assume flags are portable across tools/versions.
