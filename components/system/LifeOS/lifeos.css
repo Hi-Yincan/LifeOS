@@ -75,7 +75,7 @@
 .hyc-detail-columns p { white-space:pre-wrap;color:var(--hyc-muted);line-height:1.7; }
 .hyc-source-note { margin-top:16px!important; }
 .hyc-about { max-width:740px;padding-bottom:16px; }
-.hyc-about-avatar { display:grid;place-items:center;width:48px;height:48px;background:#333;border:1px solid var(--hyc-line);font-size:18px;margin-bottom:12px; }
+.hyc-about-avatar { display:block;width:48px;height:48px;border-radius:50%;object-fit:contain;margin-bottom:12px; }
 .hyc-about-lead { color:var(--hyc-muted);margin-top:12px!important; }
 .hyc-about-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:16px;margin:20px 0; }
 .hyc-about-grid section { border-top:1px solid #383838;padding-top:12px; }

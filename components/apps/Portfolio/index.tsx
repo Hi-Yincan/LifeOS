@@ -1,4 +1,5 @@
 /* eslint-disable no-alert -- Native confirmations protect unsaved editor content. */
+import site from "lifeos.json";
 import { useEffect, useState } from "react";
 import { Back } from "components/apps/FileExplorer/NavigationIcons";
 import StyledAddressBar from "components/apps/FileExplorer/StyledAddressBar";
@@ -738,10 +739,13 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
             )
           ) : active === "about" ? (
             <article className="hyc-about">
-              <div className="hyc-about-avatar">
-                YH
-                <span />
-              </div>
+              <img
+                alt={site.name}
+                className="hyc-about-avatar"
+                height={48}
+                src={site.icon}
+                width={48}
+              />
               <h1>{profile?.name}</h1>
               <p className="hyc-about-lead">{profile?.bio[locale]}</p>
               <div className="hyc-about-grid">
