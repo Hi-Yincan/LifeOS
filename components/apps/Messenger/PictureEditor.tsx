@@ -13,7 +13,7 @@ import {
 } from "components/apps/Messenger/picture";
 import StyledPictureEditor from "components/apps/Messenger/StyledPictureEditor";
 import StyledStatusBar from "components/system/Files/FileManager/StyledStatusBar";
-import { usePersonalOS } from "components/system/PersonalOS/context";
+import { useLifeOS } from "components/system/LifeOS/context";
 import Button from "styles/common/Button";
 
 const messages = {
@@ -65,7 +65,7 @@ const messages = {
 };
 
 const PictureEditor: FC<{ onClose: () => void }> = ({ onClose }) => {
-  const { locale } = usePersonalOS();
+  const { locale } = useLifeOS();
   const text = messages[locale];
   const updateProfile = useUpdateProfile();
   const [image, setImage] = useState<HTMLImageElement>();

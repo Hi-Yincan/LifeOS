@@ -35,7 +35,7 @@ yarn e2e:product
 yarn upstream:check
 ```
 
-构建从当前仓库直接生成 `out/`，不会覆盖上游源码、下载移动分支或调用研究 overlay。Product checks 只检查；独立发布仓库的手动工作流 Publish visitor OS 发布通过验收的访客版产物。生产数据库、媒体、会话与多节点仍待后续验收。Messenger #20 保持暂缓。
+构建从当前仓库直接生成 `out/`，不会覆盖上游源码、下载移动分支或调用研究 overlay。Product checks 只检查；独立发布仓库的手动工作流 Publish visitor OS 发布通过验收的访客版产物。生产数据库、媒体、会话与多节点仍待后续验收。Messenger 支持本地头像编辑、背景图预设和 Yincan Huang 预置联系人；实际收发与跨设备验证继续由 #20 跟踪，详见 [Messenger 资料编辑](specs/development/messenger-picture.md)。
 
 ## 访客版发布
 

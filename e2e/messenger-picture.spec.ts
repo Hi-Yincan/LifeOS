@@ -125,7 +125,7 @@ test("Chinese picture editing fits a narrow window", async ({
   await page.getByRole("menuitem", { name: "修改头像" }).click();
   await page
     .getByLabel("选择图片", { exact: true })
-    .setInputFiles("public/System/PersonalOS/avatar.png");
+    .setInputFiles("public/System/LifeOS/avatar.png");
   const editor = page.getByRole("region", { name: "修改头像" });
   await expect(page.getByRole("img", { name: "圆形头像预览" })).toBeVisible();
   expect(
@@ -147,7 +147,7 @@ test("failed publication retains the crop and leaves the existing profile unchan
 }) => {
   await page
     .getByLabel("Choose picture", { exact: true })
-    .setInputFiles("public/System/PersonalOS/avatar.png");
+    .setInputFiles("public/System/LifeOS/avatar.png");
   await expect(
     page.getByRole("img", { name: "Circular picture preview" })
   ).toBeVisible();

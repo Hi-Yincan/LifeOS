@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { MAX_SUGGESTIONS } from "components/apps/Messenger/constants";
+import { contactProfile } from "components/apps/Messenger/contacts";
 import {
-  dataToProfile,
   decodePublicKey,
   NIP05_ADDRESS,
   resolveAddress,
@@ -39,7 +39,11 @@ const To: FC<ToProps> = ({ knownKeys, setRecipientKey }) => {
   const term = search.trim().toLowerCase();
   const suggestions = candidateKeys
     .filter((key) => {
-      const { nip05 = "", npub = "", userName = "" } = profiles[key] || {};
+      const {
+        nip05 = "",
+        npub = "",
+        userName = "",
+      } = contactProfile(key, profiles[key]);
 
       return (
         !term ||
@@ -89,8 +93,10 @@ const To: FC<ToProps> = ({ knownKeys, setRecipientKey }) => {
       {suggestions.length > 0 && (
         <ol aria-label="Suggestions">
           {suggestions.map((key) => {
-            const { nip05, picture, userName } =
-              profiles[key] || dataToProfile(key);
+            const { nip05, picture, userName } = contactProfile(
+              key,
+              profiles[key]
+            );
 
             return (
               <li key={key}>

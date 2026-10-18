@@ -8,6 +8,10 @@ import {
   NOTIFICATION_SOUND,
 } from "components/apps/Messenger/constants";
 import {
+  contactProfile,
+  SITE_CONTACT_PUBLIC_KEY,
+} from "components/apps/Messenger/contacts";
+import {
   createProfileEvent,
   dataToProfile,
   decodePublicKey,
@@ -186,7 +190,10 @@ export const useNostrContacts = (
   const { messages } = useMessageContext();
   const { blockedKeys, seenEventIds } = useHistoryContext();
   const globalKeys = [
-    ...new Set(Object.values(wellKnownNames).map(decodePublicKey)),
+    ...new Set([
+      SITE_CONTACT_PUBLIC_KEY,
+      ...Object.values(wellKnownNames).map(decodePublicKey),
+    ]),
   ].filter((key) => key && key !== publicKey && !blockedKeys.includes(key));
   const lastMessages: Record<string, DirectMessage> = {};
   const repliedKeys = new Set<string>();
@@ -322,6 +329,7 @@ export const useNostrProfile = (
   publicKey: string,
   isVisible = true
 ): NostrProfile => {
+  const { signer } = useNostr();
   const { profiles, setProfiles } = useHistoryContext();
   const profileFilter = {
     enabled: Boolean(publicKey) && isVisible,
@@ -333,5 +341,7 @@ export const useNostrProfile = (
 
   useNostrEvents(profileFilter);
 
-  return publicKey ? profiles[publicKey] || dataToProfile(publicKey) : {};
+  return publicKey
+    ? contactProfile(publicKey, profiles[publicKey], signer.publicKey)
+    : {};
 };

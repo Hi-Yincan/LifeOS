@@ -1,5 +1,6 @@
 import { AnimatePresence } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import BannerEditor from "components/apps/Messenger/BannerEditor";
 import ChatLog from "components/apps/Messenger/ChatLog";
 import {
   inLeftOutRight,
@@ -66,20 +67,22 @@ const NostrChat: FC<NostrChatProps> = ({
     useHistoryContext();
   const [selectedRecipientKey, setSelectedRecipientKey] = useState("");
   const [editingPicture, setEditingPicture] = useState(false);
+  const [editingBanner, setEditingBanner] = useState(false);
   const messengerRef = useRef<HTMLDivElement>(null);
   const pictureWasOpen = useRef(false);
   const closePictureEditor = (): void => {
     setEditingPicture(false);
+    setEditingBanner(false);
   };
 
   useEffect(() => {
-    if (!editingPicture && pictureWasOpen.current) {
+    if (!editingPicture && !editingBanner && pictureWasOpen.current) {
       messengerRef.current
         ?.querySelector<HTMLButtonElement>('button[aria-label="Profile"]')
         ?.focus();
     }
-    pictureWasOpen.current = editingPicture;
-  }, [editingPicture]);
+    pictureWasOpen.current = editingPicture || editingBanner;
+  }, [editingBanner, editingPicture]);
   const [hideReadMessages, setHideReadMessages] = useState(false);
   const [view, setView] = useState<View>("chats");
   const [selectedKeys, setSelectedKeys] = useState<string[]>();
@@ -151,10 +154,14 @@ const NostrChat: FC<NostrChatProps> = ({
     if (selectedRecipientKey) markRead([selectedRecipientKey]);
   }, [markRead, selectedRecipientKey]);
 
-  if (editingPicture) {
+  if (editingPicture || editingBanner) {
     return (
       <StyledMessenger ref={messengerRef}>
-        <PictureEditor onClose={closePictureEditor} />
+        {editingBanner ? (
+          <BannerEditor onClose={closePictureEditor} />
+        ) : (
+          <PictureEditor onClose={closePictureEditor} />
+        )}
       </StyledMessenger>
     );
   }
@@ -164,6 +171,7 @@ const NostrChat: FC<NostrChatProps> = ({
       <ProfileBanner
         block={(key) => blockKeys([key])}
         deleteChat={(key) => deleteChats([key])}
+        editBanner={() => setEditingBanner(true)}
         editPicture={() => setEditingPicture(true)}
         goBack={
           selectedRecipientKey || view !== "chats"

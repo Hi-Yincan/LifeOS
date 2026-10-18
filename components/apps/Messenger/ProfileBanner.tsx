@@ -19,7 +19,7 @@ import { useNostr } from "components/apps/Messenger/NostrContext";
 import Profile, { PROFILE } from "components/apps/Messenger/Profile";
 import StyledProfileBanner from "components/apps/Messenger/StyledProfileBanner";
 import { type ProfileData, type Signer } from "components/apps/Messenger/types";
-import { usePersonalOS } from "components/system/PersonalOS/context";
+import { useLifeOS } from "components/system/LifeOS/context";
 import { useMenu, useMenuActions } from "contexts/menu";
 import Button from "styles/common/Button";
 import { MENU_SEPERATOR } from "utils/constants";
@@ -32,6 +32,7 @@ const STYLING =
 type ProfileBannerProps = {
   block: (key: string) => void;
   deleteChat: (key: string) => void;
+  editBanner: () => void;
   editPicture: () => void;
   goBack?: () => void;
   hideReadMessages: boolean;
@@ -44,6 +45,7 @@ type ProfileBannerProps = {
 const ProfileBanner: FC<ProfileBannerProps> = ({
   block,
   deleteChat,
+  editBanner,
   editPicture,
   goBack,
   hideReadMessages,
@@ -53,7 +55,7 @@ const ProfileBanner: FC<ProfileBannerProps> = ({
   setSigner,
 }) => {
   const { connectToRelay, relayStatus, signer } = useNostr();
-  const { locale } = usePersonalOS();
+  const { locale } = useLifeOS();
   const saveProfile = useUpdateProfile();
   const { publicKey, secretKey } = signer;
   const isOwnProfile = !selectedRecipientKey;
@@ -126,8 +128,8 @@ const ProfileBanner: FC<ProfileBannerProps> = ({
         label: locale === "zh" ? "修改头像" : "Edit Picture",
       },
       {
-        action: () => updateProfile({ banner: prompt("Banner URL") || "" }),
-        label: "Edit Banner",
+        action: editBanner,
+        label: locale === "zh" ? "修改背景图" : "Edit Banner",
       },
       MENU_SEPERATOR,
       {

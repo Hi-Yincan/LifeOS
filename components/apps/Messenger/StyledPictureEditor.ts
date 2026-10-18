@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Surface from "components/system/PersonalOS/Surface";
+import Surface from "components/system/LifeOS/Surface";
 import ScrollBars from "styles/common/ScrollBars";
 
 const StyledPictureEditor = styled(Surface)`
