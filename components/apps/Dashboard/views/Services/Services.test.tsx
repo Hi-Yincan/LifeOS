@@ -1,0 +1,146 @@
+import { act } from "react";
+import { createRoot, type Root } from "react-dom/client";
+import { makeDemoData } from "components/apps/Dashboard/fixtures";
+import { type DashboardViewProps } from "components/apps/Dashboard/model";
+import Services from "components/apps/Dashboard/views/Services";
+
+let container: HTMLDivElement;
+let root: Root;
+
+const renderView = (overrides: Partial<DashboardViewProps> = {}): void => {
+  act(() => {
+    root.render(
+      <Services
+        data={makeDemoData()}
+        locale="zh"
+        onNavigate={jest.fn()}
+        onUpdate={jest.fn()}
+        {...overrides}
+      />
+    );
+  });
+};
+
+const button = (text: string): HTMLButtonElement => {
+  const match = [...container.querySelectorAll("button")].find(
+    (item) => item.textContent === text
+  );
+
+  if (!match) throw new Error(`Missing button: ${text}`);
+  return match;
+};
+
+beforeEach(() => {
+  Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+  container = document.createElement("div");
+  document.body.append(container);
+  root = createRoot(container);
+});
+
+afterEach(() => {
+  act(() => root.unmount());
+  container.remove();
+});
+
+test("pending checks without an observation remain selectable and unmonitored entries stay separate", () => {
+  renderView();
+  const select = container.querySelector("select");
+
+  if (!select) throw new Error("Missing status filter");
+  act(() => {
+    select.value = "pending";
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+  expect(container.textContent).toContain("演示检索服务");
+  expect(container.textContent).not.toContain("演示内部服务");
+  expect(container.textContent).not.toContain("上次观测状态");
+
+  act(() => {
+    select.value = "unmonitored";
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+  expect(container.textContent).toContain("演示内部服务");
+  expect(container.textContent).not.toContain("演示检索服务");
+});
+
+test("saving directory edits updates shared memory without changing observations", () => {
+  const data = makeDemoData();
+  const original = data.services.find(({ id }) => id === "demo-notebook");
+  const onUpdate = jest.fn<void, Parameters<DashboardViewProps["onUpdate"]>>();
+  const onDirtyChange = jest.fn();
+
+  if (!original) throw new Error("Missing notebook fixture");
+  renderView({ data, onDirtyChange, onUpdate, selectedId: original.id });
+  act(() => button("编辑示例").click());
+  const input = container.querySelector("input");
+  const setValue = Object.getOwnPropertyDescriptor(
+    HTMLInputElement.prototype,
+    "value"
+  )?.set;
+
+  if (!input || !setValue) throw new Error("Missing editable name");
+  act(() => {
+    setValue.call(input, "修改后的演示服务");
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  expect(onDirtyChange).toHaveBeenLastCalledWith(true);
+  const save = button("保存示例");
+
+  expect(save.type).toBe("submit");
+  act(() => save.click());
+  expect(onUpdate).toHaveBeenCalledTimes(1);
+  const [update] = onUpdate.mock.calls[0];
+  const updated = update(data).services.find(({ id }) => id === original.id);
+
+  expect(updated?.name.zh).toBe("修改后的演示服务");
+  expect(updated?.observedAt).toBe(original.observedAt);
+  expect(updated?.monitor).toBe(original.monitor);
+  expect(updated?.events).toBe(original.events);
+  expect(onDirtyChange).toHaveBeenLastCalledWith(false);
+  expect(container.textContent).toContain("示例已保存在本窗口");
+});
+
+test("visitor preview cannot edit and source failure does not establish a target outage", () => {
+  const data = makeDemoData();
+  const original = data.services.find(({ id }) => id === "demo-notebook");
+
+  if (!original) throw new Error("Missing notebook fixture");
+  data.services = [{ ...original, freshness: "unavailable" }];
+  renderView({ data, previewMode: "visitor", selectedId: original.id });
+  expect(container.textContent).toContain(
+    "监测来源不可用，不能据此判断目标服务宕机"
+  );
+  expect(container.textContent).toContain("上次观测状态: 正常");
+  expect(container.textContent).toContain("访客预览为只读");
+  expect(container.textContent).not.toContain("编辑示例");
+  expect(container.querySelector("a")).toBeNull();
+});
+
+test("cancelling offers a way to keep editing or discard without saving", () => {
+  const onUpdate = jest.fn();
+  const onDirtyChange = jest.fn();
+
+  renderView({ onDirtyChange, onUpdate, selectedId: "demo-notebook" });
+  act(() => button("编辑示例").click());
+  const input = container.querySelector("input");
+  const setValue = Object.getOwnPropertyDescriptor(
+    HTMLInputElement.prototype,
+    "value"
+  )?.set;
+
+  if (!input || !setValue) throw new Error("Missing editable name");
+  act(() => {
+    setValue.call(input, "尚未保存的服务名称");
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  act(() => button("取消").click());
+  expect(container.textContent).toContain("放弃此示例尚未保存的修改");
+  act(() => button("继续编辑").click());
+  expect(input.value).toBe("尚未保存的服务名称");
+  act(() => button("取消").click());
+  act(() => button("放弃修改").click());
+  expect(onUpdate).not.toHaveBeenCalled();
+  expect(onDirtyChange).toHaveBeenLastCalledWith(false);
+  expect(container.textContent).toContain("演示笔记服务");
+  expect(container.textContent).not.toContain("尚未保存的服务名称");
+});
