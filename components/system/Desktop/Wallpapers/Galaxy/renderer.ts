@@ -689,10 +689,15 @@ export const createGalaxyRenderer = (
 
   sizeRenderTarget(glowTarget, 2, 2);
 
+  // 仅有群星时跳过星云和尘埃的离屏渲染与合成。
+  const hasSoftLayers = layers.some(
+    ({ target }) => target === "glow" || target === "dust"
+  );
   let useRenderTargets =
+    hasSoftLayers &&
     gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
 
-  if (!useRenderTargets && glowHdr) {
+  if (hasSoftLayers && !useRenderTargets && glowHdr) {
     // The driver advertises float rendering but refuses the attachment:
     // fall back to the classic 8-bit glow buffer without tone mapping
     glowHdr = false;

@@ -74,15 +74,6 @@ export const CAMERA = {
 };
 
 export const BASE_COUNTS = {
-  bulgeGlow: 2600,
-  diskGlow: 18000,
-  dust: 13000,
   farStars: 2800,
-  globularClusters: 110,
-  h2Regions: 150,
-  haloStars: 1500,
   nearStars: 90,
-  oldStars: 64000,
-  openClusters: 26,
-  youngStars: 7000,
 };
