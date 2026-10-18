@@ -172,6 +172,7 @@ const StyledDashboard = styled(Surface)`
   .dashboard-workspace {
     display: grid;
     grid-template-columns: clamp(68px, 16%, 148px) minmax(0, 1fr);
+    height: 100%;
     min-height: 0;
     min-width: 0;
   }
@@ -184,6 +185,7 @@ const StyledDashboard = styled(Surface)`
     overflow: auto;
     padding: 8px 4px;
     ${ScrollBars()}
+    scrollbar-gutter: auto;
   }
 
   .dashboard-modules {
