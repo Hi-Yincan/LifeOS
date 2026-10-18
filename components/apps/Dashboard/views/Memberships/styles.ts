@@ -167,8 +167,12 @@ export const RowStates = styled.div`
   flex-direction: column;
   gap: 3px;
 `;
-export const MoneyList = styled.span`
-  display: grid;
-  font-variant-numeric: tabular-nums;
+export const CurrencyOptions = styled.div`
+  display: flex;
   gap: 4px;
+
+  button[aria-pressed="true"] {
+    background: var(--hyc-selected);
+    border-color: var(--hyc-selected-border);
+  }
 `;

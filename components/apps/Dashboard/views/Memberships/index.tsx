@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   type DashboardViewProps,
   type Membership,
-  type Money,
 } from "components/apps/Dashboard/model";
 import {
   ActionButton,
@@ -20,9 +19,14 @@ import {
   Split,
   StatusBadge,
   summarizeMemberships,
-  sumMoneyByCurrency,
   Toolbar,
 } from "components/apps/Dashboard/shared";
+import {
+  convertDisplayMoney,
+  type DisplayCurrency,
+  estimateMonthlyCost,
+  sumDisplayMoney,
+} from "components/apps/Dashboard/views/Memberships/currency";
 import {
   filterMemberships,
   type MembershipSort,
@@ -36,10 +40,10 @@ import {
   renewals,
 } from "components/apps/Dashboard/views/Memberships/messages";
 import {
+  CurrencyOptions,
   Facts,
   ListControls,
   MembershipTable,
-  MoneyList,
   ResultCount,
   RowLink,
   RowMeta,
@@ -50,7 +54,9 @@ import {
 
 type MembershipContentProps = DashboardViewProps & {
   category: "" | Membership["category"];
+  displayCurrency: DisplayCurrency;
   onCategoryChange: (category: "" | Membership["category"]) => void;
+  onCurrencyChange: (currency: DisplayCurrency) => void;
   onSearchChange: (search: string) => void;
   onSortChange: (sort: MembershipSort) => void;
   search: string;
@@ -60,8 +66,10 @@ type MembershipContentProps = DashboardViewProps & {
 const MembershipContent = ({
   category,
   data,
+  displayCurrency,
   locale,
   onCategoryChange,
+  onCurrencyChange,
   onNavigate,
   onSearchChange,
   onSortChange,
@@ -77,18 +85,28 @@ const MembershipContent = ({
     search,
     category,
     sort,
-    locale
+    locale,
+    displayCurrency
   );
-  const totals = (amounts: Money[], empty?: string): React.ReactNode =>
-    amounts.length > 0 ? (
-      <MoneyList>
-        {amounts.map((amount) => (
-          <span key={amount.currency}>{formatMoney(amount, locale)}</span>
-        ))}
-      </MoneyList>
-    ) : (
-      empty || t.notSet
-    );
+  const estimate = estimateMonthlyCost(data.memberships, displayCurrency);
+  const currencyOptions = (
+    <CurrencyOptions aria-label={t.currency} role="group">
+      {(["CNY", "USD"] as const).map((currency) => (
+        <ActionButton
+          key={currency}
+          aria-pressed={displayCurrency === currency}
+          onClick={() => onCurrencyChange(currency)}
+          type="button"
+        >
+          {currency}
+        </ActionButton>
+      ))}
+    </CurrencyOptions>
+  );
+  const displayMoney = (amount: Membership["amount"]): string =>
+    amount
+      ? formatMoney(convertDisplayMoney(amount, displayCurrency), locale)
+      : t.unknown;
   const back = (): void => {
     onNavigate("memberships");
   };
@@ -106,8 +124,9 @@ const MembershipContent = ({
   }
   if (selected) {
     const url = safeExternalUrl(selected.managementUrl);
-    const paid = sumMoneyByCurrency(
-      selected.payments.map(({ amount }) => amount)
+    const paid = sumDisplayMoney(
+      selected.payments.map(({ amount }) => amount),
+      displayCurrency
     );
     return (
       <Section aria-label={`${t.details}: ${selected.name[locale]}`}>
@@ -118,7 +137,9 @@ const MembershipContent = ({
             </ActionButton>
             <h2>{selected.name[locale]}</h2>
           </Toolbar>
+          {currencyOptions}
         </SectionHeading>
+        <Muted>{t.exchangeHint}</Muted>
         <p>
           {selected.planName[locale]} · {categories[selected.category][locale]}
         </p>
@@ -152,10 +173,8 @@ const MembershipContent = ({
             <Facts>
               <dt>{t.price}</dt>
               <dd>
-                {selected.amount
-                  ? formatMoney(selected.amount, locale)
-                  : t.unknown}{" "}
-                · {cycles[selected.cycle][locale]}
+                {displayMoney(selected.amount)} ·{" "}
+                {cycles[selected.cycle][locale]}
               </dd>
               <dt>{t.next}</dt>
               <dd>
@@ -201,7 +220,7 @@ const MembershipContent = ({
         <Muted>{t.paidHint}</Muted>
         {selected.payments.length > 0 ? (
           <>
-            <p>{totals(paid)}</p>
+            <p>{formatMoney(paid, locale)}</p>
             <DataTable>
               <caption>{t.paid}</caption>
               <thead>
@@ -220,7 +239,7 @@ const MembershipContent = ({
                         <br />
                         <Muted>{payment.note[locale]}</Muted>
                       </td>
-                      <td>{formatMoney(payment.amount, locale)}</td>
+                      <td>{displayMoney(payment.amount)}</td>
                     </tr>
                   ))}
               </tbody>
@@ -236,7 +255,9 @@ const MembershipContent = ({
     <Section aria-label={t.title}>
       <SectionHeading>
         <h2>{t.title}</h2>
+        {currencyOptions}
       </SectionHeading>
+      <Muted>{t.exchangeHint}</Muted>
       <SummaryStrip
         aria-label={locale === "zh" ? "会员摘要" : "Membership summary"}
       >
@@ -249,11 +270,18 @@ const MembershipContent = ({
         </div>
         <div>
           <dt>{t.estimate}</dt>
-          <dd>{totals(summary.estimatedMonthly, t.noPlan)}</dd>
+          <dd>{estimate ? formatMoney(estimate, locale) : t.noPlan}</dd>
         </div>
         <div>
           <dt>{t.paid}</dt>
-          <dd>{totals(summary.confirmedPayments, t.noPayments)}</dd>
+          <dd>
+            {summary.confirmedPayments.length > 0
+              ? formatMoney(
+                  sumDisplayMoney(summary.confirmedPayments, displayCurrency),
+                  locale
+                )
+              : t.noPayments}
+          </dd>
         </div>
       </SummaryStrip>
       <ListControls>
@@ -335,7 +363,7 @@ const MembershipContent = ({
                     </RowMeta>
                   </th>
                   <td className="membership-price">
-                    {item.amount ? formatMoney(item.amount, locale) : t.unknown}
+                    {displayMoney(item.amount)}
                     <RowMeta>{cycles[item.cycle][locale]}</RowMeta>
                   </td>
                   <td className="membership-date">
@@ -396,6 +424,8 @@ const Memberships = (props: DashboardViewProps): React.ReactNode => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<"" | Membership["category"]>("");
   const [sort, setSort] = useState<MembershipSort>("date");
+  const [displayCurrency, setDisplayCurrency] =
+    useState<DisplayCurrency>("CNY");
 
   // 实体详情切换不重置列表筛选。
   return (
@@ -403,7 +433,9 @@ const Memberships = (props: DashboardViewProps): React.ReactNode => {
       key={props.selectedId || "list"}
       {...props}
       category={category}
+      displayCurrency={displayCurrency}
       onCategoryChange={setCategory}
+      onCurrencyChange={setDisplayCurrency}
       onSearchChange={setSearch}
       onSortChange={setSort}
       search={search}

@@ -13,7 +13,7 @@
 .hyc-surface button:disabled { opacity:.45; }
 .hyc-surface .hyc-primary { border-color:var(--hyc-accent);background:#333;color:var(--hyc-text); }
 .hyc-surface :is(input,textarea,select) { min-width:0;width:100%;padding:4px 6px;border:1px solid var(--hyc-line);border-radius:0;background:var(--hyc-panel);color:var(--hyc-text); }
-.hyc-surface :is(input,textarea,select):focus { border-color:var(--hyc-accent); }
+.hyc-surface :is(input,textarea,select):focus { border-color:var(--hyc-accent);outline:none;box-shadow:none; }
 .hyc-surface textarea { resize:vertical;min-height:68px;line-height:1.5; }
 .hyc-surface label { display:grid;gap:4px; }
 .hyc-surface svg { flex-shrink:0;display:block; }

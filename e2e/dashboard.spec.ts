@@ -244,6 +244,49 @@ test("membership filters and all access, renewal and payment records remain read
   await expectReadOnly(app);
 });
 
+test("membership currency switches all displayed amounts and keeps a single focus highlight", async ({
+  page,
+}) => {
+  const app = await openDashboard(page, "memberships");
+  const currencies = app.getByRole("group", { name: "Display currency" });
+  const summary = app.locator("dl").first();
+  await expect(
+    currencies.getByRole("button", { exact: true, name: "CNY" })
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(summary).toContainText("CNY 136.00");
+  await expect(summary).toContainText("CNY 957.00");
+  await currencies.getByRole("button", { exact: true, name: "USD" }).click();
+  await expect(summary).toContainText("USD 18.89");
+  await expect(summary).toContainText("USD 132.92");
+  await app
+    .getByRole("button", { exact: true, name: "Details: Demo Cinema" })
+    .click();
+  await expect(
+    currencies.getByRole("button", { exact: true, name: "USD" })
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(
+    app.getByRole("table", { name: "Confirmed sample payments" })
+  ).toContainText("USD 3.47");
+  await app.getByRole("button", { name: "Back to memberships" }).click();
+  const cny = currencies.getByRole("button", { exact: true, name: "CNY" });
+  await cny.focus();
+  await cny.press("Enter");
+  await expect(summary).toContainText("CNY 136.00");
+  await expect(cny).toBeFocused();
+  await expect(cny).toHaveCSS("outline-offset", "-1px");
+  const category = app.getByRole("combobox", { exact: true, name: "Category" });
+  await category.focus();
+  await expect(category).toBeFocused();
+  await expect(category).toHaveCSS("outline-style", "none");
+  await expect(category).toHaveCSS("border-top-width", "1px");
+  await expect(category).toHaveCSS("box-shadow", "none");
+  await currencies.getByRole("button", { exact: true, name: "USD" }).click();
+  await page.reload();
+  await expect(
+    currencies.getByRole("button", { exact: true, name: "CNY" })
+  ).toHaveAttribute("aria-pressed", "true");
+});
+
 test("personal activity, schedules, location and checkups are all available to read", async ({
   page,
 }) => {

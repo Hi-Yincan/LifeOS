@@ -96,4 +96,32 @@ describe("membership records", () => {
       "Demo Cloud"
     );
   });
+
+  it("defaults to CNY and retains USD across list and detail navigation", () => {
+    const data = makeDemoData();
+    const before = JSON.stringify(data);
+    renderView({ data });
+    const currencyButton = (currency: string): HTMLButtonElement => {
+      const button = [
+        ...container.querySelectorAll<HTMLButtonElement>("button"),
+      ].find((item) => item.textContent === currency);
+      if (!button) throw new Error("MISSING_CURRENCY_BUTTON");
+      return button;
+    };
+    expect(currencyButton("CNY").getAttribute("aria-pressed")).toBe("true");
+    expect(container.querySelector("dl")?.textContent).toMatch(/CNY\s*136\.00/);
+    act(() => currencyButton("USD").click());
+    expect(container.querySelector("dl")?.textContent).toMatch(/USD\s*18\.89/);
+    expect(container.querySelector("dl")?.textContent).toMatch(/USD\s*132\.92/);
+    renderView({ data, selectedId: "demo-cinema" });
+    expect(currencyButton("USD").getAttribute("aria-pressed")).toBe("true");
+    expect(container.querySelector("tbody")?.textContent).toMatch(
+      /USD\s*3\.47/
+    );
+    renderView({ data, locale: "zh" });
+    expect(currencyButton("USD").getAttribute("aria-pressed")).toBe("true");
+    act(() => currencyButton("CNY").click());
+    expect(container.querySelector("dl")?.textContent).toMatch(/CNY\s*136\.00/);
+    expect(JSON.stringify(data)).toBe(before);
+  });
 });

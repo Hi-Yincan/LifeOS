@@ -95,8 +95,8 @@ export const makeDemoData = (): DashboardDemoData => ({
       managementUrl: null,
       name: text("演示云盘", "Demo Cloud"),
       note: text(
-        "保留美元原币，不与人民币直接相加。",
-        "Kept in USD; not added to CNY."
+        "原始记录为美元年付，换算展示不修改付款记录。",
+        "Recorded as an annual USD payment; display conversion preserves the source."
       ),
       payments: [
         {

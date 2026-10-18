@@ -222,10 +222,14 @@ const StyledDashboard = styled(Surface)`
     justify-items: start;
   }
 
-  button:focus-visible,
-  select:focus-visible {
+  button:focus-visible {
     outline: 1px solid var(--hyc-accent);
-    outline-offset: 2px;
+    outline-offset: -1px;
+  }
+
+  select:focus-visible {
+    border-color: var(--hyc-accent);
+    outline: none;
   }
 
   /* 不支持容器查询时保留随容器比例收缩的竖向导航。 */

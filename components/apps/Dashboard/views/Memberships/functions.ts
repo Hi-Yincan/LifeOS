@@ -2,6 +2,10 @@ import {
   type DashboardLocale,
   type Membership,
 } from "components/apps/Dashboard/model";
+import {
+  convertDisplayMoney,
+  type DisplayCurrency,
+} from "components/apps/Dashboard/views/Memberships/currency";
 
 export type MembershipSort = "date" | "name" | "price";
 export const filterMemberships = (
@@ -9,7 +13,8 @@ export const filterMemberships = (
   search: string,
   category: "" | Membership["category"],
   sort: MembershipSort,
-  locale: DashboardLocale
+  locale: DashboardLocale,
+  displayCurrency?: DisplayCurrency
 ): Membership[] =>
   memberships
     .filter(
@@ -34,6 +39,12 @@ export const filterMemberships = (
       if (sort === "price") {
         if (!first.amount) return second.amount ? 1 : 0;
         if (!second.amount) return -1;
+        if (displayCurrency) {
+          return (
+            (convertDisplayMoney(second.amount, displayCurrency)?.minor || 0) -
+            (convertDisplayMoney(first.amount, displayCurrency)?.minor || 0)
+          );
+        }
         const currency = first.amount.currency.localeCompare(
           second.amount.currency
         );
