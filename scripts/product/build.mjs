@@ -14,7 +14,7 @@ for (const file of ['.next', '.swc', 'out', 'tsconfig.tsbuildinfo', 'public/.ind
   rmSync(resolve(root, file), { recursive: true, force: true });
 }
 if (publicRelease) run('scripts/product/export-public-content.mjs');
-for (const script of ['personalSite.cjs', 'searchIndex.js', 'preloadIcons.js', 'cacheShortcuts.js']) run(`scripts/${script}`);
+for (const script of ['lifeos.cjs', 'searchIndex.js', 'preloadIcons.js', 'cacheShortcuts.js']) run(`scripts/${script}`);
 run('scripts/fs2json.js', ['--exclude', '.index,private', '--out', 'public/.index/fs.9p.json', './public']);
 if (existsSync(resolve(root, 'public/private'))) run('scripts/fs2json.js', ['--out', 'public/.index/fs.private.9p.json', './public/private']);
 run('node_modules/next/dist/bin/next', ['build', '--webpack']);

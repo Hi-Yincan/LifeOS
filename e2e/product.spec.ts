@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { type Project } from "components/system/PersonalOS/context";
+import { type Project } from "components/system/LifeOS/context";
 
 test("plain visits show the desktop; portfolio remains opt-in", async ({
   page,
@@ -136,6 +136,40 @@ test("store defaults to all and toggles its three categories", async ({
   await expect(cards).toHaveCount(1);
 });
 
+for (const [appId, appTitle] of [
+  ["Emulator", "Emulator"],
+  ["JSDOS", "js-dos v7"],
+  ["Marked", "Marked"],
+  ["OpenType", "OpenType"],
+  ["PDF", "PDF"],
+  ["Photos", "Photos"],
+  ["Ruffle", "Ruffle"],
+  ["V86", "Virtual x86"],
+  ["VideoPlayer", "Video Player"],
+]) {
+  test(`store opens file app ${appId} from its card and details`, async ({
+    page,
+  }) => {
+    await page.goto("/?app=AppStore");
+    const card = page.locator(`.hyc-store-card[data-app="${appId}"]`);
+    await card.locator(".hyc-store-launch").click();
+    const app = page.getByRole("dialog", { exact: true, name: appTitle });
+    await expect(app).toBeVisible();
+    await expect(
+      page.getByRole("dialog", { exact: true, name: "My PC" })
+    ).toHaveCount(0);
+    await app.getByRole("button", { exact: true, name: "Close" }).click();
+    await expect(app).toHaveCount(0);
+    await card.getByRole("button", { name: `Details: ${appTitle}` }).click();
+    await page.locator(".hyc-store-detail .hyc-primary").click();
+    await expect(app).toBeVisible();
+    await expect(app).toHaveCSS("opacity", "1");
+    await expect(
+      page.getByRole("dialog", { exact: true, name: "My PC" })
+    ).toHaveCount(0);
+  });
+}
+
 test("Start keeps settings and Power without folder shortcuts", async ({
   page,
 }) => {
@@ -173,7 +207,7 @@ test("site metadata uses the owner identity and old assets stay absent", async (
   await page.goto("/");
   await expect(page.locator('link[rel="icon"]')).toHaveAttribute(
     "href",
-    "/System/PersonalOS/avatar.png"
+    "/System/LifeOS/avatar.png"
   );
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
     "content",
@@ -181,7 +215,7 @@ test("site metadata uses the owner identity and old assets stay absent", async (
   );
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
     "content",
-    "https://hyc.ac/System/PersonalOS/avatar.png"
+    "https://hyc.ac/System/LifeOS/avatar.png"
   );
   expect((await request.get("/favicon.ico")).status()).toBe(404);
   expect((await request.get("/screenshot.png")).status()).toBe(404);

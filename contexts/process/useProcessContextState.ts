@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { canClosePersonalApp } from "components/system/PersonalOS/closeGuards";
+import { canCloseLifeOSApp } from "components/system/LifeOS/closeGuards";
 import {
   closeProcess,
   maximizeProcess,
@@ -101,7 +101,7 @@ const useProcessContextState = (
   const url = (id: string, newUrl: string): void =>
     setProcesses(setUrl(id, newUrl));
   const closeWithTransition = (id: string): void => {
-    if (!canClosePersonalApp(id)) return;
+    if (!canCloseLifeOSApp(id)) return;
     // Capturing the window for a close effect is async, so rapid close
     // requests could each spawn their own effect. Ignore repeats until
     // the process is fully closed.

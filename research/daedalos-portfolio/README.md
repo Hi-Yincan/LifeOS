@@ -5,7 +5,7 @@
 这是概念验证，不是生产实现。源码 overlay 与内容服务在本目录；完整 daedalOS 在独立临时 checkout 构建，根目录现有站点未修改。
 
 - 本地入口：`http://127.0.0.1:4391`
-- 站点名称：`Yincan Huang`；站点名称、地址 `https://hyc.ac`、头像、描述和索引入口共用 `personal-site.json` 配置。
+- 站点名称：`Yincan Huang`；站点名称、地址 `https://hyc.ac`、头像、描述和索引入口共用 `lifeos.json` 配置。
 - 基线：`DustinBrett/daedalOS@f017b393d4175eb396a741a7562299423843f1b1`
 - 默认直接进入桌面，不自动打开作品集；显式作品集链接仍可打开；设置保留语言选择与单密钥管理入口。2026-10-17 起取消额外手机/平板适配和独立 App 皮肤，全部沿用 daedalOS 原生响应式。
 - 管理入口：开始菜单左侧栏 → 系统设置 → 站点维护。密钥在本机忽略目录 `.runtime/key.json` 中；不要提交、截图或粘贴到 Issue。无用户名。

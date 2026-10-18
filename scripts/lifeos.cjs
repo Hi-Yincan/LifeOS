@@ -1,6 +1,6 @@
 const { writeFileSync } = require("node:fs");
 const { resolve } = require("node:path");
-const site = require("../personal-site.json");
+const site = require("../lifeos.json");
 
 const xml = (value) =>
   value.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");

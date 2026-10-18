@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { SETTINGS_ICON } from "components/system/PersonalOS/settingsIcon";
+import { SETTINGS_ICON } from "components/system/LifeOS/settingsIcon";
 import { type Processes } from "contexts/process/types";
 import { FOLDER_ICON, TASKBAR_HEIGHT } from "utils/constants";
 
@@ -8,7 +8,7 @@ const directory: Processes = {
     backgroundColor: "#202020",
     Component: dynamic(() => import("components/apps/AppStore")),
     defaultSize: { height: 580, width: 820 },
-    icon: "/System/PersonalOS/store.svg", singleton: true, title: "App Store",
+    icon: "/System/LifeOS/store.svg", singleton: true, title: "App Store",
   },
   BoxedWine: {
     allowResizing: false,
@@ -232,7 +232,7 @@ const directory: Processes = {
     backgroundColor: "#202020",
     Component: dynamic(() => import("components/apps/Portfolio")),
     defaultSize: { height: 640, width: 960 },
-    icon: "/System/PersonalOS/portfolio.svg", singleton: true, title: "Portfolio",
+    icon: "/System/LifeOS/portfolio.svg", singleton: true, title: "Portfolio",
   },
   Properties: {
     allowResizing: false,
@@ -329,7 +329,7 @@ const directory: Processes = {
   },
   SystemSettings: {
     backgroundColor: "#202020",
-    Component: dynamic(() => import("components/system/PersonalOS/Settings")),
+    Component: dynamic(() => import("components/system/LifeOS/Settings")),
     defaultSize: { height: 420, width: 500 },
     icon: SETTINGS_ICON, singleton: true, title: "Settings",
   },

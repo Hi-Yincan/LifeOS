@@ -10,9 +10,9 @@
 
 ## 发现
 
-1. **规格不一致，建议在下一轮任务拆分前修正。** `specs/concept/flows-and-states.md:77` 的代表性验证路径仍要求“新访客→自动作品集”，但同文件 `:42`、`specs/concept/acceptance.md:9` 和最新 `specs/concept/prototype-handoff.md:32` 均要求无参数首次访问显示桌面、不自动打开作品集或商店。当前 `research/daedalos-portfolio/overlay/components/system/PersonalOS/Shell.tsx:11` 仅在显式 `app=Portfolio` 时启动作品集，与最新交接一致。建议将旧路径改为“新访客→桌面→主动打开作品集”，并单列显式深链接场景。否则新 agent 可能据此误修正确的启动行为。
+1. **规格不一致，建议在下一轮任务拆分前修正。** `specs/concept/flows-and-states.md:77` 的代表性验证路径仍要求“新访客→自动作品集”，但同文件 `:42`、`specs/concept/acceptance.md:9` 和最新 `specs/concept/prototype-handoff.md:32` 均要求无参数首次访问显示桌面、不自动打开作品集或商店。当前 `research/daedalos-portfolio/overlay/components/system/LifeOS/Shell.tsx:11` 仅在显式 `app=Portfolio` 时启动作品集，与最新交接一致。建议将旧路径改为“新访客→桌面→主动打开作品集”，并单列显式深链接场景。否则新 agent 可能据此误修正确的启动行为。
 
-2. **源码可确认的错误反馈缺口，建议补独立修复任务。** `research/daedalos-portfolio/overlay/components/system/PersonalOS/Settings.tsx:17` 中注销按钮直接 `await request("/api/session", { method: "DELETE", ... })`，没有 `try/catch`、没有写入可见 `error`，也没有进行中状态。同文件登录分支已有这些处理。`research/daedalos-portfolio/overlay/components/system/PersonalOS/context.tsx:43` 的 request 会在请求/响应解析失败或非成功响应时抛错；网络中断或服务端 5xx 时，注销因此可能留下未处理的 Promise rejection，并仍显示 admin 状态而没有明确失败提示。影响 `specs/concept/acceptance.md:16` 的单密钥登录/注销可用性。建议保留真实会话状态，同时显示本地化错误并允许重试；用故障响应验证。此结论来自控制流审查，尚无浏览器复现，也不意味着注销成功路径失败。
+2. **源码可确认的错误反馈缺口，建议补独立修复任务。** `research/daedalos-portfolio/overlay/components/system/LifeOS/Settings.tsx:17` 中注销按钮直接 `await request("/api/session", { method: "DELETE", ... })`，没有 `try/catch`、没有写入可见 `error`，也没有进行中状态。同文件登录分支已有这些处理。`research/daedalos-portfolio/overlay/components/system/LifeOS/context.tsx:43` 的 request 会在请求/响应解析失败或非成功响应时抛错；网络中断或服务端 5xx 时，注销因此可能留下未处理的 Promise rejection，并仍显示 admin 状态而没有明确失败提示。影响 `specs/concept/acceptance.md:16` 的单密钥登录/注销可用性。建议保留真实会话状态，同时显示本地化错误并允许重试；用故障响应验证。此结论来自控制流审查，尚无浏览器复现，也不意味着注销成功路径失败。
 
 ## 与最新要求相符的源码观察
 
@@ -25,7 +25,7 @@
 | 商店三分类、再次点击取消、搜索保留 | `AppStore/index.tsx:160` 默认无筛选；`:245` 联合搜索过滤；`:373` 仅三个栏目且再次点击变 undefined；reset (`:255`) 不清空 search | 未测渲染、触屏与窄屏布局 |
 | 商店原生/第三方启动语义 | `AppStore/catalog.ts:48` 从 process directory 生成目录并排除 dialogProcess/SystemSettings；`:69` 将 AppStore 与 Portfolio 归应用软件；`AppStore/index.tsx:262` 的文件型应用打开 FileExplorer，启用的外链用新标签及 noopener noreferrer | 33 注册/30 商品只得到历史 manifest 与生成规则支持，本次没有重新生成目录或逐 App 运行验证 |
 
-上表短路径均相对于 `research/daedalos-portfolio/`，`Shell.tsx`、`Settings.tsx`、`useLaunch.ts` 均位于 `overlay/components/system/PersonalOS/`；AppStore 短路径位于 `overlay/components/apps/`。历史 `evidence/integration-manifest.json` 仅作已有证据阅读，不作为本次重新执行的结果。
+上表短路径均相对于 `research/daedalos-portfolio/`，`Shell.tsx`、`Settings.tsx`、`useLaunch.ts` 均位于 `overlay/components/system/LifeOS/`；AppStore 短路径位于 `overlay/components/apps/`。历史 `evidence/integration-manifest.json` 仅作已有证据阅读，不作为本次重新执行的结果。
 
 ## 本次执行的检查
 

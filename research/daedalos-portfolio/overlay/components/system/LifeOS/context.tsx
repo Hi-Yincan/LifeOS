@@ -11,12 +11,12 @@ export const messages = {
 export type Message = keyof typeof messages.zh;
 type Session = { role: "visitor" | "admin"; csrf: string | null };
 type Settings = { language: "auto" | Locale };
-type PersonalContext = { locale: Locale; t: (key: Message) => string; preferences: Settings; setPreference: <K extends keyof Settings>(key: K, value: Settings[K]) => void; session: Session; applySession: (s: Session) => void; request: <T = any>(path: string, options?: RequestInit) => Promise<T>; route: string; navigate: (route: string) => void; errorText: (error: unknown) => string };
-const Context = createContext<PersonalContext | null>(null);
+type LifeOSContext = { locale: Locale; t: (key: Message) => string; preferences: Settings; setPreference: <K extends keyof Settings>(key: K, value: Settings[K]) => void; session: Session; applySession: (s: Session) => void; request: <T = any>(path: string, options?: RequestInit) => Promise<T>; route: string; navigate: (route: string) => void; errorText: (error: unknown) => string };
+const Context = createContext<LifeOSContext | null>(null);
 const getRoute = (): string => new URLSearchParams(location.search).get("project") ? `project/${new URLSearchParams(location.search).get("project")}` : new URLSearchParams(location.search).get("view") || "overview";
-export const usePersonalOS = (): PersonalContext => { const value = useContext(Context); if (!value) throw new Error("Personal OS context missing"); return value; };
+export const useLifeOS = (): LifeOSContext => { const value = useContext(Context); if (!value) throw new Error("LifeOS context missing"); return value; };
 
-export const PersonalOSProvider: FC = ({ children }) => {
+export const LifeOSProvider: FC = ({ children }) => {
   const [preferences, setPreferences] = useState<Settings>({ language: "auto" });
   const [browserLocale, setBrowserLocale] = useState<Locale>("en");
   const [session, applySession] = useState<Session>({ role: "visitor", csrf: null });
@@ -39,8 +39,8 @@ export const PersonalOSProvider: FC = ({ children }) => {
   }, []);
   const locale = preferences.language === "auto" ? browserLocale : preferences.language;
   useEffect(() => { document.documentElement.lang = locale === "zh" ? "zh-CN" : "en"; }, [locale]);
-  const setPreference: PersonalContext["setPreference"] = (key, value) => setPreferences(current => { const next = { ...current, [key]: value }; try { localStorage.setItem("hyc.preferences.v1", JSON.stringify(next)); } catch {} return next; });
-  const request: PersonalContext["request"] = async (path, options = {}) => {
+  const setPreference: LifeOSContext["setPreference"] = (key, value) => setPreferences(current => { const next = { ...current, [key]: value }; try { localStorage.setItem("hyc.preferences.v1", JSON.stringify(next)); } catch {} return next; });
+  const request: LifeOSContext["request"] = async (path, options = {}) => {
     const response = await fetch(path, { credentials: "same-origin", ...options, headers: { "Content-Type": "application/json", ...(session.csrf ? { "X-CSRF-Token": session.csrf } : {}), ...options.headers } });
     const result = await response.json(); if (!response.ok) { if (response.status === 401 && session.role === "admin") applySession({ role: "visitor", csrf: null }); throw new Error(result.error || "REQUEST_FAILED"); } return result;
   };
