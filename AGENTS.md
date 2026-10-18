@@ -1,7 +1,156 @@
-# Project agents
+# LifeOS 开发约定
 
-For multi-agent development, prototype validation batches, or resuming parallel work, read [the project parallel-development skill](.agents/skills/parallel-development/SKILL.md). It is the canonical workflow for all tools. Small independent edits do not require a parallel batch.
+本文件适用于 LifeOS 产品源码仓库中的开发、研究、审查和维护工作。用户在当前会话中的明确要求优先于本文件；具体任务同时遵循对应的 spec、Issue 验收标准和目录内适用的约定。
 
-Keep the user's active prototype checkout and runtime intact. Use assigned worktrees for concurrent writers; shared interfaces and files have one owner. Read the latest concept specifications and `specs/concept/prototype-handoff.md` before deriving tasks from older issue discussions.
+参考 [HuangYincan/AGENTS.md](https://github.com/HuangYincan/AGENTS.md/blob/e005a25a617c82ada50ab693e983fa32ff1e47bd/AGENTS.md)，结合本项目已确认的产品与工程决策维护。参考版本固定为 `e005a25a617c82ada50ab693e983fa32ff1e47bd`；外部规范的更新需要审阅后纳入本文件。
 
-The helper requires Git and Python 3.9+ standard library. Agents without native skill discovery can read the same Markdown and generated task packets directly. Local `.parallel/` state/logs are ignored; curated development evidence belongs in `specs/development/`. Using the workflow does not grant publishing or production permissions.
+## 1. 接手任务
+
+- 用户每次提及 AGENTS.md 时，重新读取当前文件。继续修改前读取文件现状，保留用户或其他开发者的新修改；用户移除的内容不能自行恢复。
+- 确认当前目录、`git remote -v`、分支、`git status` 和 `git worktree list`。识别未提交修改、运行中的服务和并行任务后再编辑。
+- 阅读 [README](README.md)、[工作区约定](maintenance/workspace.md) 和当前任务的 spec / Issue。涉及界面时阅读 [概念交付目录](specs/concept/README.md)、[原型交接](specs/concept/prototype-handoff.md) 与 [UI 规范](specs/concept/design-system.md)。
+- 代码与部署现状通过实际文件、Git 引用、CI 和发布记录核验。旧概念报告中的计划、日期或待办不能直接作为当前完成状态；遇到矛盾，核对较新的用户决定和实施记录。
+- 不重复已经确认的产品选型、视觉设计或仓库迁移。缺失的业务决定向用户询问；已授权的常规实现和验证继续完成。
+
+## 2. 项目背景与产品要求
+
+LifeOS 是基于 daedalOS 的个人网站，展示名称为 **Yincan Huang**，公开入口为 **hyc.ac**。个人内容通过 OS 中的应用呈现。作品集是首个重点业务应用，也为后续自有应用提供 UI 参考。
+
+| 范围       | 已确认要求                                                                                                                        |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| 进入网站   | 默认显示桌面；作品集和商店不自动打开。保留显式 App 深链接。                                                                       |
+| 视觉与设备 | 延续 daedalOS 的窗口、主题、控件和响应式布局；桌面、手机、iPad 保持同一套设计规则。                                               |
+| 原生应用   | 默认全部保留。访客可以使用编辑器、文件工具和游戏；异常或不适配项目逐项确认后处理。                                                |
+| 作品集     | 展示开源项目、个人参与和公开资料，提供详情、源码及在线体验入口。个人贡献、履历和媒体需要来源或作者确认。                          |
+| 应用商店   | 分类为「系统软件」「应用软件」「第三方」。未选分类时显示全部，再次点击已选分类取消筛选；App Store 与 Portfolio 属于应用软件。     |
+| 桌面入口   | 保留 Portfolio 与 App Store 快捷方式，以及原有桌面布局规则。                                                                      |
+| 系统设置   | OS 级应用，从开始菜单侧栏独立进入；电源入口保持独立。普通应用默认不提供设置按钮，特殊需求由用户说明。                             |
+| 品牌资源   | 网站与作品集图标采用用户头像。站点身份统一从现有配置与资源维护，保留上游许可证和第三方署名。                                      |
+| 多语言     | 自有应用、OS 公共菜单和设置支持简体中文与英文；作品正文使用双语字段，locale 设计保留扩展能力。原有 App 内部语言按已确认范围保留。 |
+| 访客与管理 | visitor 只能读取公开内容；管理员通过单密钥验证获得会话，无需访客账户或管理员用户名。管理入口位于系统设置。                        |
+
+内容管理目标包括创建、编辑、排序、图片上传、草稿、发布和下架，具体状态与权限见 [内容模型](specs/concept/data-and-permissions.md)。隐藏登录入口不承担授权检查；写入权限必须由服务端验证。
+
+当前生产是 **Pages 静态访客版**，本地已具备管理流程。生产管理员服务、持久数据、多节点与第三方应用分发的完成状态应按对应 Issue 核验。Messenger 方案在 #20 暂缓，后续需求以用户的新决定为准。
+
+## 3. 仓库与目录职责
+
+| 仓库 / 远程                         | 职责                                                                    |
+| ----------------------------------- | ----------------------------------------------------------------------- |
+| `Hi-Yincan/LifeOS` / `origin`       | 完整产品源码、内容配置、spec、Issues、PR 和上游维护记录；日常开发入口。 |
+| `DustinBrett/daedalOS` / `upstream` | 获取与比较原项目更新。常规开发不向该仓库推送。                          |
+| `Hi-Yincan/Hi-Yincan.github.io`     | 独立 Pages 发布仓库，只维护 `deployment.json`、工作流和 README。        |
+
+本机源码位于 `/Users/acccan/Repos/Hi-Yincan/LifeOS`；发布配置位于 `/Users/acccan/Repos/Hi-Yincan/hi-yincan.github.io`。在其他机器或临时 worktree 中以 Git 仓库身份为准，不把本机绝对路径写入产品代码。两个仓库独立维护，不使用 submodule。
+
+| 产品目录                                                  | 维护内容                                     |
+| --------------------------------------------------------- | -------------------------------------------- |
+| `components/`、`contexts/`、`pages/`、`utils/`、`public/` | 正式前端与资源，保留上游目录布局。           |
+| `components/apps/Portfolio`、`components/apps/AppStore`   | 自有应用与应用商店。                         |
+| `components/system/PersonalOS`、`personal-site.json`      | 个人站设置、语言、部署模式和系统接入。       |
+| `server/`                                                 | 内容服务、本地管理流程、种子内容及服务测试。 |
+| `scripts/product/`                                        | 产品构建、公开内容导出、资源检查与上游检查。 |
+| `specs/`                                                  | 需求、设计、架构、验收与开发记录。           |
+| `maintenance/`                                            | 工作区、上游基线、维护流程和验收证据。       |
+| `research/`                                               | 冻结研究与原型记录；正式功能在产品目录维护。 |
+
+普通构建只使用当前产品仓库。不要通过研究 overlay、字符串替换或临时上游 checkout 生成另一套正式实现。
+
+## 4. Spec / Issue 驱动开发
+
+1. 明确关联 Issue、用户目标、范围、依赖和可观察的验收条件。新功能、架构调整或独立问题建立对应 Issue；小型修正关联现有适用议题。
+2. 按任务需要更新 spec。产品研究、概念、计划、开发、发布各阶段保留其交付与验证依据；已批准的阶段成果继续复用。
+3. 每个 Issue 保持单一职责。跨主题工作使用 sub-issue，父 Issue 保留目录、状态和链接，详细研究、决策与验收报告放在评论中。
+4. 按批准的需求实现，并完成对应验证。业务范围发生变化时同步更新 spec 和验收标准，不自行增加未请求的功能。
+5. PR 描述写清具体问题、最终行为、关联 Issue、测试结果与未覆盖项。源码和规范描述当前设计；Issue 报告保留有用的决定与证据。
+6. 验收条件实际满足后再标记完成。未执行、失败、跳过的检查分别说明；不得把原型演示、命令退出成功或旧 CI 结果当作当前完整验收。
+
+不要无依据承诺时间、编造用户履历或扩大项目贡献。研究结论标明来源与核验时间，只呈现与用户目标有关的结果。
+
+## 5. 沟通与工具使用
+
+- 使用直接、完整、易理解的中文。代码 identifier、命令和适合英文表达的专用名词保持原名；新增说明性注释使用中文，只解释必要信息。
+- 使用完整动宾结构描述操作。避免自造缩写、企业黑话、无关对比、工作量评价和固定的开场或总结套话。
+- 进展说明基于实际发现，交付说明写最终行为、证据和限制。用户指出问题后直接修正，不在代码、PR 或回复中反复复述被否定的方案。
+- 问答围绕用户问题展开；执行任务中的追问应及时回应，然后继续已授权工作。用户已作出的决定和授权无需反复询问。
+- 不自行切换 Plan mode。存在影响产品范围的未知条件时，提出具体问题，同时推进不依赖该答案的工作。
+- 读取用户提供的相关资料后再依赖它作决定；库或 API 的用法不确定时核对官方文档。不得凭印象报告缺陷或把猜测写成事实。
+- 优先使用 `rg` / `rg --files` 搜索。使用文件编辑或 patch 工具修改源码，不用批量字符串替换脚本或桌面编辑器自动操作代替代码编辑。
+- 较长脚本写入文件后执行，避免把大量代码嵌入 shell 命令。新增临时输出放入已忽略的仓库内目录，例如 `.cache/agent-work/`；并行状态使用 `.parallel/`。
+- 需要解析成熟文件格式时使用对应解析器；所需依赖直接导入，不用异常捕获隐藏缺失依赖。新增 Python 文件不添加无用途的文件级 docstring 或 shebang。
+- 浏览器操作优先使用语义选择器和实际页面状态。视觉检查按用户任务要求进行，不凭未经核验的截图推断功能正确。
+- 需要图示时使用 Mermaid，需要比较时使用 Markdown 表格；不使用 ASCII 图示。
+
+## 6. 实现与数据保护
+
+- 遵循现有 TypeScript / React 组织方式、格式配置和组件职责。复用系统控件、主题、语言资源与窗口机制；新增应用检查进程注册、单实例、菜单、快捷方式和图标等接入点。
+- 错误在发生处明确报告。配置错误、非法状态和构建错误应终止相关操作；不要通过吞掉异常、伪造成功或静默切换实现来掩盖问题。用户界面的恢复行为按 spec 实现。
+- 尊重依赖与锁文件，功能改动不附带无关升级或全仓格式化。遵守 `.gitattributes`，尤其不能将包含图片等二进制资源的目录统一标记为 `text`。
+- 不修改生成产物来修复源码问题。`out/`、生成索引和公开内容快照由构建流程产生。
+- 保留 `server/.runtime/`、研究原型运行目录和活动服务。构建会重建共享 `out/` 等目录；影响正在使用的预览时使用隔离工作区或按授权协调重启，不能删除运行数据来解决构建问题。
+- 密钥、会话、私有媒体和用户运行数据不得提交、上传 CI 产物、写进日志或 Issue。合成测试数据必须明确用途，不能冒充个人公开内容。
+- 访客只能读取已发布公开快照。草稿、私有备注和管理字段通过公开字段白名单排除；原生 App 的本机文件操作、商店本机入口与服务器内容授权分别处理。
+- Git 历史只保存已提交文件，数据与密钥需要独立备份。用户要求恢复代码时，默认通过文件编辑恢复指定内容；使用 Git 恢复命令、覆盖未提交工作、强推或删除引用需要相应明确授权。
+
+## 7. 构建与验证
+
+运行版本以 `.node-version` 和 `package.json` 为准，使用固定 Yarn 和 `yarn.lock`。首次安装：
+
+```sh
+yarn install --frozen-lockfile --ignore-scripts --non-interactive
+```
+
+正常产品构建与本地完整 API 预览：
+
+```sh
+yarn build
+yarn preview:local
+```
+
+产品预览默认端口为 `4392`；已有研究原型使用 `4391`。先核实监听进程再启停服务。`yarn dev` 只提供 Next 开发服务器，完整管理流程需要内容服务。
+
+产品 CI 按以下顺序检查；lint 与测试依赖构建生成的文件系统和图标索引：
+
+```sh
+yarn build
+yarn lint
+yarn test:unit
+yarn test:server
+yarn playwright install chromium
+yarn e2e:product
+```
+
+涉及 Pages 或公开内容导出时，在隔离工作区验证访客模式：
+
+```sh
+node scripts/product/build.mjs --public
+yarn lint
+yarn test:unit
+yarn test:server
+yarn playwright install chromium
+PUBLIC_DEPLOYMENT=1 yarn playwright test --config=playwright.public.config.ts
+```
+
+- 根据改动选择必要检查，发布及上游升级执行要求的完整验证。纯文档修改核验链接、命令、事实和 `git diff --check`，无需重复构建产品。
+- 测试验证真实行为和重要失败场景。服务、权限、发布与浏览器验收使用实际实现；不通过 mock 成功结果、删除断言或跳过失败检查来制造通过记录。
+- UI 变更检查窗口操作、内容状态、键盘使用、中英文和受影响的窗口尺寸；保留原生 App 的变化需要相应回归。未实际验证的设备、地区网络或应用能力明确列出。
+- 在任务范围内修复发现的问题并重跑受影响检查。外部阻碍无法解决时说明具体原因和影响，不把可自行完成的验证交给用户。
+
+## 8. Git、并行协作与上游更新
+
+- `main` 是正式产品基线；按任务使用临时分支，保护未提交修改和其他开发者的工作。提交、推送、合并、清理与发布分别遵循用户已给出的授权，任务说明本身不扩大操作范围。
+- 需要多 Agent、并行开发或恢复并行任务时，读取 [parallel-development 技能](.agents/skills/parallel-development/SKILL.md)。普通独立修改可以串行完成。
+- 并行流程使用指定 worktree、任务包与文件所有者；协调者、实施者和独立审查者按协议协作，不能通过改名冒充独立审查。共享文件只有一个写入负责人。
+- 并行工具需要 Git 与 Python 3.9+ 标准库。`.parallel/` 中的状态和日志不提交；经过整理的验证证据放入 `specs/development/`。技能和工具不授予生产操作权限。
+- 清理 worktree 或分支前检查未提交修改、独有提交、运行进程和数据；需要保留的实验先归档并核验远端。历史 `pages-live` 与归档标签的职责见工作区约定。
+- 上游基线以 [baseline.json](maintenance/upstream/baseline.json) 中的完整 SHA 为准。获取上游只用于比较和评估，不自动合并或发布。
+- 升级使用独立 Issue、分支和 PR，按 [上游维护手册](maintenance/upstream/README.md) 合并固定目标，保留 ancestry，处理冲突，更新基线并验证回归与恢复方案。不要直接覆盖产品目录或重写已发布历史。
+
+## 9. 发布与交接
+
+- 生产由独立发布仓库管理，`deployment.json` 固定 LifeOS 完整源码 SHA。手动工作流完成构建与验证后部署；LifeOS 普通 push 不上线。
+- 内容导出只使用已提交、明确公开的种子内容和媒体，不读取本地运行目录。当前静态访客模式不能写入管理 API，本地编辑也不会自动更新线上内容。
+- 保护 `hyc.ac`、现有 DNS、`/blog/` 和 `/gallery/`。改源码、完成 CI 或更新本文件不自动授予域名变更、付费资源、生产数据迁移或发布权限；已有明确授权则按其范围执行。
+- 发布版本恢复通过发布仓库选择已验证的源码 SHA，并按 [Pages 发布手册](specs/deployment/pages.md) 完成检查。LifeOS 中的 `pages-live` 仅作历史备份；当前发布仓库没有该分支。
+- 交接写清实际修改、所在仓库与分支、提交/推送状态、验证结果、未完成事项、运行服务和下一步入口。详细证据归入对应 Issue，更新受影响的 spec 与维护文档。
+- 不在本文件维护不断变化的线上 SHA、进程 PID 或测试数量。当前目录信息见工作区约定，实际发布版本以线上 `release.json` 和对应工作流记录为准。
