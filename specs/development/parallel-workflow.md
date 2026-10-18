@@ -8,9 +8,22 @@
 
 给任何 agent 的启动提示：
 
-> 读取本项目 `.agents/skills/parallel-development/SKILL.md`，以当前原型为基线，按共享协议拆分并执行这个目标。保留我正在做的设计，先给每个写入任务分配独立 worktree 与文件范围。
+> 读取本项目 `.agents/skills/parallel-development/SKILL.md`，从确认过的 main 提交建立批次，按共享协议拆分并执行这个目标。保留我的未提交工作和活动服务，先给每个写入任务分配独立 worktree 与文件范围。
 
 支持原生技能调用的客户端也可使用 `$parallel-development`；Claude Code 使用 `/parallel-development`。实际发现和调用方式以客户端版本为准。任意工具都能通过 Markdown 任务包＋同一套 Python 命令参加，聊天历史和原生 subagent API 都不作为跨工具协议。
+
+## 并发配置
+
+2026-10-18 用户将本机 Codex 配置目标设为最多 12 个并发子 Agent，不含主 Agent。配置位于用户级 `~/.codex/config.toml`：
+
+```toml
+[agents]
+max_concurrent_threads_per_session = 12
+```
+
+字段依据与宿主适配见 [Codex 并发说明](../../.agents/skills/parallel-development/references/adapters.md#local-codex-concurrency)。配置写入不代表已有会话已扩大额度；重启应用并新建会话后核对实际可用名额，调度始终服从会话实际额度。
+
+批次计划的 `max_workers` 是同时领取写入任务的实施者数量，脚本支持 1–16。它与宿主子 Agent 上限分别控制不同资源：只读调查和独立审查消耗宿主名额，但不领取写入任务。按独立任务数量、依赖、运行资源和实际额度分配写入预算，并为独立审查预留名额；不固定为两个，也不要求每次用满 12 个子 Agent。原型示例只有两个审查任务，因此保留 `max_workers: 2`。新预算使用新批次，不修改正在运行批次的计划。
 
 ## 一个批次如何运行
 
@@ -39,17 +52,19 @@ python3 .agents/skills/parallel-development/scripts/workflow.py recover --batch 
 
 `prepare` 基于已提交的 HEAD 创建任务和集成分支，不切换当前设计分支，也不复制未提交的设计修改。使用新规格前确认其已进入所选基线；首次安装的技能应与规格一起版本化。每个批次用唯一 ID，修改计划应建新批次。
 
+启动时先确认 HEAD 是任务选定的 main 基线；脚本不会自动切到 main。集成通过只代表成果进入专用集成分支，合入 main 仍遵循用户已有授权。合入 main 后，协调者按用户已授权的 [收尾步骤](../../maintenance/workspace.md#后续操作) 检查成果、保存证据、处理任务服务和数据，及时清理无用的本地及远程分支和 worktree。尚未合入 main 的交付保留，不提前删除。
+
 ## 设计取舍
 
 | 层 | 约定 |
 | --- | --- |
 | 共享核心 | 同一份 SKILL.md、JSON 协议和 Python/Git 实现；Claude 入口只转到主体 |
-| 调度 | 一个总控、默认两个写入者；嵌套 Claude/其他子 agent 的写任务也单独领取，计入同一并发预算 |
+| 调度 | 一个总控；按批次设置写入预算，并为独立审查预留宿主名额；嵌套写入者单独领取任务，计入同一预算 |
 | 隔离 | 每任务一个 worktree/分支；共用接口、锁文件、入口注册和迁移各有一个所有者；路径冲突检查忽略大小写 |
 | 证据 | 门禁命令、退出码、日志、attempt、提交 SHA；修改后必须重新检查，评审只针对该提交 |
 | 集成 | 独立 worktree 按 manifest 顺序合并已评审 SHA；组合门禁通过才标 verified；冲突或失败停下 |
 | 恢复 | 原子状态、跨进程锁、心跳/租约、显式交接；recover 只观察，过期不自动抢占；重复集成跳过已有提交 |
-| 授权 | 不新增工具权限、不自动 push/清理/部署；文件归属是协作校验，沿用宿主沙箱 |
+| 授权与收尾 | helper 不执行 push 或删除；协调者在合入 main 后完成用户已授权的清理，提交、推送、合并与部署分别遵循已有授权 |
 | 兼容边界 | 支持任何能读文件并操作终端的 agent；无终端 agent 交补丁/评审给总控；跨机器走 Git/报告交接，v1 不提供分布式锁或远程执行 |
 
 参考 `Projsyc/claude-boss-workflow@20f7b88ae739e17bb3222e8ad3e085eefc42c406` 的职责分离、worktree-first 和落盘恢复思想；本实现按工具无关协议重新实现，不依赖其 Claude 专用权限或默认项目目录。

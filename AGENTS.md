@@ -138,11 +138,12 @@ PUBLIC_DEPLOYMENT=1 yarn playwright test --config=playwright.public.config.ts
 
 ## 8. Git、并行协作与上游更新
 
-- `main` 是正式产品基线；按任务使用临时分支，保护未提交修改和其他开发者的工作。提交、推送、合并、清理与发布分别遵循用户已给出的授权，任务说明本身不扩大操作范围。
-- 需要多 Agent、并行开发或恢复并行任务时，读取 [parallel-development 技能](.agents/skills/parallel-development/SKILL.md)。普通独立修改可以串行完成。
+- `main` 是正式产品基线；从已确认的 main 提交建立任务分支，默认不直接在 main 上修改。普通独立任务由当前 Agent 完成；小型修改可以在干净的当前工作区切换任务分支，涉及活动预览、构建产物或其他未提交工作时使用独立 worktree。提交、推送、合并与发布分别遵循用户已给出的授权。
+- 用户要求多 Agent、并行开发，或适用技能要求独立 Agent 时，读取 [parallel-development 技能](.agents/skills/parallel-development/SKILL.md)，建立任务和集成专用 worktree。普通对话不自动启动多个 Agent。
+- 本机 Codex 的配置目标为最多 12 个并发子 Agent，不含主 Agent；实际调度以当前会话可用额度为准。批次的 `max_workers` 只限制同时领取写入任务的实施者，按独立任务数量和可用资源设置，并为审查预留名额；不固定为两个写入者，也不要求每次用满额度。配置位置与口径见 [并行工作流](specs/development/parallel-workflow.md)。
 - 并行流程使用指定 worktree、任务包与文件所有者；协调者、实施者和独立审查者按协议协作，不能通过改名冒充独立审查。共享文件只有一个写入负责人。
 - 并行工具需要 Git 与 Python 3.9+ 标准库。`.parallel/` 中的状态和日志不提交；经过整理的验证证据放入 `specs/development/`。技能和工具不授予生产操作权限。
-- 清理 worktree 或分支前检查未提交修改、独有提交、运行进程和数据；需要保留的实验先归档并核验远端。历史 `pages-live` 与归档标签的职责见工作区约定。
+- 用户已授权合并后的任务清理：成果合入 main 后，及时清理已经无用的本地和远程任务分支、集成分支及 worktree，无需逐项再次询问。先确认改动已进入 main、没有待保留的修改或独有成果，保存必要验证证据并处理任务专用服务和运行数据；squash 合并需核对改动，不能仅凭 ancestry 判断。需要保留的实验先归档并核验远端；main、upstream、历史 pages-live 和有用途的归档标签不属于清理对象，详见 [工作区约定](maintenance/workspace.md)。
 - 上游基线以 [baseline.json](maintenance/upstream/baseline.json) 中的完整 SHA 为准。获取上游只用于比较和评估，不自动合并或发布。
 - 升级使用独立 Issue、分支和 PR，按 [上游维护手册](maintenance/upstream/README.md) 合并固定目标，保留 ancestry，处理冲突，更新基线并验证回归与恢复方案。不要直接覆盖产品目录或重写已发布历史。
 
