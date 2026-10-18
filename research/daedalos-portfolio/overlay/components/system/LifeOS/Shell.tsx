@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { usePersonalOS } from "components/system/PersonalOS/context";
-import useLaunch from "components/system/PersonalOS/useLaunch";
+import { useLifeOS } from "components/system/LifeOS/context";
+import useLaunch from "components/system/LifeOS/useLaunch";
 import { useSessionLoaded } from "contexts/session";
 
 // Only explicit portfolio links need this route bridge. Plain visits show the desktop.
-const PersonalShell = (): React.ReactNode => {
-  const { route } = usePersonalOS();
+const LifeOSShell = (): React.ReactNode => {
+  const { route } = useLifeOS();
   const open = useLaunch();
   const loaded = useSessionLoaded();
   useEffect(() => {
@@ -19,4 +19,4 @@ const PersonalShell = (): React.ReactNode => {
   return <></>;
 };
 
-export default PersonalShell;
+export default LifeOSShell;

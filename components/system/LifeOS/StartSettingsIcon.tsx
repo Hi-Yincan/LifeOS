@@ -1,4 +1,4 @@
-import { SETTINGS_GEAR_PATH } from "components/system/PersonalOS/settingsIcon";
+import { SETTINGS_GEAR_PATH } from "components/system/LifeOS/settingsIcon";
 
 // Uses the same inherited size/color as the upstream sidebar icons.
 const StartSettingsIcon = (): React.ReactNode => (

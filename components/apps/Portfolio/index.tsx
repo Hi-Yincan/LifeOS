@@ -1,20 +1,21 @@
 /* eslint-disable no-alert -- Native confirmations protect unsaved editor content. */
+import site from "lifeos.json";
 import { useEffect, useState } from "react";
 import { Back } from "components/apps/FileExplorer/NavigationIcons";
 import StyledAddressBar from "components/apps/FileExplorer/StyledAddressBar";
 import StyledNavigation from "components/apps/FileExplorer/StyledNavigation";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
 import StyledStatusBar from "components/system/Files/FileManager/StyledStatusBar";
-import { registerCloseGuard } from "components/system/PersonalOS/closeGuards";
+import { registerCloseGuard } from "components/system/LifeOS/closeGuards";
 import {
   type Locale,
   type Profile,
   type Project,
   type ProjectText,
-  usePersonalOS,
-} from "components/system/PersonalOS/context";
-import Icon from "components/system/PersonalOS/Icon";
-import Surface from "components/system/PersonalOS/Surface";
+  useLifeOS,
+} from "components/system/LifeOS/context";
+import Icon from "components/system/LifeOS/Icon";
+import Surface from "components/system/LifeOS/Surface";
 import { useProcessesActions } from "contexts/process";
 import Button from "styles/common/Button";
 
@@ -65,7 +66,7 @@ const Editor = ({
   onClose: () => void;
   processId: string;
 }): React.ReactNode => {
-  const { errorText, locale, request, t } = usePersonalOS();
+  const { errorText, locale, request, t } = useLifeOS();
   const [busy, setBusy] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -432,7 +433,7 @@ const Card = ({
   go: (route: string) => void;
   item: Project;
   locale: Locale;
-  t: ReturnType<typeof usePersonalOS>["t"];
+  t: ReturnType<typeof useLifeOS>["t"];
 }): React.ReactNode => {
   const text = projectText(item, locale);
   return (
@@ -475,7 +476,7 @@ const Card = ({
 
 const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
   const { errorText, locale, navigate, request, route, session, t } =
-    usePersonalOS();
+    useLifeOS();
   const { title: setTitle } = useProcessesActions();
   const [errorMessage, setErrorMessage] = useState("");
   const [items, setItems] = useState<Project[]>([]);
@@ -738,10 +739,13 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
             )
           ) : active === "about" ? (
             <article className="hyc-about">
-              <div className="hyc-about-avatar">
-                YH
-                <span />
-              </div>
+              <img
+                alt={site.name}
+                className="hyc-about-avatar"
+                height={48}
+                src={site.icon}
+                width={48}
+              />
               <h1>{profile?.name}</h1>
               <p className="hyc-about-lead">{profile?.bio[locale]}</p>
               <div className="hyc-about-grid">
@@ -792,7 +796,7 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
             <>
               {active === "overview" && (
                 <section className="hyc-hero">
-                  <img alt="" src="/System/PersonalOS/portfolio.svg" />
+                  <img alt="" src="/System/LifeOS/portfolio.svg" />
                   <div>
                     <h1>{profile?.name}</h1>
                     <p>{profile?.bio[locale]}</p>

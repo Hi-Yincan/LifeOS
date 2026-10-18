@@ -1,15 +1,16 @@
 {
+  "namingNote": "2026-10-18：名称和路径已统一为 LifeOS；其余数据为历史观察，未重新验证。",
   "portfolio": {
     "title": "个人作品集 - Yincan Huang",
     "ogTitle": "Yincan Huang",
     "siteName": "Yincan Huang",
-    "favicon": "/System/PersonalOS/avatar.png"
+    "favicon": "/System/LifeOS/avatar.png"
   },
   "desktop": {
     "title": "Yincan Huang",
     "ogTitle": "Yincan Huang",
     "siteName": "Yincan Huang",
-    "favicon": "/System/PersonalOS/avatar.png"
+    "favicon": "/System/LifeOS/avatar.png"
   },
   "browserTaskSpace": 10,
   "date": "2026-10-17",

@@ -13,7 +13,7 @@
 
 ### 核心结论
 
-**建议将本项目定位为“以操作系统交互组织个人知识、作品与生活内容的个人 OS”。** 桌面是入口，App 是领域组织单位，窗口提供探索和切换能力；文章、照片、项目等仍应能被直接打开、阅读和分享。这是本轮研究建议，尚未形成冻结的 PRD 或技术选型。
+**建议将 LifeOS 定位为“以操作系统交互组织个人知识、作品与生活内容的网站”。** 桌面是入口，App 是领域组织单位，窗口提供探索和切换能力；文章、照片、项目等仍应能被直接打开、阅读和分享。这是本轮研究建议，尚未形成冻结的 PRD 或技术选型。
 
 用户已经明确“个人博客也是操作系统”，并提出博客、相册、健康数据、项目展示。[概念阶段现有记录](https://github.com/Hi-Yincan/LifeOS/issues/2#issuecomment-6181132923)进一步覆盖系统化 Wiki、衣柜、日常／技术博客，以及位置、日程、状态和健康组成的 ContextOS。调研保留这一完整愿景，不擅自缩减成求职作品集。
 
@@ -355,7 +355,7 @@ Star、Fork、订阅者取仓库 API；订阅者使用 `subscribers_count`，不
 | 产品／仓库 | Star | Fork | 订阅者 | 默认分支最后提交 | 90 天提交数 | 筛选结果（研究判断） |
 | --- | ---: | ---: | ---: | --- | ---: | --- |
 | [HeyPuter/puter](https://github.com/HeyPuter/puter) | 43,721 | 4,088 | 224 | [2026-10-15](https://github.com/HeyPuter/puter/commit/8faff74793a9358b51ecc04a61eacea6bd7a1c08) | 1,018 | 深入：完整云电脑；需服务端 |
-| [DustinBrett/daedalOS](https://github.com/DustinBrett/daedalOS) | 13,057 | 1,201 | 117 | [2026-10-10](https://github.com/DustinBrett/daedalOS/commit/f017b393d4175eb396a741a7562299423843f1b1) | 107 | 深入：个人 OS 首选验证对象 |
+| [DustinBrett/daedalOS](https://github.com/DustinBrett/daedalOS) | 13,057 | 1,201 | 117 | [2026-10-10](https://github.com/DustinBrett/daedalOS/commit/f017b393d4175eb396a741a7562299423843f1b1) | 107 | 深入：LifeOS 首选验证对象 |
 | [blueedgetechno/win11React](https://github.com/blueedgetechno/win11React) | 9,655 | 1,260 | 11 | [2024-08-11](https://github.com/blueedgetechno/win11React/commit/afb02e797106c208314abbf837ec11bf50da9d62) | 0 | 退出主选：已归档 |
 | [win12-online/win12](https://github.com/win12-online/win12) | 7,266 | 907 | 55 | [2026-10-14](https://github.com/win12-online/win12/commit/9de1990a79254e0febeff67d6cc5d1c5f133a9b8) | 106 | 条件候选：活跃、中文生态；手机和授权声明需处理 |
 | [os-js/OS.js](https://github.com/os-js/OS.js) | 7,085 | 868 | 228 | [2022-09-16](https://github.com/os-js/OS.js/commit/0aa874455e1ca5a31e7be193b3be14080300c2c1) | 0 | 暂不主选：平台结构成熟，核心包也缺少近期活动 |
@@ -448,7 +448,7 @@ R07 的 Star／Fork／订阅者反映 GitHub 关注积累，近期提交／PR �
 | 维度 | 本轮最有说服力的信号 | 应如何使用 |
 | --- | --- | --- |
 | 社区规模 | Puter 在 GitHub 和已核验的 HN／Reddit 样本上均突出 | 提高长期生态候选优先级，同时评估部署复杂度 |
-| 与个人 OS 的相关传播 | daedalOS 的公开演示与个人站点持续存在 | 与活跃代码维护一起支持优先验证 |
+| 与 LifeOS 的相关传播 | daedalOS 的公开演示与个人站点持续存在 | 与活跃代码维护一起支持优先验证 |
 | 历史名气但维护不足 | OS.js、winXP、归档的 win11React | 保留参考价值，不自动进入主选 |
 | 小众但扩展结构合适 | ProzillaOS、vtron | 不能因 Star 少直接排除，也不能称已有大规模采用证明 |
 
@@ -469,7 +469,7 @@ R07 的 Star／Fork／订阅者反映 GitHub 关注积累，近期提交／PR �
 
 | 候选 | 可复用的底座 | 自定义 App 入口 | 托管与运维 | 本项目主要二开负担 | 建议 |
 | --- | --- | --- | --- | --- | --- |
-| **daedalOS** | 桌面、任务栏、窗口、文件浏览、多种内容查看器 | App 目录注册 React 组件和窗口元信息 | 已有 Next 静态导出配置；选定 App 的额外依赖仍需查验 | 博客／项目内容模型、稳定 URL、手机交互、品牌与默认内容 | **公开个人 OS 首选验证** |
+| **daedalOS** | 桌面、任务栏、窗口、文件浏览、多种内容查看器 | App 目录注册 React 组件和窗口元信息 | 已有 Next 静态导出配置；选定 App 的额外依赖仍需查验 | 博客／项目内容模型、稳定 URL、手机交互、品牌与默认内容 | **LifeOS 公开展示场景首选验证** |
 | **ProzillaOS** | React OS 组件、App 类、虚拟文件系统、常用应用 | 独立包＋自定义 App 文档＋示例；可组合桌面、任务栏、窗口视图 | 文档明确覆盖 GitHub Pages、Vercel、Cloudflare Pages | 内容发布、深链接契约、手机端完整任务；要承担较小社区风险 | **结构型备选** |
 | **Puter** | 桌面、账户、存储、应用平台、服务端基础设施 | Web App／开发者平台；核心 Shell 与平台服务可二开 | 当前完整自托管方案为多服务部署 | 匿名访客入口、个人内容展示、公共／私有空间划分、运维与升级 | **完整云电脑路线首选** |
 | **Win12 Online** | 中文桌面、窗口、文件界面及大量系统风格应用 | 源码中有应用实现；需自行评估抽取与注册边界 | 网页版有 GitHub Pages 在线演示；部分集成功能需单独核验 | 手机适配、内容导航、与系统 App 的耦合、素材与 README 附加声明 | **偏好现代 Windows／中文外观时的条件候选** |
@@ -595,7 +595,7 @@ R07—R09 提供数据和原始链接；动态指标仅对采集日期有效。�
 
 用户新增明确需求：visitor 与 admin 具有不同权限，同一个 App 面向 visitor 展示内容，面向 admin 提供管理功能，例如在衣柜 App 内维护单品与搭配。
 
-据此，研究建议从 R09 的“公开个人内容站优先验证 daedalOS”调整为：**优先验证 Puter，构建带身份与内容管理能力的个人 OS。** 选择权重现在应提高账户、共享数据、服务端权限、在线编辑与持久化能力的重要性。Puter 提供身份／存储／应用平台与 Worker 的组合，和该需求更匹配；这不代表现成衣柜、博客管理或业务角色权限已经具备。[平台介绍](https://github.com/HeyPuter/puter/blob/8faff74793a9358b51ecc04a61eacea6bd7a1c08/README.md)／[Worker 路由](https://docs.puter.com/Workers/router/)
+据此，研究建议从 R09 的“公开个人内容站优先验证 daedalOS”调整为：**优先验证 Puter，为 LifeOS 提供身份与内容管理能力。** 选择权重现在应提高账户、共享数据、服务端权限、在线编辑与持久化能力的重要性。Puter 提供身份／存储／应用平台与 Worker 的组合，和该需求更匹配；这不代表现成衣柜、博客管理或业务角色权限已经具备。[平台介绍](https://github.com/HeyPuter/puter/blob/8faff74793a9358b51ecc04a61eacea6bd7a1c08/README.md)／[Worker 路由](https://docs.puter.com/Workers/router/)
 
 ### 产品角色建议
 
@@ -657,7 +657,7 @@ flowchart LR
 
 原始评论：https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6208431738
 
-## R12｜本地部署反馈：展示型个人 OS 与完整云电脑的边界
+## R12｜本地部署反馈：LifeOS 展示场景与完整云电脑的边界
 
 版本：v1.3 · 日期：2026-10-16 · 状态：产品边界修订；底座尚未冻结。
 
@@ -665,7 +665,7 @@ flowchart LR
 
 项目负责人已在本地部署 Puter，反馈它更接近浏览器 OS，与“OS 样式的个人博客展示”存在偏差，并举出远程桌面等用不到的功能。此条是负责人的实际体验反馈；本轮助手没有检查该本地实例、部署版本或已启用的服务。
 
-R11 因 visitor/admin 和在线管理需求提高了 Puter 优先级，但过度重视完整平台能力，对公开展示场景的适配权重不足。**本轮撤回“Puter 为首选验证对象”的优先建议：保留条件性评估，先以展示型个人 OS 的核心流程验证适配。** 账户权限仍是需求，但不要求账户、桌面和内容管理都由同一个完整 OS 提供。
+R11 因 visitor/admin 和在线管理需求提高了 Puter 优先级，但过度重视完整平台能力，对公开展示场景的适配权重不足。**本轮撤回“Puter 为首选验证对象”的优先建议：保留条件性评估，先以 LifeOS 展示场景的核心流程验证适配。** 账户权限仍是需求，但不要求账户、桌面和内容管理都由同一个完整 OS 提供。
 
 Puter 官方定位覆盖工作、创作、娱乐及开发者平台，功能广度本来就是其目标；本地体验反映的是产品取舍差异，不据此判定 Puter 质量差。[官方 README](https://github.com/HeyPuter/puter/blob/main/README.md)
 

@@ -14,10 +14,10 @@ import StyledAddressBar from "components/apps/FileExplorer/StyledAddressBar";
 import StyledNavigation from "components/apps/FileExplorer/StyledNavigation";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
 import StyledStatusBar from "components/system/Files/FileManager/StyledStatusBar";
-import { usePersonalOS } from "components/system/PersonalOS/context";
-import Icon from "components/system/PersonalOS/Icon";
-import Surface from "components/system/PersonalOS/Surface";
-import useLaunch from "components/system/PersonalOS/useLaunch";
+import { useLifeOS } from "components/system/LifeOS/context";
+import Icon from "components/system/LifeOS/Icon";
+import Surface from "components/system/LifeOS/Surface";
+import useLaunch from "components/system/LifeOS/useLaunch";
 import { useProcessesActions } from "contexts/process";
 import Button from "styles/common/Button";
 import NativeIcon from "styles/common/Icon";
@@ -50,8 +50,8 @@ const messages = {
     enable: "Enable",
     external: "External browser tab",
     favorite: "Favorite app",
-    fileHint: "Choose a compatible file, then use its Open with menu.",
-    files: "Choose a file",
+    fileHint:
+      "Open the app, then load or drop a compatible file into its window.",
     hint: "Try another search or add your own web app.",
     import: "Import and add",
     invalid:
@@ -110,8 +110,7 @@ const messages = {
     enable: "启用",
     external: "外部浏览器标签",
     favorite: "收藏应用",
-    fileHint: "先选择兼容文件，再通过文件的打开方式使用此应用。",
-    files: "选择文件",
+    fileHint: "打开应用后，在应用窗口中载入或拖入兼容文件。",
     hint: "搜索其他关键词，或添加你自己的网页应用。",
     import: "导入并添加",
     invalid:
@@ -147,7 +146,7 @@ const messages = {
 const isWeb = (app: CatalogApp | WebApp): app is WebApp => "url" in app;
 
 const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
-  const { locale } = usePersonalOS();
+  const { locale } = useLifeOS();
   const t = messages[locale];
   const { title } = useProcessesActions();
   const launch = useLaunch();
@@ -275,10 +274,10 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
       ) : (
         <button
           className="hyc-primary"
-          onClick={() => launch(app.fileBased ? "FileExplorer" : app.id)}
+          onClick={() => launch(app.id)}
           type="button"
         >
-          {app.fileBased ? t.files : t.open}
+          {t.open}
         </button>
       )}
       {isWeb(app) ? (
@@ -358,7 +357,7 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
           <NativeIcon
             alt=""
             imgSize={16}
-            src="/System/PersonalOS/store.svg"
+            src="/System/LifeOS/store.svg"
             $eager
           />
           <span>
@@ -552,6 +551,27 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
                   className="hyc-store-card"
                   data-app={app.id}
                 >
+                  {isWeb(app) && app.enabled ? (
+                    <a
+                      aria-label={`${t.open}: ${appName(app)}`}
+                      className="hyc-store-launch"
+                      href={externalURL(app.url, location.origin)}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    />
+                  ) : (
+                    <button
+                      aria-label={`${t.open}: ${appName(app)}`}
+                      className="hyc-store-launch"
+                      disabled={isWeb(app)}
+                      onClick={() => {
+                        if (!isWeb(app)) {
+                          launch(app.id);
+                        }
+                      }}
+                      type="button"
+                    />
+                  )}
                   <NativeIcon
                     alt=""
                     imgSize={32}
@@ -571,6 +591,7 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
                     <p className="hyc-store-description">{description(app)}</p>
                     <button
                       aria-label={`${t.detail}: ${appName(app)}`}
+                      className="hyc-store-details"
                       onClick={() => {
                         setSelectedId(app.id);
                         setNotice(false);

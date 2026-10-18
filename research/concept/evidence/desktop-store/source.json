@@ -1,5 +1,6 @@
 {
-  "desktopShortcut": "[InternetShortcut]\nBaseURL=AppStore\nComment=App Store\nIconFile=/System/PersonalOS/store.svg\n",
+  "namingNote": "2026-10-18：名称和路径已统一为 LifeOS；其余数据为历史观察，未重新验证。",
+  "desktopShortcut": "[InternetShortcut]\nBaseURL=AppStore\nComment=App Store\nIconFile=/System/LifeOS/store.svg\n",
   "matchesStartShortcut": true,
   "desktopCacheTarget": "AppStore",
   "prepareIdempotent": true,
