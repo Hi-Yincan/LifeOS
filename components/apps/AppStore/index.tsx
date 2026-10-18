@@ -50,8 +50,8 @@ const messages = {
     enable: "Enable",
     external: "External browser tab",
     favorite: "Favorite app",
-    fileHint: "Choose a compatible file, then use its Open with menu.",
-    files: "Choose a file",
+    fileHint:
+      "Open the app, then load or drop a compatible file into its window.",
     hint: "Try another search or add your own web app.",
     import: "Import and add",
     invalid:
@@ -110,8 +110,7 @@ const messages = {
     enable: "启用",
     external: "外部浏览器标签",
     favorite: "收藏应用",
-    fileHint: "先选择兼容文件，再通过文件的打开方式使用此应用。",
-    files: "选择文件",
+    fileHint: "打开应用后，在应用窗口中载入或拖入兼容文件。",
     hint: "搜索其他关键词，或添加你自己的网页应用。",
     import: "导入并添加",
     invalid:
@@ -275,10 +274,10 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
       ) : (
         <button
           className="hyc-primary"
-          onClick={() => launch(app.fileBased ? "FileExplorer" : app.id)}
+          onClick={() => launch(app.id)}
           type="button"
         >
-          {app.fileBased ? t.files : t.open}
+          {t.open}
         </button>
       )}
       {isWeb(app) ? (
@@ -552,6 +551,27 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
                   className="hyc-store-card"
                   data-app={app.id}
                 >
+                  {isWeb(app) && app.enabled ? (
+                    <a
+                      aria-label={`${t.open}: ${appName(app)}`}
+                      className="hyc-store-launch"
+                      href={externalURL(app.url, location.origin)}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    />
+                  ) : (
+                    <button
+                      aria-label={`${t.open}: ${appName(app)}`}
+                      className="hyc-store-launch"
+                      disabled={isWeb(app)}
+                      onClick={() => {
+                        if (!isWeb(app)) {
+                          launch(app.id);
+                        }
+                      }}
+                      type="button"
+                    />
+                  )}
                   <NativeIcon
                     alt=""
                     imgSize={32}
@@ -571,6 +591,7 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
                     <p className="hyc-store-description">{description(app)}</p>
                     <button
                       aria-label={`${t.detail}: ${appName(app)}`}
+                      className="hyc-store-details"
                       onClick={() => {
                         setSelectedId(app.id);
                         setNotice(false);

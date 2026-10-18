@@ -134,7 +134,13 @@
 .hyc-store-controls { padding:8px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;border-bottom:1px solid #383838; }
 .hyc-store-tools { display:flex;flex-wrap:wrap;align-items:center;gap:8px;flex:1 1 300px;justify-content:space-between; }
 .hyc-store-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:8px; }
-.hyc-store-card { display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid #383838; }
+.hyc-store-card { position:relative;display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid #383838; }
+.hyc-store-card:hover,.hyc-store-card:focus-within { background:var(--hyc-hover);border-color:var(--hyc-selected-border); }
+.hyc-store-card .hyc-store-launch { position:absolute;inset:0;z-index:1;display:block;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer; }
+.hyc-store-card .hyc-store-launch:hover { background:transparent; }
+.hyc-store-card .hyc-store-launch:focus-visible { outline:1px solid var(--hyc-selected-border);outline-offset:-2px; }
+.hyc-store-card .hyc-store-launch:disabled { cursor:default; }
+.hyc-store-card .hyc-store-details { position:relative;z-index:2; }
 .hyc-store-card>img { flex:none; }
 .hyc-store-card>div { min-width:0; }
 .hyc-store-card h2 { font-size:14px; }
