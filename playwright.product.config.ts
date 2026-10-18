@@ -1,8 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const port = Number(process.env.LIFEOS_PORT || 4392);
-if (!Number.isInteger(port) || port < 1 || port > 65535)
-  {throw new Error("Invalid LIFEOS_PORT");}
+if (!Number.isInteger(port) || port < 1 || port > 65535) {
+  throw new Error("Invalid LIFEOS_PORT");
+}
 const baseURL = `http://127.0.0.1:${port}`;
 
 export default defineConfig({
