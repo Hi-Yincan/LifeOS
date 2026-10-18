@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { usePersonalOS } from "components/system/PersonalOS/context";
+import { useLifeOS } from "components/system/LifeOS/context";
 import rndDefaults from "components/system/Window/RndWindow/rndDefaults";
 import StyledTitlebar from "components/system/Window/Titlebar/StyledTitlebar";
 import useTitlebarContextMenu from "components/system/Window/Titlebar/useTitlebarContextMenu";
@@ -29,7 +29,7 @@ type TitlebarProps = {
 };
 
 const Titlebar: FC<TitlebarProps> = ({ id }) => {
-  const { locale } = usePersonalOS();
+  const { locale } = useLifeOS();
   const {
     allowResizing = true,
     closing,

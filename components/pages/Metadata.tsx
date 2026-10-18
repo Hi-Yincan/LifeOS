@@ -1,5 +1,5 @@
+import site from "lifeos.json";
 import Head from "next/head";
-import site from "personal-site.json";
 import { useCursor } from "components/pages/hooks/useCursor";
 import { useFaviconAndTitle } from "components/pages/hooks/useFaviconAndTitle";
 import desktopIcons from "public/.index/desktopIcons.json";

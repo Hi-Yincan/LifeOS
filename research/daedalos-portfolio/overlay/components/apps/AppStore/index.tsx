@@ -14,10 +14,10 @@ import StyledAddressBar from "components/apps/FileExplorer/StyledAddressBar";
 import StyledNavigation from "components/apps/FileExplorer/StyledNavigation";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
 import StyledStatusBar from "components/system/Files/FileManager/StyledStatusBar";
-import { usePersonalOS } from "components/system/PersonalOS/context";
-import Icon from "components/system/PersonalOS/Icon";
-import Surface from "components/system/PersonalOS/Surface";
-import useLaunch from "components/system/PersonalOS/useLaunch";
+import { useLifeOS } from "components/system/LifeOS/context";
+import Icon from "components/system/LifeOS/Icon";
+import Surface from "components/system/LifeOS/Surface";
+import useLaunch from "components/system/LifeOS/useLaunch";
 import { useProcessesActions } from "contexts/process";
 import Button from "styles/common/Button";
 import NativeIcon from "styles/common/Icon";
@@ -148,7 +148,7 @@ const messages = {
 const isWeb = (app: CatalogApp | WebApp): app is WebApp => "url" in app;
 
 const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
-  const { locale } = usePersonalOS();
+  const { locale } = useLifeOS();
   const t = messages[locale];
   const { title } = useProcessesActions();
   const launch = useLaunch();
@@ -359,7 +359,7 @@ const AppStore = ({ id }: ComponentProcessProps): React.ReactNode => {
           <NativeIcon
             alt=""
             imgSize={16}
-            src="/System/PersonalOS/store.svg"
+            src="/System/LifeOS/store.svg"
             $eager
           />
           <span>
