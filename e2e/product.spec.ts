@@ -62,6 +62,40 @@ test("store defaults to all and toggles its three categories", async ({
   await expect(cards).toHaveCount(1);
 });
 
+for (const [appId, appTitle] of [
+  ["Emulator", "Emulator"],
+  ["JSDOS", "js-dos v7"],
+  ["Marked", "Marked"],
+  ["OpenType", "OpenType"],
+  ["PDF", "PDF"],
+  ["Photos", "Photos"],
+  ["Ruffle", "Ruffle"],
+  ["V86", "Virtual x86"],
+  ["VideoPlayer", "Video Player"],
+]) {
+  test(`store opens file app ${appId} from its card and details`, async ({
+    page,
+  }) => {
+    await page.goto("/?app=AppStore");
+    const card = page.locator(`.hyc-store-card[data-app="${appId}"]`);
+    await card.locator(".hyc-store-launch").click();
+    const app = page.getByRole("dialog", { exact: true, name: appTitle });
+    await expect(app).toBeVisible();
+    await expect(
+      page.getByRole("dialog", { exact: true, name: "My PC" })
+    ).toHaveCount(0);
+    await app.getByRole("button", { exact: true, name: "Close" }).click();
+    await expect(app).toHaveCount(0);
+    await card.getByRole("button", { name: `Details: ${appTitle}` }).click();
+    await page.locator(".hyc-store-detail .hyc-primary").click();
+    await expect(app).toBeVisible();
+    await expect(app).toHaveCSS("opacity", "1");
+    await expect(
+      page.getByRole("dialog", { exact: true, name: "My PC" })
+    ).toHaveCount(0);
+  });
+}
+
 test("Start keeps settings and Power without folder shortcuts", async ({
   page,
 }) => {
