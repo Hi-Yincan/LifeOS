@@ -8,7 +8,9 @@ const directory: Processes = {
     backgroundColor: "#202020",
     Component: dynamic(() => import("components/apps/AppStore")),
     defaultSize: { height: 580, width: 820 },
-    icon: "/System/LifeOS/store.svg", singleton: true, title: "App Store",
+    icon: "/System/LifeOS/store.svg",
+    singleton: true,
+    title: "App Store",
   },
   BoxedWine: {
     allowResizing: false,
@@ -60,6 +62,14 @@ const directory: Processes = {
     icon: "/System/Icons/classicube.webp",
     libs: ["/Program Files/ClassiCube/ClassiCube.js"],
     title: "ClassiCube",
+  },
+  Dashboard: {
+    backgroundColor: "#202020",
+    Component: dynamic(() => import("components/apps/Dashboard")),
+    defaultSize: { height: 680, width: 1000 },
+    icon: "/System/LifeOS/dashboard.svg",
+    singleton: true,
+    title: "Dashboard",
   },
   DevTools: {
     backgroundColor: "#242424",
@@ -232,7 +242,9 @@ const directory: Processes = {
     backgroundColor: "#202020",
     Component: dynamic(() => import("components/apps/Portfolio")),
     defaultSize: { height: 640, width: 960 },
-    icon: "/System/LifeOS/portfolio.svg", singleton: true, title: "Portfolio",
+    icon: "/System/LifeOS/portfolio.svg",
+    singleton: true,
+    title: "Portfolio",
   },
   Properties: {
     allowResizing: false,
@@ -331,7 +343,9 @@ const directory: Processes = {
     backgroundColor: "#202020",
     Component: dynamic(() => import("components/system/LifeOS/Settings")),
     defaultSize: { height: 420, width: 500 },
-    icon: SETTINGS_ICON, singleton: true, title: "Settings",
+    icon: SETTINGS_ICON,
+    singleton: true,
+    title: "Settings",
   },
   Terminal: {
     backgroundBlur: "8px",
