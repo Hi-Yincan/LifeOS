@@ -1,35 +1,72 @@
 import styled from "styled-components";
 import { ActionButton } from "components/apps/Dashboard/shared";
 
-export const ServiceList = styled.ul`
-  border: 1px solid var(--hyc-line);
+export const ServiceGrid = styled.ul`
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   list-style: none;
   margin: 0;
+  min-width: 0;
   padding: 0;
 `;
 
-export const ServiceRow = styled.li`
+export const ServiceCard = styled.li`
+  background: var(--hyc-bg);
+  border: 1px solid var(--hyc-line);
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  grid-template-rows: auto 1fr auto auto;
+  min-width: 0;
   padding: 12px;
 
-  & + & {
-    border-top: 1px solid var(--hyc-line);
+  &:focus-within {
+    border-color: var(--hyc-selected-border);
   }
+`;
 
-  p {
-    line-height: 1.5;
-    overflow-wrap: anywhere;
+export const ServiceHeader = styled.div`
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  justify-content: space-between;
+
+  h3 {
+    min-width: 0;
   }
 `;
 
 export const ServiceName = styled(ActionButton)`
-  font-weight: 600;
-  max-width: 100%;
+  && {
+    background: transparent;
+    border-color: transparent;
+    font-weight: 500;
+    justify-content: flex-start;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    padding: 0;
+    text-align: left;
+    width: fit-content;
+  }
+`;
+
+export const ServiceDescription = styled.p`
+  color: var(--hyc-muted);
+  line-height: 1.5;
   overflow-wrap: anywhere;
-  text-align: left;
-  width: fit-content;
+`;
+
+export const ServiceObservation = styled.div`
+  border-top: 1px solid var(--hyc-line);
+  color: var(--hyc-muted);
+  display: grid;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  gap: 3px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  padding-top: 8px;
 `;
 
 export const Facts = styled.dl`

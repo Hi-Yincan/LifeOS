@@ -15,7 +15,6 @@ import {
   Muted,
   Section,
   SectionHeading,
-  Stack,
   Toolbar,
 } from "components/apps/Dashboard/shared";
 import Detail from "components/apps/Dashboard/views/Services/Detail";
@@ -25,9 +24,12 @@ import {
 } from "components/apps/Dashboard/views/Services/messages";
 import ServiceStatus from "components/apps/Dashboard/views/Services/ServiceStatus";
 import {
-  ServiceList,
+  ServiceCard,
+  ServiceDescription,
+  ServiceGrid,
+  ServiceHeader,
   ServiceName,
-  ServiceRow,
+  ServiceObservation,
 } from "components/apps/Dashboard/views/Services/styles";
 
 type StatusFilter =
@@ -156,36 +158,50 @@ const Services = (props: DashboardViewProps): ReactNode => {
       ) : filtered.length === 0 ? (
         <EmptyState description={t.noMatchesHint} title={t.noMatches} />
       ) : (
-        <ServiceList>
+        <ServiceGrid>
           {filtered.map((service) => (
-            <ServiceRow key={service.id}>
-              <Stack>
-                <ServiceName
-                  onClick={() => onNavigate("services", service.id)}
-                  type="button"
-                >
-                  {localize(service.name, locale)}
-                </ServiceName>
-                <p>{localize(service.description, locale)}</p>
+            <ServiceCard key={service.id}>
+              <ServiceHeader>
+                <h3>
+                  <ServiceName
+                    onClick={() => onNavigate("services", service.id)}
+                    type="button"
+                  >
+                    {localize(service.name, locale)}
+                  </ServiceName>
+                </h3>
                 <Muted>{localize(categories[service.category], locale)}</Muted>
-              </Stack>
-              <Stack>
-                <ServiceStatus locale={locale} service={service} />
-                <Muted>
+              </ServiceHeader>
+              <ServiceDescription>
+                {localize(service.description, locale)}
+              </ServiceDescription>
+              <ServiceStatus locale={locale} service={service} />
+              <ServiceObservation>
+                <span>
                   {t.observedAt}:{" "}
-                  {formatDateTime(service.observedAt, locale, data.timeZone)} (
-                  {data.timeZone})
-                </Muted>
+                  {service.observedAt ? (
+                    <time dateTime={service.observedAt}>
+                      {formatDateTime(
+                        service.observedAt,
+                        locale,
+                        data.timeZone
+                      )}
+                    </time>
+                  ) : (
+                    "—"
+                  )}{" "}
+                  ({data.timeZone})
+                </span>
                 {service.monitor && (
-                  <Muted>
+                  <span>
                     {localize(service.monitor.location, locale)} ·{" "}
                     {service.monitor.method}
-                  </Muted>
+                  </span>
                 )}
-              </Stack>
-            </ServiceRow>
+              </ServiceObservation>
+            </ServiceCard>
           ))}
-        </ServiceList>
+        </ServiceGrid>
       )}
     </Section>
   );
