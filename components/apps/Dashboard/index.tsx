@@ -74,11 +74,13 @@ const readRoute = (): Route => {
       }
     : { invalidModule: true, module: "overview" };
 };
-const historyIndex = (value: unknown): number | undefined => {
+const historyIndex = (value: unknown, session: string): number | undefined => {
   if (
     !value ||
     typeof value !== "object" ||
-    !("lifeosDashboardIndex" in value)
+    !("lifeosDashboardIndex" in value) ||
+    !("lifeosDashboardSession" in value) ||
+    value.lifeosDashboardSession !== session
   ) {
     return undefined;
   }
@@ -87,11 +89,15 @@ const historyIndex = (value: unknown): number | undefined => {
     ? value.lifeosDashboardIndex
     : undefined;
 };
-const historyState = (index: number): Record<string, unknown> => ({
+const historyState = (
+  index: number,
+  session: string
+): Record<string, unknown> => ({
   ...(history.state && typeof history.state === "object"
     ? (history.state as Record<string, unknown>)
     : {}),
   lifeosDashboardIndex: index,
+  lifeosDashboardSession: session,
 });
 const hasSelectedRecord = (data: DashboardDemoData, route: Route): boolean => {
   if (!route.selectedId) return true;
@@ -243,9 +249,9 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
   const [resetNotice, setResetNotice] = useState(false);
   const dirtyRef = useRef(false);
   const currentRoute = useRef(route);
-  const currentUrl = useRef("");
+  const currentDashboardUrl = useRef("");
   const currentHistoryIndex = useRef(0);
-  const restoringHistory = useRef(false);
+  const historySession = useRef("");
   const contentRef = useRef<HTMLElement>(null);
   const onDirtyChange = useCallback((value: boolean): void => {
     dirtyRef.current = value;
@@ -269,10 +275,14 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
     // 初次挂载后读取浏览器路由，服务端始终使用可复现的总览状态。
     // eslint-disable-next-line react/set-state-in-effect -- 浏览器路由在挂载后初始化。
     replaceRoute(next);
-    currentUrl.current = location.href;
-    currentHistoryIndex.current = historyIndex(history.state) ?? 0;
+    currentDashboardUrl.current = location.href;
+    historySession.current = Array.from(
+      crypto.getRandomValues(new Uint32Array(4)),
+      (value) => value.toString(16)
+    ).join("-");
+    currentHistoryIndex.current = 0;
     history.replaceState(
-      historyState(currentHistoryIndex.current),
+      historyState(currentHistoryIndex.current, historySession.current),
       "",
       location.href
     );
@@ -293,19 +303,11 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
   }, []);
   useEffect(() => {
     const sync = (event: PopStateEvent): void => {
-      const targetIndex = historyIndex(event.state);
-      if (restoringHistory.current) {
-        restoringHistory.current = false;
-        currentUrl.current = location.href;
-        return;
-      }
+      const targetIndex = historyIndex(event.state, historySession.current);
       const isDashboard =
         new URLSearchParams(location.search).get("app")?.toLowerCase() ===
         "dashboard";
       if (!isDashboard) {
-        currentUrl.current = location.href;
-        currentHistoryIndex.current =
-          targetIndex ?? currentHistoryIndex.current;
         return;
       }
       const next = readRoute();
@@ -315,31 +317,24 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
         next.selectedId !== previous.selectedId ||
         next.invalidModule !== previous.invalidModule;
       if (!changed) {
-        currentUrl.current = location.href;
+        currentDashboardUrl.current = location.href;
         currentHistoryIndex.current =
           targetIndex ?? currentHistoryIndex.current;
         return;
       }
       if (!canLeave()) {
-        const delta =
-          targetIndex === undefined
-            ? 0
-            : currentHistoryIndex.current - targetIndex;
-        if (delta) {
-          restoringHistory.current = true;
-          history.go(delta);
-        } else {
-          history.pushState(
-            historyState(currentHistoryIndex.current),
-            "",
-            currentUrl.current
-          );
-        }
+        // 本实例序号不等于全局历史距离；恢复草稿所在地址会截断当前前进分支。
+        currentHistoryIndex.current += 1;
+        history.pushState(
+          historyState(currentHistoryIndex.current, historySession.current),
+          "",
+          currentDashboardUrl.current
+        );
         return;
       }
       onDirtyChange(false);
       replaceRoute(next);
-      currentUrl.current = location.href;
+      currentDashboardUrl.current = location.href;
       currentHistoryIndex.current = targetIndex ?? currentHistoryIndex.current;
       setResetNotice(false);
     };
@@ -354,8 +349,12 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
     if (next.selectedId) url.searchParams.set("dashboardItem", next.selectedId);
     else url.searchParams.delete("dashboardItem");
     currentHistoryIndex.current += 1;
-    history.pushState(historyState(currentHistoryIndex.current), "", url);
-    currentUrl.current = url.href;
+    history.pushState(
+      historyState(currentHistoryIndex.current, historySession.current),
+      "",
+      url
+    );
+    currentDashboardUrl.current = url.href;
     replaceRoute(next);
   };
   const onNavigate: DashboardViewProps["onNavigate"] = (module, selectedId) => {
