@@ -1,9 +1,6 @@
 /* eslint-disable unicorn/no-null -- 测试明确覆盖缺失值与零值的不同语义。 */
 import { DEMO_NOW, makeDemoData } from "components/apps/Dashboard/fixtures";
-import {
-  type DemoPrivacyPolicy,
-  type Membership,
-} from "components/apps/Dashboard/model";
+import { type Membership } from "components/apps/Dashboard/model";
 import { getChartGeometry } from "components/apps/Dashboard/shared/chart";
 import {
   formatBytes,
@@ -14,12 +11,6 @@ import {
   safeExternalUrl,
 } from "components/apps/Dashboard/shared/format";
 import {
-  getDemoCalendarWindow,
-  isInDemoWindow,
-  selectPersonalDemoPreview,
-} from "components/apps/Dashboard/shared/preview";
-import {
-  selectVisibleDemoData,
   summarizeMemberships,
   summarizeServices,
   sumMoneyByCurrency,
@@ -29,11 +20,15 @@ describe("dashboard demonstration data", () => {
   it("creates independent nested records with a fixed clock", () => {
     const first = makeDemoData();
     const second = makeDemoData();
+    const originalPoint = second.personal.health[0].points[0].value;
+    const originalLabel = second.personal.checkups[0].items[0].label.en;
 
     first.memberships[0].payments[0].amount.minor = 999;
-    first.personal.policies.steps.visibility = "private";
+    first.personal.health[0].points[0].value = 999;
+    first.personal.checkups[0].items[0].label.en = "Changed sample label";
     expect(second.memberships[0].payments[0].amount.minor).toBe(2500);
-    expect(second.personal.policies.steps.visibility).toBe("public");
+    expect(second.personal.health[0].points[0].value).toBe(originalPoint);
+    expect(second.personal.checkups[0].items[0].label.en).toBe(originalLabel);
     expect(first.now).toBe(DEMO_NOW);
     expect(second.now).toBe(DEMO_NOW);
   });
@@ -42,8 +37,13 @@ describe("dashboard demonstration data", () => {
     const data = makeDemoData();
     const stale = data.services.find(({ id }) => id === "demo-gallery");
 
-    expect(stale).toMatchObject({ freshness: "stale", health: "up" });
-    expect(stale?.fetchedAt).not.toBe(stale?.observedAt);
+    expect(stale).toMatchObject({
+      fetchedAt: DEMO_NOW,
+      freshness: "stale",
+      health: "up",
+      observedAt: "2026-10-18T06:00:00Z",
+      sourceUpdatedAt: "2026-10-18T06:00:00Z",
+    });
     expect(
       data.servers.some(
         ({ freshness, health }) => freshness === "fresh" && health === "down"
@@ -111,7 +111,7 @@ describe("dashboard value formatting", () => {
     expect(formatMoney({ currency: "USD", minor: 1 }, "en")).toContain("0.01");
   });
 
-  it("rejects unsafe links and keeps invalid dates visibly missing", () => {
+  it("rejects unsafe links", () => {
     // eslint-disable-next-line no-script-url -- 不执行该字符串，只检查拒绝危险协议。
     expect(safeExternalUrl("javascript:alert(1)")).toBeNull();
     expect(safeExternalUrl("https://user:secret@example.invalid")).toBeNull();
@@ -220,130 +220,38 @@ describe("chart geometry", () => {
       getChartGeometry([{ at: DEMO_NOW, value: 0 }]).segments[0][0]
     ).toMatchObject({ value: 0, x: 150, y: 40 });
   });
-});
 
-describe("uTC calendar preview", () => {
-  const policy: DemoPrivacyPolicy = {
-    delayDays: 7,
-    history: "threeDays",
-    mode: "calendar",
-    visibility: "public",
-  };
-
-  it("anchors history to the delayed cutoff and uses a half-open window", () => {
-    const window = getDemoCalendarWindow(policy, DEMO_NOW);
-
-    expect(window).toStrictEqual({
-      from: "2026-10-09T00:00:00.000Z",
-      toExclusive: "2026-10-12T00:00:00.000Z",
-    });
-    expect(isInDemoWindow(window.from, window)).toBe(true);
-    expect(isInDemoWindow(window.toExclusive, window)).toBe(false);
-    expect(
-      getDemoCalendarWindow(
-        { ...policy, delayDays: 1, history: "day" },
-        DEMO_NOW
-      )
-    ).toStrictEqual({
-      from: "2026-10-17T00:00:00.000Z",
-      toExclusive: "2026-10-18T00:00:00.000Z",
-    });
-  });
-
-  it("clamps a calendar month at month-end instead of using thirty days", () => {
-    expect(
-      getDemoCalendarWindow(
-        { ...policy, delayDays: 0, history: "month" },
-        "2026-03-31T12:00:00Z"
-      ).from
-    ).toBe("2026-02-28T12:00:00.000Z");
-  });
-
-  it("filters headline values and points together without mutating the source", () => {
-    const data = makeDemoData();
-    data.personal.policies.heartRate = {
-      ...policy,
-      delayDays: 1,
-      history: "threeDays",
-    };
-    const metric = data.personal.health.find(({ id }) => id === "heartRate");
-    if (!metric) throw new Error("Missing heart rate fixture");
-    metric.points = [
-      { at: "2026-10-17T20:00:00Z", value: 60 },
-      { at: "2026-10-18T11:59:00Z", value: 72 },
+  it("orders chart samples without mutating the source and leaves non-finite gaps", () => {
+    const points = [
+      { at: "2026-10-18T03:00:00Z", value: 5 },
+      { at: "2026-10-18T01:00:00Z", value: 0 },
+      { at: "2026-10-18T02:00:00Z", value: Number.POSITIVE_INFINITY },
     ];
-    const preview = selectPersonalDemoPreview(data.personal, DEMO_NOW);
-    const selected = preview.health.find(({ id }) => id === "heartRate");
+    const before = points.map((point) => ({ ...point }));
+    const result = getChartGeometry(points);
 
-    expect(selected).toMatchObject({
-      freshness: "stale",
-      note: {
-        en: "Sample selected within the demonstration window.",
-        zh: "仅显示演示时间范围内的样本。",
-      },
-      observedAt: "2026-10-17T20:00:00Z",
-      value: 60,
-    });
-    expect(selected?.points).toHaveLength(1);
-    expect(metric.value).toBe(72);
-    expect(metric.points).toHaveLength(2);
     expect(
-      preview.schedule.some(
-        ({ startsAt }) => Date.parse(startsAt) > Date.parse(DEMO_NOW)
-      )
-    ).toBe(true);
+      result.segments.map((segment) => segment.map(({ value }) => value))
+    ).toStrictEqual([[0], [5]]);
+    expect(points).toStrictEqual(before);
   });
 });
 
-describe("visitor demonstration selection", () => {
-  it("removes private records before any overview counts and hides source timing", () => {
-    const original = makeDemoData();
-    const selected = selectVisibleDemoData(original, "visitor");
-
-    expect(
-      selected.memberships.every(({ visibility }) => visibility === "public")
-    ).toBe(true);
-    expect(
-      selected.services.every(({ visibility }) => visibility === "public")
-    ).toBe(true);
-    expect(
-      selected.servers.every(({ visibility }) => visibility === "public")
-    ).toBe(true);
-    expect(
-      selected.sources.every(
-        ({ observedAt, sourceUpdatedAt }) =>
-          observedAt === null && sourceUpdatedAt === null
-      )
-    ).toBe(true);
-    expect(summarizeServices(selected.services).total).toBe(
-      original.services.length - 1
-    );
-  });
-
-  it("hides personal fields without altering the source data", () => {
-    const original = makeDemoData();
-    const selected = selectVisibleDemoData(original, "visitor");
-
-    expect(selected.personal).toMatchObject({
-      checkups: [],
-      location: null,
-      route: [],
-    });
-    expect(selected.personal.health.map(({ id }) => id)).toStrictEqual([
-      "steps",
-    ]);
-    expect(original.personal.location).not.toBeNull();
-  });
-
+describe("service summaries", () => {
   it("separates unmonitored, pending, stale and unhealthy services", () => {
-    const summary = summarizeServices(makeDemoData().services);
+    const data = makeDemoData();
+    const before = JSON.stringify(data.services);
+    const summary = summarizeServices(data.services);
 
-    expect(summary).toMatchObject({
+    expect(summary).toStrictEqual({
       attention: 1,
       healthy: 1,
       pending: 1,
       stale: 1,
+      total: 6,
+      unknown: 0,
       unmonitored: 1,
     });
+    expect(JSON.stringify(data.services)).toBe(before);
   });
 });
