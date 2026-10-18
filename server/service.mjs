@@ -1,126 +1,269 @@
-import http from 'node:http';
-import { randomBytes, randomUUID, scryptSync, timingSafeEqual } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync, statSync } from 'node:fs';
-import { resolve, dirname, extname, sep } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import http from "node:http";
+import { lstatSync, readFileSync, realpathSync, statSync } from "node:fs";
+import { dirname, extname, resolve, sep } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const root = dirname(fileURLToPath(import.meta.url));
-const clone = value => JSON.parse(JSON.stringify(value));
-const seed = JSON.parse(readFileSync(resolve(root, 'content/seed.json'), 'utf8'));
-const safeUrl = value => !value || /^https:\/\//.test(value);
-const publicFields = item => ({ id: item.id, kind: item.kind, featured: item.featured === true, order: item.order, accent: item.accent, technology: item.technology, repository: item.repository, website: item.website, video: item.video, translations: item.translations, imageId: item.imageId, imageUrl: item.imageId ? `/media/${item.imageId}` : null });
-const initial = () => ({ profile: clone(seed.profile), projects: seed.projects.map(item => ({ id: item.id, draft: clone(item), published: item.published ? publicFields(item) : null, version: 1, updatedAt: new Date().toISOString() })) });
+const seed = JSON.parse(
+  readFileSync(resolve(root, "content/seed.json"), "utf8")
+);
+const locales = ["zh", "en"];
+const imagePattern = /^[a-f\d-]+\.(png|jpg|webp)$/;
+const imageTypes = {
+  ".jpg": "image/jpeg",
+  ".png": "image/png",
+  ".webp": "image/webp",
+};
+const staticTypes = {
+  ...imageTypes,
+  ".css": "text/css",
+  ".html": "text/html; charset=utf-8",
+  ".ico": "image/x-icon",
+  ".js": "text/javascript",
+  ".json": "application/json",
+  ".mp3": "audio/mpeg",
+  ".mp4": "video/mp4",
+  ".svg": "image/svg+xml",
+  ".txt": "text/plain; charset=utf-8",
+  ".wasm": "application/wasm",
+  ".woff2": "font/woff2",
+  ".xml": "application/xml; charset=utf-8",
+};
+const requireObject = (value) => {
+  if (value === null || typeof value !== "object" || Array.isArray(value))
+    throw new Error("INVALID_PUBLIC_CONTENT");
+  return value;
+};
+const pickText = (value, fields) => {
+  requireObject(value);
+  return Object.fromEntries(
+    fields.map((field) => {
+      if (typeof value[field] !== "string")
+        throw new Error("INVALID_PUBLIC_CONTENT");
+      return [field, value[field]];
+    })
+  );
+};
+const publicProfile = (value) => {
+  const profile = pickText(value, ["name", "email", "github"]);
+  for (const field of ["headline", "bio", "education"])
+    profile[field] = pickText(value[field], locales);
+  return profile;
+};
+const publicProject = (value) => {
+  const project = pickText(value, [
+    "id",
+    "kind",
+    "accent",
+    "repository",
+    "website",
+    "video",
+  ]);
+  if (
+    !/^[\w-]+$/.test(project.id) ||
+    !["project", "tool", "contribution", "other"].includes(project.kind) ||
+    !Number.isInteger(value.order) ||
+    !Array.isArray(value.technology) ||
+    value.technology.some((item) => typeof item !== "string") ||
+    (value.featured !== undefined && typeof value.featured !== "boolean")
+  )
+    throw new Error("INVALID_PUBLIC_CONTENT");
+  for (const field of ["repository", "website", "video"]) {
+    if (project[field] && !/^https:\/\//.test(project[field]))
+      throw new Error("INVALID_PUBLIC_URL");
+  }
+  requireObject(value.translations);
+  project.translations = Object.fromEntries(
+    locales.map((locale) => [
+      locale,
+      pickText(value.translations[locale], [
+        "title",
+        "summary",
+        "background",
+        "contribution",
+        "detail",
+      ]),
+    ])
+  );
+  if (
+    value.imageId !== undefined &&
+    value.imageId !== null &&
+    (typeof value.imageId !== "string" || !imagePattern.test(value.imageId))
+  )
+    throw new Error("INVALID_PUBLIC_MEDIA");
+  project.order = value.order;
+  project.technology = [...value.technology];
+  project.featured = value.featured === true;
+  project.imageUrl = value.imageId ? `/media/${value.imageId}` : null;
+  return project;
+};
 
-export function createDevelopmentServer({ dataDir, key, staticDir, secureCookies = false }) {
-  if (typeof key !== 'string' || key.length < 24) throw new Error('Provide an explicit concept key of at least 24 characters');
-  mkdirSync(resolve(dataDir, 'images'), { recursive: true });
-  const file = resolve(dataDir, 'content.json');
-  const persist = value => { writeFileSync(file + '.next', JSON.stringify(value, null, 2), { mode: 0o600 }); renameSync(file + '.next', file); };
-  if (!existsSync(file)) persist(initial());
-  let data = JSON.parse(readFileSync(file, 'utf8'));
-  const sessions = new Map(), attempts = new Map(), salt = randomBytes(24), keyHash = scryptSync(key, salt, 32);
-  const send = (res, status, body, headers = {}) => { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', ...headers }); res.end(JSON.stringify(body)); };
-  const cookie = token => `hyc_concept_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${token ? 3600 : 0}${secureCookies ? '; Secure' : ''}`;
-  const body = async req => {
-    if (!req.headers['content-type']?.startsWith('application/json')) throw Object.assign(new Error('JSON_REQUIRED'), { status: 415 });
-    let length = 0; const chunks = [];
-    for await (const chunk of req) { length += chunk.length; if (length > 4_300_000) throw Object.assign(new Error('TOO_LARGE'), { status: 413 }); chunks.push(chunk); }
-    try { return JSON.parse(Buffer.concat(chunks).toString()); } catch { throw Object.assign(new Error('INVALID_JSON'), { status: 400 }); }
-  };
-  const invalid = message => Object.assign(new Error(message), { status: 400 });
-  const validate = item => {
-    if (!['project', 'tool', 'contribution', 'other'].includes(item.kind) || !Number.isInteger(item.order) || item.order < 0 || item.order > 10000) throw invalid('INVALID_FIELDS');
-    if (item.featured !== undefined && typeof item.featured !== 'boolean') throw invalid('INVALID_FIELDS');
-    if (!Array.isArray(item.technology) || item.technology.length > 15 || item.technology.some(x => typeof x !== 'string' || x.length > 80)) throw invalid('INVALID_TECHNOLOGY');
-    if (!['blue', 'violet', 'teal', 'amber'].includes(item.accent)) throw invalid('INVALID_ACCENT');
-    for (const field of ['repository', 'website', 'video']) if (typeof item[field] !== 'string' || item[field].length > 2000 || !safeUrl(item[field])) throw invalid('INVALID_URL');
-    if (typeof item.privateNote !== 'string' || item.privateNote.length > 5000) throw invalid('INVALID_NOTE');
-    for (const locale of ['zh', 'en']) {
-      const text = item.translations?.[locale];
-      if (!text || !text.title?.trim() || text.title.length > 100) throw invalid('TITLE_REQUIRED');
-      for (const field of ['summary', 'background', 'contribution', 'detail']) if (typeof text[field] !== 'string' || text[field].length > 10000) throw invalid('INVALID_TRANSLATION');
+const readPublishedContent = (dataDir) => {
+  let source = seed;
+  let stored = false;
+  if (dataDir) {
+    const filename = resolve(dataDir, "content.json");
+    try {
+      // 不跟随内容文件符号链接，不读取同目录的密钥或会话文件。
+      if (!lstatSync(filename).isFile())
+        throw new Error("INVALID_CONTENT_FILE");
+      source = JSON.parse(readFileSync(filename, "utf8"));
+      stored = true;
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
     }
+  }
+  requireObject(source);
+  if (!Array.isArray(source.projects))
+    throw new Error("INVALID_PUBLIC_CONTENT");
+  const media = new Set();
+  const projects = [];
+  for (const entry of source.projects) {
+    requireObject(entry);
+    let published;
+    if (stored) {
+      if (entry.published === null || entry.published === false) continue;
+      published = requireObject(entry.published);
+      if (published.id !== entry.id)
+        throw new Error("INVALID_PUBLISHED_SNAPSHOT");
+    } else {
+      if (entry.published !== true) continue;
+      published = entry;
+    }
+    projects.push(publicProject(published));
+    if (stored && published.imageId) media.add(published.imageId);
+  }
+  return {
+    media,
+    profile: publicProfile(source.profile),
+    projects: projects.sort((a, b) => a.order - b.order),
   };
-  const server = http.createServer(async (req, res) => {
+};
+
+const inside = (base, filename) =>
+  filename === base || filename.startsWith(base + sep);
+const staticFile = (staticDir, pathname) => {
+  const base = resolve(staticDir);
+  let filename = resolve(base, `.${pathname}`);
+  if (!inside(base, filename)) return undefined;
+  try {
+    if (statSync(filename).isDirectory())
+      filename = resolve(filename, "index.html");
+    const canonical = realpathSync(filename);
+    if (!inside(realpathSync(base), canonical) || !statSync(canonical).isFile())
+      return undefined;
+    return canonical;
+  } catch (error) {
+    if (["ENOENT", "ENOTDIR"].includes(error.code)) return undefined;
+    throw error;
+  }
+};
+const publicImage = (dataDir, id) => {
+  if (!dataDir) return undefined;
+  const filename = resolve(dataDir, "images", id);
+  try {
+    const info = lstatSync(filename);
+    if (!info.isFile() || info.size > 3_000_000) return undefined;
+    if (realpathSync(filename) !== resolve(realpathSync(dataDir), "images", id))
+      return undefined;
+    const bytes = readFileSync(filename);
+    const extension = extname(id);
+    const valid =
+      (extension === ".png" &&
+        bytes
+          .subarray(0, 8)
+          .equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) ||
+      (extension === ".jpg" &&
+        bytes[0] === 255 &&
+        bytes[1] === 216 &&
+        bytes[2] === 255) ||
+      (extension === ".webp" &&
+        bytes.toString("ascii", 0, 4) === "RIFF" &&
+        bytes.toString("ascii", 8, 12) === "WEBP");
+    return valid ? bytes : undefined;
+  } catch (error) {
+    if (["ENOENT", "ENOTDIR"].includes(error.code)) return undefined;
+    throw error;
+  }
+};
+
+export function createDevelopmentServer({ dataDir, staticDir } = {}) {
+  // 启动时只投影已发布数据；运行期间不创建目录、不写文件、不建立会话。
+  const data = readPublishedContent(dataDir);
+  const send = (res, status, body) => {
+    res.writeHead(status, {
+      "Cache-Control": "no-store",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-Content-Type-Options": "nosniff",
+    });
+    res.end(JSON.stringify(body));
+  };
+  const notFound = (res) => send(res, 404, { error: "NOT_FOUND" });
+  const server = http.createServer((req, res) => {
     try {
       const port = server.address().port;
-      if (![`127.0.0.1:${port}`, `localhost:${port}`].includes(req.headers.host)) return send(res, 421, { error: 'INVALID_HOST' });
-      const origin = `http://${req.headers.host}`, url = new URL(req.url, origin), path = url.pathname;
-      const token = /(?:^|;\s*)hyc_concept_session=([^;]+)/.exec(req.headers.cookie ?? '')?.[1];
-      let session = sessions.get(token);
-      if (session && session.expires < Date.now()) { sessions.delete(token); session = null; }
-      const write = !['GET', 'HEAD'].includes(req.method);
-      if (write && req.headers.origin && req.headers.origin !== origin) return send(res, 403, { error: 'INVALID_ORIGIN' });
-      if (req.method === 'GET' && path === '/api/session') return send(res, 200, { role: session ? 'admin' : 'visitor', csrf: session?.csrf ?? null });
-      if (req.method === 'POST' && path === '/api/session') {
-        const ip = req.socket.remoteAddress, recent = (attempts.get(ip) ?? []).filter(x => x > Date.now() - 60000);
-        if (recent.length >= 12) return send(res, 429, { error: 'TRY_LATER' });
-        attempts.set(ip, [...recent, Date.now()]); const input = await body(req);
-        if (typeof input.key !== 'string' || input.key.length > 256 || !timingSafeEqual(scryptSync(input.key, salt, 32), keyHash)) return send(res, 401, { error: 'INVALID_KEY' });
-        if (token) sessions.delete(token);
-        const next = randomBytes(32).toString('hex'); session = { csrf: randomBytes(24).toString('hex'), expires: Date.now() + 3600000 }; sessions.set(next, session);
-        return send(res, 200, { role: 'admin', csrf: session.csrf }, { 'Set-Cookie': cookie(next) });
+      if (
+        ![`127.0.0.1:${port}`, `localhost:${port}`].includes(req.headers.host)
+      )
+        return send(res, 421, { error: "INVALID_HOST" });
+      const url = new URL(req.url, `http://${req.headers.host}`);
+      let path;
+      try {
+        path = decodeURIComponent(url.pathname);
+      } catch {
+        return send(res, 400, { error: "INVALID_PATH" });
       }
-      if (req.method === 'DELETE' && path === '/api/session') {
-        if (!session || req.headers['x-csrf-token'] !== session.csrf) return send(res, 403, { error: 'INVALID_SESSION' });
-        sessions.delete(token); return send(res, 200, { role: 'visitor', csrf: null }, { 'Set-Cookie': cookie('') });
+      if (path.includes("\0")) return notFound(res);
+      if (
+        path === "/api/session" ||
+        path.startsWith("/api/session/") ||
+        path === "/api/admin" ||
+        path.startsWith("/api/admin/") ||
+        !["GET", "HEAD"].includes(req.method)
+      )
+        return notFound(res);
+      if (path === "/api/profile") return send(res, 200, data.profile);
+      if (path === "/api/projects") return send(res, 200, data.projects);
+      if (/^\/api\/projects\/[^/]+$/.test(path)) {
+        const found = data.projects.find(
+          (item) => item.id === path.split("/")[3]
+        );
+        return found ? send(res, 200, found) : notFound(res);
       }
-      if (req.method === 'GET' && path === '/api/profile') return send(res, 200, data.profile);
-      if (req.method === 'GET' && path === '/api/projects') return send(res, 200, data.projects.filter(x => x.published).map(x => x.published).sort((a, b) => a.order - b.order));
-      if (req.method === 'GET' && /^\/api\/projects\/[^/]+$/.test(path)) {
-        const found = data.projects.find(x => x.id === path.split('/')[3] && x.published);
-        return found ? send(res, 200, found.published) : send(res, 404, { error: 'NOT_FOUND' });
+      if (path.startsWith("/media/")) {
+        const id = path.slice(7);
+        if (!imagePattern.test(id) || !data.media.has(id)) return notFound(res);
+        const bytes = publicImage(dataDir, id);
+        if (!bytes) return notFound(res);
+        res.writeHead(200, {
+          "Cache-Control": "no-store",
+          "Content-Type": imageTypes[extname(id)],
+          "X-Content-Type-Options": "nosniff",
+        });
+        return req.method === "HEAD" ? res.end() : res.end(bytes);
       }
-      if (req.method === 'GET' && path.startsWith('/media/')) {
-        const id = path.slice(7), allowed = /^[a-f\d-]+\.(png|jpg|webp)$/.test(id) && data.projects.some(x => x.published?.imageId === id || (session && x.draft.imageId === id));
-        const filename = resolve(dataDir, 'images', id);
-        if (!allowed || !existsSync(filename)) return send(res, 404, { error: 'NOT_FOUND' });
-        res.writeHead(200, { 'Content-Type': { '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp' }[extname(id)], 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' }); return res.end(readFileSync(filename));
-      }
-      if (path.startsWith('/api/admin/')) {
-        if (!session) return send(res, 401, { error: 'AUTH_REQUIRED' });
-        if (write && req.headers['x-csrf-token'] !== session.csrf) return send(res, 403, { error: 'CSRF_REQUIRED' });
-        if (req.method === 'GET' && path === '/api/admin/projects') return send(res, 200, data.projects.map(x => ({ ...x.draft, published: Boolean(x.published), version: x.version, updatedAt: x.updatedAt, imageUrl: x.draft.imageId ? `/media/${x.draft.imageId}` : null })).sort((a, b) => a.order - b.order));
-        if (req.method === 'POST' && path === '/api/admin/projects') {
-          const id = randomUUID(), draft = { id, kind: 'project', order: data.projects.length, accent: 'blue', technology: [], repository: '', website: '', video: '', imageId: null, privateNote: '', translations: { zh: { title: '新项目', summary: '', background: '', contribution: '', detail: '' }, en: { title: 'New project', summary: '', background: '', contribution: '', detail: '' } } };
-          data.projects.push({ id, draft, published: null, version: 1, updatedAt: new Date().toISOString() }); persist(data); return send(res, 201, { ...draft, version: 1 });
-        }
-        const match = /^\/api\/admin\/projects\/([\w-]+)(?:\/(publish|unpublish|image))?$/.exec(path), item = match && data.projects.find(x => x.id === match[1]);
-        if (!item) return send(res, 404, { error: 'NOT_FOUND' });
-        const input = await body(req);
-        if (input.version !== item.version) return send(res, 409, { error: 'VERSION_CONFLICT' });
-        if (req.method === 'PATCH' && !match[2]) {
-          const allowed = ['version', 'translations', 'kind', 'featured', 'order', 'accent', 'technology', 'repository', 'website', 'video', 'privateNote'];
-          if (Object.keys(input).some(x => !allowed.includes(x))) return send(res, 400, { error: 'INVALID_FIELDS' });
-          const { version, ...fields } = input; const next = { ...item.draft, ...fields }; validate(next); item.draft = next;
-        } else if (req.method === 'POST' && match[2] === 'publish') {
-          validate(item.draft);
-          if (!item.draft.repository || ['zh', 'en'].some(locale => !item.draft.translations[locale].summary.trim())) return send(res, 400, { error: 'PUBLICATION_INCOMPLETE' });
-          item.published = publicFields(clone(item.draft));
-        } else if (req.method === 'POST' && match[2] === 'unpublish') item.published = null;
-        else if (req.method === 'POST' && match[2] === 'image') {
-          if (typeof input.base64 !== 'string' || input.base64.length > 4200000) return send(res, 413, { error: 'IMAGE_TOO_LARGE' });
-          const bytes = Buffer.from(input.base64, 'base64'); let extension;
-          if (bytes.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10]))) extension = 'png';
-          else if (bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255) extension = 'jpg';
-          else if (bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WEBP') extension = 'webp';
-          if (!extension || bytes.length > 3000000) return send(res, 415, { error: 'INVALID_IMAGE' });
-          const imageId = `${randomUUID()}.${extension}`; writeFileSync(resolve(dataDir, 'images', imageId), bytes, { mode: 0o600 }); item.draft.imageId = imageId;
-        } else return send(res, 405, { error: 'METHOD_NOT_ALLOWED' });
-        item.version++; item.updatedAt = new Date().toISOString(); persist(data);
-        return send(res, 200, { ...item.draft, version: item.version, published: Boolean(item.published), imageUrl: item.draft.imageId ? `/media/${item.draft.imageId}` : null });
-      }
-      if (path.startsWith('/api/')) return send(res, 404, { error: 'NOT_FOUND' });
-      if (!['GET', 'HEAD'].includes(req.method) || !staticDir) return send(res, 404, { error: 'NOT_FOUND' });
-      const decoded = decodeURIComponent(path), base = resolve(staticDir), filename = resolve(base, '.' + decoded);
-      if (!filename.startsWith(base + sep) && filename !== base) return send(res, 404, { error: 'NOT_FOUND' });
-      let asset = filename;
-      if (existsSync(asset) && statSync(asset).isDirectory()) asset = resolve(asset, 'index.html');
-      if (!existsSync(asset)) return send(res, 404, { error: 'NOT_FOUND' });
-      const type = { '.txt':'text/plain; charset=utf-8', '.xml':'application/xml; charset=utf-8', '.html':'text/html; charset=utf-8', '.js':'text/javascript', '.css':'text/css', '.json':'application/json', '.svg':'image/svg+xml', '.png':'image/png', '.webp':'image/webp', '.jpg':'image/jpeg', '.ico':'image/x-icon', '.wasm':'application/wasm', '.woff2':'font/woff2', '.mp4':'video/mp4', '.mp3':'audio/mpeg' }[extname(asset)] ?? 'application/octet-stream';
-      res.writeHead(200, { 'Content-Type': type, 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff', 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'credentialless' });
-      return req.method === 'HEAD' ? res.end() : res.end(readFileSync(asset));
-    } catch (error) { send(res, error.status ?? 500, { error: error.status ? error.message : 'SERVER_ERROR' }); }
+      if (path.startsWith("/api/") || !staticDir) return notFound(res);
+      const asset = staticFile(staticDir, path);
+      if (!asset) return notFound(res);
+      res.writeHead(200, {
+        "Cache-Control": "no-cache",
+        "Content-Type":
+          staticTypes[extname(asset)] ?? "application/octet-stream",
+        "Cross-Origin-Embedder-Policy": "credentialless",
+        "Cross-Origin-Opener-Policy": "same-origin",
+        "X-Content-Type-Options": "nosniff",
+      });
+      return req.method === "HEAD" ? res.end() : res.end(readFileSync(asset));
+    } catch {
+      return send(res, 500, { error: "SERVER_ERROR" });
+    }
+  });
+  // CONNECT 不进入普通请求回调；同样拒绝，不建立代理隧道。
+  server.on("connect", (_req, socket) => {
+    const body = JSON.stringify({ error: "NOT_FOUND" });
+    socket.end(
+      `HTTP/1.1 404 Not Found\r\nConnection: close\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: ${Buffer.byteLength(body)}\r\n\r\n${body}`
+    );
   });
   return server;
 }
