@@ -18,6 +18,12 @@ import {
   Toolbar,
 } from "components/apps/Dashboard/shared";
 import Detail from "components/apps/Dashboard/views/Services/Detail";
+import { summarizeHealthHistory } from "components/apps/Dashboard/views/Services/health";
+import {
+  HealthHistoryHelp,
+  HealthTimeline,
+  UptimeValue,
+} from "components/apps/Dashboard/views/Services/HealthHistory";
 import {
   categories,
   messages,
@@ -25,9 +31,9 @@ import {
 import ServiceStatus from "components/apps/Dashboard/views/Services/ServiceStatus";
 import {
   ServiceCard,
-  ServiceDescription,
   ServiceGrid,
   ServiceHeader,
+  ServiceIdentity,
   ServiceName,
   ServiceObservation,
 } from "components/apps/Dashboard/views/Services/styles";
@@ -73,11 +79,6 @@ const Services = (props: DashboardViewProps): ReactNode => {
         name.toLocaleLowerCase().includes(term)
       )
   );
-  const resetFilters = (): void => {
-    setCategory("all");
-    setSearch("");
-    setStatus("all");
-  };
 
   if (selected) {
     return <Detail key={selected.id} {...props} service={selected} />;
@@ -131,12 +132,14 @@ const Services = (props: DashboardViewProps): ReactNode => {
             <option value="unmonitored">{t.unmonitored}</option>
           </select>
         </Field>
-        {(category !== "all" || search || status !== "all") && (
-          <ActionButton onClick={resetFilters} type="button">
-            {t.clear}
-          </ActionButton>
-        )}
       </Toolbar>
+      <HealthHistoryHelp
+        locale={locale}
+        summary={summarizeHealthHistory(
+          data.services[0]?.healthHistory,
+          data.now
+        )}
+      />
       <Toolbar aria-label={t.category} role="group">
         {Object.entries(categories).map(([value, label]) => (
           <ActionButton
@@ -159,48 +162,59 @@ const Services = (props: DashboardViewProps): ReactNode => {
         <EmptyState description={t.noMatchesHint} title={t.noMatches} />
       ) : (
         <ServiceGrid>
-          {filtered.map((service) => (
-            <ServiceCard key={service.id}>
-              <ServiceHeader>
-                <h3>
-                  <ServiceName
-                    onClick={() => onNavigate("services", service.id)}
-                    type="button"
-                  >
-                    {localize(service.name, locale)}
-                  </ServiceName>
-                </h3>
-                <Muted>{localize(categories[service.category], locale)}</Muted>
-              </ServiceHeader>
-              <ServiceDescription>
-                {localize(service.description, locale)}
-              </ServiceDescription>
-              <ServiceStatus locale={locale} service={service} />
-              <ServiceObservation>
-                <span>
-                  {t.observedAt}:{" "}
-                  {service.observedAt ? (
-                    <time dateTime={service.observedAt}>
-                      {formatDateTime(
-                        service.observedAt,
-                        locale,
-                        data.timeZone
-                      )}
-                    </time>
-                  ) : (
-                    "—"
-                  )}{" "}
-                  ({data.timeZone})
-                </span>
-                {service.monitor && (
+          {filtered.map((service) => {
+            const summary = summarizeHealthHistory(
+              service.healthHistory,
+              data.now
+            );
+
+            return (
+              <ServiceCard key={service.id}>
+                <ServiceHeader>
+                  <ServiceIdentity>
+                    <h3>
+                      <ServiceName
+                        onClick={() => onNavigate("services", service.id)}
+                        title={localize(service.description, locale)}
+                        type="button"
+                      >
+                        {localize(service.name, locale)}
+                      </ServiceName>
+                    </h3>
+                    <ServiceStatus locale={locale} service={service} />
+                  </ServiceIdentity>
+                  <UptimeValue locale={locale} summary={summary} />
+                </ServiceHeader>
+                <HealthTimeline
+                  locale={locale}
+                  name={localize(service.name, locale)}
+                  summary={summary}
+                />
+                <ServiceObservation>
                   <span>
-                    {localize(service.monitor.location, locale)} ·{" "}
-                    {service.monitor.method}
+                    {localize(categories[service.category], locale)}
+                    {service.monitor &&
+                      ` · ${localize(service.monitor.location, locale)} · ${service.monitor.method}`}
                   </span>
-                )}
-              </ServiceObservation>
-            </ServiceCard>
-          ))}
+                  <span>
+                    {t.observedAt}:{" "}
+                    {service.observedAt ? (
+                      <time dateTime={service.observedAt}>
+                        {formatDateTime(
+                          service.observedAt,
+                          locale,
+                          data.timeZone
+                        )}
+                      </time>
+                    ) : (
+                      "—"
+                    )}{" "}
+                    ({data.timeZone})
+                  </span>
+                </ServiceObservation>
+              </ServiceCard>
+            );
+          })}
         </ServiceGrid>
       )}
     </Section>

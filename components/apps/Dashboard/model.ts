@@ -138,6 +138,16 @@ export type ServiceEvent = {
   summary: LocalizedText;
   title: LocalizedText;
 };
+export type ServiceHealthDay = {
+  date: string;
+  degraded: number;
+  down: number;
+  up: number;
+};
+export type ServiceHealthHistory = {
+  days: ServiceHealthDay[];
+  expectedSamplesPerDay: number;
+};
 export type Service = {
   category: "development" | "media" | "productivity" | "storage";
   description: LocalizedText;
@@ -145,6 +155,8 @@ export type Service = {
   fetchedAt: null | string;
   freshness: Freshness;
   health: HealthStatus;
+  healthHistory: null | ServiceHealthHistory;
+  // 响应时间样本，单位毫秒；与每日健康检查结果分开。
   history: ChartPoint[];
   id: string;
   latencyMs: null | number;
@@ -158,7 +170,6 @@ export type Service = {
   serverId: null | string;
   sourceId: string;
   sourceUpdatedAt: null | string;
-  uptimePercent: null | number;
   url: null | string;
   visibility: Visibility;
 };

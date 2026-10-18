@@ -25,6 +25,12 @@ import {
 import Editor, {
   type ServiceDraft,
 } from "components/apps/Dashboard/views/Services/Editor";
+import { summarizeHealthHistory } from "components/apps/Dashboard/views/Services/health";
+import {
+  HealthHistoryHelp,
+  HealthTimeline,
+  UptimeValue,
+} from "components/apps/Dashboard/views/Services/HealthHistory";
 import {
   categories,
   messages,
@@ -59,6 +65,7 @@ const Detail = ({
     second.startedAt.localeCompare(first.startedAt)
   );
   const canEdit = previewMode !== "visitor";
+  const healthSummary = summarizeHealthHistory(service.healthHistory, data.now);
   const save = (draft: ServiceDraft): void => {
     onUpdate((previous) => ({
       ...previous,
@@ -130,6 +137,20 @@ const Detail = ({
             </Muted>
           </Toolbar>
           {observationHint && <Notice>{observationHint}</Notice>}
+          <Card>
+            <Stack>
+              <SectionHeading>
+                <h3>{t.uptime}</h3>
+                <UptimeValue locale={locale} summary={healthSummary} />
+              </SectionHeading>
+              <HealthTimeline
+                locale={locale}
+                name={localize(service.name, locale)}
+                summary={healthSummary}
+              />
+              <HealthHistoryHelp locale={locale} summary={healthSummary} />
+            </Stack>
+          </Card>
           <Split>
             <Card>
               <Stack>
@@ -196,12 +217,6 @@ const Detail = ({
                 label={t.latency}
                 unit={service.latencyMs === null ? undefined : "ms"}
                 value={formatNumber(service.latencyMs, locale)}
-              />
-              <Metric
-                detail={t.uptimeHint}
-                label={t.uptime}
-                unit={service.uptimePercent === null ? undefined : "%"}
-                value={formatNumber(service.uptimePercent, locale)}
               />
             </MetricGrid>
           )}

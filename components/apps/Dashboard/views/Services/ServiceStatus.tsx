@@ -34,7 +34,14 @@ const ServiceStatus = ({
 
   const current = service.freshness === "fresh";
   const historical = !current && service.observedAt !== null;
-  const status = healthLabel(service.health, locale);
+  const displayHealth =
+    !current &&
+    !historical &&
+    service.health !== "pending" &&
+    service.health !== "maintenance"
+      ? "unknown"
+      : service.health;
+  const status = healthLabel(displayHealth, locale);
 
   return (
     <Toolbar>
