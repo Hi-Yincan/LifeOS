@@ -2,8 +2,9 @@ import styled from "styled-components";
 
 export const PersonalLayout = styled.div`
   display: grid;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
+  overflow-wrap: anywhere;
 
   button[aria-pressed="true"] {
     background: var(--hyc-selected);
@@ -11,7 +12,7 @@ export const PersonalLayout = styled.div`
   }
 
   h3 {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   input,
@@ -28,7 +29,7 @@ export const PersonalLayout = styled.div`
 `;
 export const RecordList = styled.ul`
   display: grid;
-  gap: 8px;
+  gap: 6px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -36,14 +37,14 @@ export const RecordList = styled.ul`
   li {
     border-bottom: 1px solid var(--hyc-line);
     display: grid;
-    gap: 5px;
+    gap: 4px;
     padding-bottom: 8px;
   }
 `;
 export const DetailsGrid = styled.dl`
   display: grid;
-  gap: 8px;
-  grid-template-columns: minmax(70px, auto) minmax(0, 1fr);
+  gap: 6px 10px;
+  grid-template-columns: minmax(60px, auto) minmax(0, 1fr);
   margin: 0;
 
   dt {
@@ -51,6 +52,7 @@ export const DetailsGrid = styled.dl`
   }
 
   dd {
+    font-variant-numeric: tabular-nums;
     margin: 0;
     overflow-wrap: anywhere;
   }
@@ -68,7 +70,7 @@ export const TableScroll = styled.div`
 `;
 export const Disclosure = styled.details`
   border: 1px solid var(--hyc-line);
-  padding: 10px;
+  padding: 8px;
 
   summary {
     cursor: pointer;
@@ -76,6 +78,6 @@ export const Disclosure = styled.details`
   }
 
   &[open] > summary {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 `;

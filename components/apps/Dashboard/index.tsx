@@ -1,5 +1,5 @@
 /* eslint-disable no-alert -- 沿用原生确认保护未保存示例，重置也需要明确确认。 */
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { makeDemoData } from "components/apps/Dashboard/fixtures";
 import messages from "components/apps/Dashboard/messages";
@@ -19,6 +19,10 @@ import {
 import Memberships from "components/apps/Dashboard/views/Memberships";
 import Overview from "components/apps/Dashboard/views/Overview";
 import Personal from "components/apps/Dashboard/views/Personal";
+import {
+  getPersonalTab,
+  tabs as personalTabs,
+} from "components/apps/Dashboard/views/Personal/common";
 import Servers from "components/apps/Dashboard/views/Servers";
 import Services from "components/apps/Dashboard/views/Services";
 import { Back } from "components/apps/FileExplorer/NavigationIcons";
@@ -121,8 +125,10 @@ const hasSelectedRecord = (data: DashboardDemoData, route: Route): boolean => {
   );
 };
 const StyledDashboard = styled(Surface)`
+  container-name: dashboard;
+  container-type: inline-size;
   display: grid;
-  grid-template-rows: 35px auto auto minmax(0, 1fr) 23px;
+  grid-template-rows: 35px minmax(0, 1fr) auto;
   height: 100%;
   min-width: 0;
   overflow: hidden;
@@ -131,6 +137,7 @@ const StyledDashboard = styled(Surface)`
 
   .dashboard-address {
     align-items: center;
+    flex: 1;
     gap: 7px;
     min-width: 0;
     padding: 0 6px;
@@ -142,49 +149,69 @@ const StyledDashboard = styled(Surface)`
     white-space: nowrap;
   }
 
-  .dashboard-controls {
-    background: var(--hyc-panel);
-    border-bottom: 1px solid var(--hyc-line);
-    display: grid;
-    gap: 6px;
-    padding: 8px 12px;
-  }
-
-  .dashboard-control-row {
+  .dashboard-top-actions {
     align-items: center;
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    flex: 0 0 auto;
+    gap: 5px;
+    padding-right: 7px;
   }
 
-  .dashboard-control-row label {
-    align-items: center;
-    display: flex;
-    gap: 6px;
-    margin-left: auto;
-  }
-
-  .dashboard-control-row select {
-    width: auto;
-  }
-
-  .dashboard-hint {
-    color: var(--hyc-muted);
+  .dashboard-top-actions select {
     font-size: 11px;
+    padding: 3px 4px;
+    width: 108px;
+  }
+
+  .dashboard-top-actions button {
+    font-size: 11px;
+    min-height: 24px;
+    padding: 2px 7px;
+  }
+
+  .dashboard-workspace {
+    display: grid;
+    grid-template-columns: clamp(68px, 16%, 148px) minmax(0, 1fr);
+    min-height: 0;
+    min-width: 0;
+  }
+
+  .dashboard-sidebar {
+    background: var(--hyc-panel);
+    border-right: 1px solid var(--hyc-line);
+    min-height: 0;
+    min-width: 0;
+    overflow: auto;
+    padding: 8px 4px;
+    ${ScrollBars()}
   }
 
   .dashboard-modules {
-    border-bottom: 1px solid var(--hyc-line);
     display: flex;
-    flex-wrap: wrap;
-    gap: 2px;
-    padding: 5px 8px;
+    flex-direction: column;
+    gap: 3px;
   }
 
   .dashboard-modules button {
     background: transparent;
     border-color: transparent;
-    gap: 5px;
+    flex-direction: column;
+    font-size: 11px;
+    gap: 3px;
+    justify-content: center;
+    min-height: 42px;
+    padding: 6px 2px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .dashboard-modules button span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .dashboard-nav-full {
+    display: none;
   }
 
   .dashboard-modules button[aria-current="page"] {
@@ -192,11 +219,31 @@ const StyledDashboard = styled(Surface)`
     border-color: var(--hyc-selected-border);
   }
 
+  .dashboard-submodules {
+    border-bottom: 1px solid var(--hyc-line);
+    display: grid;
+    gap: 1px;
+    padding-bottom: 6px;
+  }
+
+  .dashboard-submodules button {
+    color: var(--hyc-muted);
+    font-size: 11px;
+    min-height: 30px;
+    padding: 5px 2px;
+  }
+
+  .dashboard-submodules button[aria-current="page"] {
+    background: var(--hyc-hover);
+    border-color: transparent;
+    color: var(--hyc-text);
+  }
+
   .dashboard-content {
     min-height: 0;
     min-width: 0;
     overflow: auto;
-    padding: 14px;
+    padding: 10px;
     ${ScrollBars()}
   }
 
@@ -205,7 +252,7 @@ const StyledDashboard = styled(Surface)`
   }
 
   .dashboard-notice {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .dashboard-empty {
@@ -219,21 +266,103 @@ const StyledDashboard = styled(Surface)`
     outline: 1px solid var(--hyc-accent);
     outline-offset: 2px;
   }
-`;
-const StatusBar = styled(StyledStatusBar)`
-  gap: 10px;
-  min-width: 0;
-  overflow: hidden;
-  position: static;
-  width: auto;
 
-  span {
-    overflow: hidden;
-    text-overflow: ellipsis;
+  /* 不支持容器查询时保留随容器比例收缩的竖向导航。 */
+  @container dashboard (min-width: 560px) {
+    .dashboard-sidebar {
+      padding: 10px 6px;
+    }
+
+    .dashboard-modules > button {
+      flex-direction: row;
+      font-size: 12px;
+      gap: 8px;
+      justify-content: flex-start;
+      min-height: 36px;
+      padding: 7px;
+      text-align: left;
+    }
+
+    .dashboard-nav-short {
+      display: none;
+    }
+
+    .dashboard-nav-full {
+      display: inline;
+    }
+
+    .dashboard-submodules button {
+      align-items: flex-start;
+      padding: 6px 7px 6px 22px;
+      text-align: left;
+    }
+
+    .dashboard-content {
+      padding: 14px;
+    }
+
+    .dashboard-top-actions select {
+      width: 126px;
+    }
   }
 
-  span:last-child {
+  @container dashboard (min-width: 860px) {
+    .dashboard-content {
+      padding: 16px;
+    }
+
+    .dashboard-modules > button {
+      padding: 9px;
+    }
+  }
+`;
+const StatusBar = styled(StyledStatusBar)`
+  align-items: center;
+  border-top: 1px solid var(--hyc-line);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 11px;
+  gap: 4px 12px;
+  height: auto;
+  max-height: 144px;
+  min-height: 28px;
+  min-width: 0;
+  overflow: auto;
+  padding: 4px 9px;
+  position: static;
+  white-space: normal;
+  width: auto;
+  ${ScrollBars()}
+
+  .dashboard-status-end {
     margin-left: auto;
+  }
+
+  .dashboard-memory {
+    color: var(--hyc-muted);
+  }
+
+  details {
+    min-width: 0;
+  }
+
+  details[open] {
+    flex-basis: 100%;
+  }
+
+  summary {
+    cursor: pointer;
+    width: fit-content;
+  }
+
+  summary:focus-visible {
+    outline: 1px solid var(--hyc-accent);
+    outline-offset: 2px;
+  }
+
+  details p {
+    color: var(--hyc-muted);
+    padding-top: 4px;
   }
 `;
 
@@ -265,6 +394,7 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
     currentRoute.current = next;
     setRoute(next);
     contentRef.current?.focus({ preventScroll: true });
+    contentRef.current?.scrollTo({ left: 0, top: 0 });
   }, []);
   useEffect(() => {
     const next =
@@ -394,7 +524,17 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
   const data = selectVisibleDemoData(raw, previewMode);
   const View = views[route.module];
   const recordExists = hasSelectedRecord(data, route);
-  const viewKey = `${route.module}:${route.selectedId || ""}:${previewMode}:${resetRevision}`;
+  // 列表视图在实体间切换时保留筛选；临时编辑态由对应视图清理。
+  const entityKey = route.module === "personal" ? route.selectedId || "" : "";
+  const viewKey = `${route.module}:${entityKey}:${previewMode}:${resetRevision}`;
+  const personalTab = getPersonalTab(data.personal, route.selectedId);
+  const selectedPersonalTab = personalTabs.find(
+    ({ id: tabId }) => tabId === personalTab
+  );
+  const personalSection =
+    route.module === "personal" &&
+    (!route.selectedId ||
+      personalTabs.some(({ id: tabId }) => tabId === route.selectedId));
 
   return (
     <StyledDashboard
@@ -420,97 +560,143 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
           <Icon name="grid" size={16} />
           <span>
             {t.title} › {t.modules[route.module]}
-            {route.selectedId && ` › ${t.details}`}
+            {route.module === "personal" &&
+              selectedPersonalTab &&
+              ` › ${selectedPersonalTab.label[locale]}`}
+            {route.selectedId && !personalSection && ` › ${t.details}`}
           </span>
         </StyledAddressBar>
-      </StyledNavigation>
-      <div className="dashboard-controls">
-        <div className="dashboard-control-row">
-          <StatusBadge label={t.demo} />
-          <span>
-            {t.sampleTime}: {formatDateTime(raw.now, locale, raw.timeZone)}{" "}
-            {raw.timeZone}
-          </span>
-          <label>
-            {t.preview}
-            <select
-              aria-label={t.preview}
-              onChange={(event) =>
-                changePreview(
-                  event.target.value === "visitor" ? "visitor" : "all"
-                )
-              }
-              value={previewMode}
-            >
-              <option value="all">{t.all}</option>
-              <option value="visitor">{t.visitor}</option>
-            </select>
-          </label>
-          <ActionButton onClick={reset} type="button">
-            {t.reset}
-          </ActionButton>
-        </div>
-        <p className="dashboard-hint">
-          {t.demoHint}
-          {previewMode === "visitor" && ` ${t.previewHint}`}
-        </p>
-      </div>
-      <nav aria-label={t.navigation} className="dashboard-modules">
-        {moduleOrder.map((module) => (
+        <div className="dashboard-top-actions">
+          <select
+            aria-label={t.preview}
+            onChange={(event) =>
+              changePreview(
+                event.target.value === "visitor" ? "visitor" : "all"
+              )
+            }
+            value={previewMode}
+          >
+            <option value="all">{t.all}</option>
+            <option value="visitor">{t.visitor}</option>
+          </select>
           <ActionButton
-            key={module}
-            aria-current={module === route.module ? "page" : undefined}
-            onClick={() => onNavigate(module)}
+            aria-label={t.reset}
+            onClick={reset}
+            title={t.reset}
             type="button"
           >
-            <Icon name={icons[module]} size={15} />
-            {t.modules[module]}
+            {t.resetShort}
           </ActionButton>
-        ))}
-      </nav>
-      <main ref={contentRef} className="dashboard-content" tabIndex={-1}>
-        {route.invalidModule && (
-          <Notice className="dashboard-notice" role="status">
-            {t.unknownModule}{" "}
-            <ActionButton onClick={() => onNavigate("overview")} type="button">
-              {t.modules.overview}
-            </ActionButton>
-          </Notice>
-        )}
-        {resetNotice && (
-          <Notice className="dashboard-notice" role="status">
-            {t.resetDone}
-          </Notice>
-        )}
-        {recordExists ? (
-          <View
-            key={viewKey}
-            data={data}
-            locale={locale}
-            onDirtyChange={onDirtyChange}
-            onNavigate={onNavigate}
-            onUpdate={onUpdate}
-            previewMode={previewMode}
-            selectedId={route.selectedId}
-          />
-        ) : (
-          <div className="dashboard-empty">
-            <EmptyState title={t.missing} />
-            <ActionButton
-              onClick={() => onNavigate(route.module)}
-              type="button"
-            >
-              {t.backToList}
-            </ActionButton>
-          </div>
-        )}
-      </main>
-      <StatusBar>
-        <span>
-          {t.modules[route.module]} ·{" "}
-          {previewMode === "visitor" ? t.visitor : t.windowOnly}
+        </div>
+      </StyledNavigation>
+      <div className="dashboard-workspace">
+        <aside className="dashboard-sidebar">
+          <nav aria-label={t.navigation} className="dashboard-modules">
+            {moduleOrder.map((module) => (
+              <Fragment key={module}>
+                <ActionButton
+                  aria-current={module === route.module ? "page" : undefined}
+                  aria-label={t.modules[module]}
+                  onClick={() => onNavigate(module)}
+                  title={t.modules[module]}
+                  type="button"
+                >
+                  <Icon name={icons[module]} size={15} />
+                  <span className="dashboard-nav-full">
+                    {t.modules[module]}
+                  </span>
+                  <span className="dashboard-nav-short">
+                    {t.navigationShort[module]}
+                  </span>
+                </ActionButton>
+                {module === "personal" && route.module === "personal" && (
+                  <nav
+                    aria-label={t.personalNavigation}
+                    className="dashboard-submodules"
+                  >
+                    {personalTabs.map(({ id: tabId, label, shortLabel }) => (
+                      <ActionButton
+                        key={tabId}
+                        aria-current={
+                          personalTab === tabId ? "page" : undefined
+                        }
+                        aria-label={label[locale]}
+                        onClick={() => onNavigate("personal", tabId)}
+                        title={label[locale]}
+                        type="button"
+                      >
+                        <span className="dashboard-nav-full">
+                          {label[locale]}
+                        </span>
+                        <span className="dashboard-nav-short">
+                          {shortLabel[locale]}
+                        </span>
+                      </ActionButton>
+                    ))}
+                  </nav>
+                )}
+              </Fragment>
+            ))}
+          </nav>
+        </aside>
+        <main ref={contentRef} className="dashboard-content" tabIndex={-1}>
+          {route.invalidModule && (
+            <Notice className="dashboard-notice" role="status">
+              {t.unknownModule}{" "}
+              <ActionButton
+                onClick={() => onNavigate("overview")}
+                type="button"
+              >
+                {t.modules.overview}
+              </ActionButton>
+            </Notice>
+          )}
+          {resetNotice && (
+            <Notice className="dashboard-notice" role="status">
+              {t.resetDone}
+            </Notice>
+          )}
+          {recordExists ? (
+            <View
+              key={viewKey}
+              data={data}
+              locale={locale}
+              onDirtyChange={onDirtyChange}
+              onNavigate={onNavigate}
+              onUpdate={onUpdate}
+              previewMode={previewMode}
+              selectedId={route.selectedId}
+            />
+          ) : (
+            <div className="dashboard-empty">
+              <EmptyState title={t.missing} />
+              <ActionButton
+                onClick={() => onNavigate(route.module)}
+                type="button"
+              >
+                {t.backToList}
+              </ActionButton>
+            </div>
+          )}
+        </main>
+      </div>
+      <StatusBar className="dashboard-status-row">
+        <StatusBadge label={t.demo} />
+        <time dateTime={raw.now} title={raw.now}>
+          {t.sampleTime}: {formatDateTime(raw.now, locale, raw.timeZone)}{" "}
+          {raw.timeZone}
+        </time>
+        <span className="dashboard-memory">{t.memoryHint}</span>
+        <span className="dashboard-status-end" role="status">
+          {dirty ? t.unsaved : t.modules[route.module]}
+          {previewMode === "visitor" && ` · ${t.visitor}`}
         </span>
-        <span>{dirty ? t.unsaved : t.demo}</span>
+        <details>
+          <summary>{t.demoDetails}</summary>
+          <p>
+            {t.demoHint} {previewMode === "visitor" && t.previewHint}
+          </p>
+        </details>
       </StatusBar>
     </StyledDashboard>
   );

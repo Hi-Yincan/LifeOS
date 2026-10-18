@@ -20,11 +20,31 @@ export type EditTarget = {
 export type PanelProps = DashboardViewProps & {
   onEdit: (target: EditTarget) => void;
 };
-export const tabs: { id: PersonalTab; label: LocalizedText }[] = [
-  { id: "activity", label: { en: "Activity & schedule", zh: "活动与日程" } },
-  { id: "location", label: { en: "Location & route", zh: "位置与轨迹" } },
-  { id: "health", label: { en: "Daily health", zh: "日常健康" } },
-  { id: "checkups", label: { en: "Checkup records", zh: "检查记录" } },
+export const tabs: {
+  id: PersonalTab;
+  label: LocalizedText;
+  shortLabel: LocalizedText;
+}[] = [
+  {
+    id: "activity",
+    label: { en: "Activity & schedule", zh: "活动与日程" },
+    shortLabel: { en: "Activity", zh: "活动日程" },
+  },
+  {
+    id: "location",
+    label: { en: "Location & route", zh: "位置与轨迹" },
+    shortLabel: { en: "Location", zh: "位置轨迹" },
+  },
+  {
+    id: "health",
+    label: { en: "Daily health", zh: "日常健康" },
+    shortLabel: { en: "Health", zh: "健康" },
+  },
+  {
+    id: "checkups",
+    label: { en: "Checkup records", zh: "检查记录" },
+    shortLabel: { en: "Checkups", zh: "检查" },
+  },
 ];
 export const getPersonalTab = (
   personal: PersonalData,
