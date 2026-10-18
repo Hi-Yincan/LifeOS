@@ -32,6 +32,10 @@ jobs:
       - run: yarn test:server
       - run: yarn playwright install --with-deps chromium
       - run: yarn e2e:product
+      - run: node scripts/product/build.mjs --public
+      - run: yarn playwright test --config=playwright.dashboard.config.ts
+        env:
+          PUBLIC_DEPLOYMENT: "1"
       - uses: actions/upload-artifact@v6
         if: failure()
         with:
