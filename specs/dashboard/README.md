@@ -4,6 +4,8 @@
 
 入口：[架构与隐私](architecture.md) · [验收矩阵](acceptance.md) · [任务与阶段](implementation.md) · [调研交接](../development/dashboard-research.md)。既有 [OS UI 规范](../concept/design-system.md)、[内容权限](../concept/data-and-permissions.md)、[Pages 规范](../deployment/pages.md)继续适用。
 
+**当前实施范围更新（2026-10-18）：** 用户已要求开始并行开发，并明确本轮只设计前端、允许模拟数据、后端只记录不开发、未知内容最后集中询问。当前交付及验收以 [前端设计与演示规格](frontend.md) 为准；下文保留完整产品目标，涉及API/持久化/真实采集/提醒的要求属于后续阶段，不能作为本轮已完成能力。
+
 ## 1. Executive Summary（概述）
 
 **问题。** 作者的个人活动/健康、会员、服务可用性和服务器指标分散在不同来源；单个来源的界面与 LifeOS 不一致，权限、更新时间和统计口径也不同。把几套页面拼在一起不能保证数据可信或隐私一致。
