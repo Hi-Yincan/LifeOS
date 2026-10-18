@@ -20,7 +20,6 @@ import {
   Muted,
   Section,
   SectionHeading,
-  Stack,
   StatusBadge,
   summarizeMemberships,
   summarizeServices,
@@ -676,22 +675,20 @@ const Overview = ({
               )}
             </>
           ) : (
-            <Stack>
-              <EmptyState
-                title={text(
-                  "当前筛选下没有待处理事项",
-                  "No actions match this filter"
-                )}
-              />
-              {queueFilter !== "all" && (
-                <ActionButton
-                  onClick={() => setQueueFilter("all")}
-                  type="button"
-                >
-                  {text("清除事项筛选", "Clear action filter")}
-                </ActionButton>
+            <EmptyState
+              description={
+                queueFilter === "all"
+                  ? undefined
+                  : text(
+                      "请调整上方的事项筛选条件。",
+                      "Adjust the action filters above."
+                    )
+              }
+              title={text(
+                "当前筛选下没有待处理事项",
+                "No actions match this filter"
               )}
-            </Stack>
+            />
           )}
           <Disclosure>
             <summary>
@@ -774,22 +771,20 @@ const Overview = ({
             })}
           </StatusItems>
         ) : (
-          <Stack>
-            <EmptyState
-              title={text(
-                "当前筛选下没有需要留意的状态",
-                "No statuses need review in this filter"
-              )}
-            />
-            {statusFilter !== "all" && (
-              <ActionButton
-                onClick={() => setStatusFilter("all")}
-                type="button"
-              >
-                {text("清除状态筛选", "Clear status filter")}
-              </ActionButton>
+          <EmptyState
+            description={
+              statusFilter === "all"
+                ? undefined
+                : text(
+                    "请调整上方的状态筛选条件。",
+                    "Adjust the status filters above."
+                  )
+            }
+            title={text(
+              "当前筛选下没有需要留意的状态",
+              "No statuses need review in this filter"
             )}
-          </Stack>
+          />
         )}
         <Disclosure>
           <summary>
