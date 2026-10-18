@@ -7,14 +7,11 @@ import {
 import {
   ActionButton,
   Card,
-  CardGrid,
   DataTable,
   EmptyState,
   Field,
   formatDate,
   formatMoney,
-  Metric,
-  MetricGrid,
   Muted,
   Notice,
   safeExternalUrl,
@@ -45,23 +42,42 @@ import {
 import PaymentEditor from "components/apps/Dashboard/views/Memberships/PaymentEditor";
 import {
   Facts,
-  MemberCard,
+  ListControls,
+  MembershipTable,
   MoneyList,
+  ResultCount,
+  RowLink,
+  RowMeta,
+  RowStates,
+  SummaryStrip,
+  TableRegion,
 } from "components/apps/Dashboard/views/Memberships/styles";
 
-const Memberships = ({
+type MembershipContentProps = DashboardViewProps & {
+  category: "" | Membership["category"];
+  onCategoryChange: (category: "" | Membership["category"]) => void;
+  onSearchChange: (search: string) => void;
+  onSortChange: (sort: MembershipSort) => void;
+  search: string;
+  sort: MembershipSort;
+};
+
+const MembershipContent = ({
+  category,
   data,
   locale,
+  onCategoryChange,
   onDirtyChange,
   onNavigate,
+  onSearchChange,
+  onSortChange,
   onUpdate,
   previewMode = "all",
+  search,
   selectedId,
-}: DashboardViewProps): React.ReactNode => {
+  sort,
+}: MembershipContentProps): React.ReactNode => {
   const t = messages[locale];
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState<"" | Membership["category"]>("");
-  const [sort, setSort] = useState<MembershipSort>("date");
   const [editingId, setEditingId] = useState("");
   const [paymentId, setPaymentId] = useState("");
   const [decision, setDecision] = useState<{
@@ -122,8 +138,8 @@ const Memberships = ({
     onDirtyChange?.(false);
   };
   const clear = (): void => {
-    setCategory("");
-    setSearch("");
+    onCategoryChange("");
+    onSearchChange("");
   };
   const back = (): void => {
     setNotice("");
@@ -419,33 +435,30 @@ const Memberships = ({
       </SectionHeading>
       {notice && <Notice role="status">{t[notice]}</Notice>}
       {readonly && <Notice>{t.readOnly}</Notice>}
-      <MetricGrid>
-        <Metric
-          detail={`${data.memberships.length} ${t.total}`}
-          label={t.remaining}
-          value={summary.activeCount}
-        />
-        <Metric
-          detail={t.estimateHint}
-          label={t.estimate}
-          value={totals(summary.estimatedMonthly, t.noPlan)}
-        />
-        <Metric
-          detail={t.paidHint}
-          label={t.paid}
-          value={totals(summary.confirmedPayments, t.noPayments)}
-        />
-      </MetricGrid>
-      {summary.unknownAmountCount > 0 && (
-        <Notice>
-          {summary.unknownAmountCount} {t.unknownAmounts}
-        </Notice>
-      )}
-      <Toolbar>
+      <SummaryStrip
+        aria-label={locale === "zh" ? "会员摘要" : "Membership summary"}
+      >
+        <div>
+          <dt>{t.remaining}</dt>
+          <dd>
+            {summary.activeCount}
+            <small> / {data.memberships.length}</small>
+          </dd>
+        </div>
+        <div>
+          <dt>{t.estimate}</dt>
+          <dd>{totals(summary.estimatedMonthly, t.noPlan)}</dd>
+        </div>
+        <div>
+          <dt>{t.paid}</dt>
+          <dd>{totals(summary.confirmedPayments, t.noPayments)}</dd>
+        </div>
+      </SummaryStrip>
+      <ListControls>
         <Field>
           {t.search}
           <input
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) => onSearchChange(event.target.value)}
             placeholder={t.search}
             type="search"
             value={search}
@@ -455,7 +468,7 @@ const Memberships = ({
           {t.category}
           <select
             onChange={(event) =>
-              setCategory(event.target.value as typeof category)
+              onCategoryChange(event.target.value as typeof category)
             }
             value={category}
           >
@@ -470,7 +483,9 @@ const Memberships = ({
         <Field>
           {t.sort}
           <select
-            onChange={(event) => setSort(event.target.value as MembershipSort)}
+            onChange={(event) =>
+              onSortChange(event.target.value as MembershipSort)
+            }
             value={sort}
           >
             <option value="date">{t.sortDate}</option>
@@ -478,65 +493,86 @@ const Memberships = ({
             <option value="price">{t.priceSort}</option>
           </select>
         </Field>
-      </Toolbar>
+        <ResultCount role="status">
+          {visible.length} / {data.memberships.length} {t.total}
+        </ResultCount>
+      </ListControls>
       {visible.length > 0 ? (
-        <CardGrid>
-          {visible.map((item) => (
-            <MemberCard key={item.id}>
-              <SectionHeading>
-                <h3>{item.name[locale]}</h3>
-                <Muted>{categories[item.category][locale]}</Muted>
-              </SectionHeading>
-              <p>{item.planName[locale]}</p>
-              <Toolbar>
-                <StatusBadge
-                  label={entitlements[item.entitlement.status][locale]}
-                  tone={
-                    item.entitlement.status === "active" ? "success" : "neutral"
-                  }
-                />
-                <StatusBadge
-                  label={
+        <TableRegion>
+          <MembershipTable
+            aria-label={locale === "zh" ? "会员列表" : "Membership list"}
+          >
+            <thead>
+              <tr>
+                <th scope="col">{t.title}</th>
+                <th className="membership-price" scope="col">
+                  {t.editAmount}
+                </th>
+                <th className="membership-date" scope="col">
+                  {t.next}
+                </th>
+                <th scope="col">
+                  {locale === "zh" ? "权益与计划" : "Access & plan"}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {visible.map((item) => (
+                <tr key={item.id}>
+                  <th scope="row">
+                    <RowLink
+                      aria-label={`${t.details}: ${item.name[locale]}`}
+                      onClick={() => onNavigate("memberships", item.id)}
+                      type="button"
+                    >
+                      {item.name[locale]}
+                    </RowLink>
+                    <RowMeta>
+                      {categories[item.category][locale]}
+                      {item.planName[locale] && ` · ${item.planName[locale]}`}
+                    </RowMeta>
+                  </th>
+                  <td className="membership-price">
+                    {item.amount ? formatMoney(item.amount, locale) : t.unknown}
+                    <RowMeta>{cycles[item.cycle][locale]}</RowMeta>
+                  </td>
+                  <td className="membership-date">
+                    {item.renewal.status === "cancelled" ||
                     item.cycle === "oneTime"
                       ? t.noRenewal
-                      : renewals[item.renewal.status][locale]
-                  }
-                />
-              </Toolbar>
-              <Facts>
-                <dt>{t.editAmount}</dt>
-                <dd>
-                  {item.amount ? formatMoney(item.amount, locale) : t.unknown} ·{" "}
-                  {cycles[item.cycle][locale]}
-                </dd>
-                <dt>{t.next}</dt>
-                <dd>
-                  {item.renewal.status === "cancelled" ||
-                  item.cycle === "oneTime"
-                    ? t.noRenewal
-                    : viewDate(item.renewal.nextAt)}
-                </dd>
-                <dt>{t.end}</dt>
-                <dd>{viewDate(item.entitlement.endsAt)}</dd>
-              </Facts>
-              {summary.overdue.some(({ id }) => id === item.id) && (
-                <p>
-                  <StatusBadge label={t.overdue} tone="warning" />
-                </p>
-              )}
-              <ActionButton
-                aria-label={`${t.details}: ${item.name[locale]}`}
-                onClick={() => {
-                  setNotice("");
-                  onNavigate("memberships", item.id);
-                }}
-                type="button"
-              >
-                {t.details}
-              </ActionButton>
-            </MemberCard>
-          ))}
-        </CardGrid>
+                      : viewDate(item.renewal.nextAt)}
+                    {item.renewal.status === "active" &&
+                      item.renewal.cancelBy && (
+                        <RowMeta>
+                          {t.cancelBy}: {viewDate(item.renewal.cancelBy)}
+                        </RowMeta>
+                      )}
+                  </td>
+                  <td>
+                    <RowStates>
+                      <StatusBadge
+                        label={entitlements[item.entitlement.status][locale]}
+                        tone={
+                          item.entitlement.status === "active"
+                            ? "success"
+                            : "neutral"
+                        }
+                      />
+                      <RowMeta>
+                        {item.cycle === "oneTime"
+                          ? t.noRenewal
+                          : renewals[item.renewal.status][locale]}
+                      </RowMeta>
+                      {summary.overdue.some(({ id }) => id === item.id) && (
+                        <StatusBadge label={t.overdue} tone="warning" />
+                      )}
+                    </RowStates>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </MembershipTable>
+        </TableRegion>
       ) : (
         <Stack>
           <EmptyState
@@ -552,7 +588,32 @@ const Memberships = ({
           )}
         </Stack>
       )}
+      <RowMeta>
+        {t.estimateHint} {t.paidHint}
+        {summary.unknownAmountCount > 0 &&
+          ` ${summary.unknownAmountCount} ${t.unknownAmounts}`}
+      </RowMeta>
     </Section>
+  );
+};
+
+const Memberships = (props: DashboardViewProps): React.ReactNode => {
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState<"" | Membership["category"]>("");
+  const [sort, setSort] = useState<MembershipSort>("date");
+
+  // 外壳确认离开并变更实体后重建临时编辑态，筛选保留在外层。
+  return (
+    <MembershipContent
+      key={props.selectedId || "list"}
+      {...props}
+      category={category}
+      onCategoryChange={setCategory}
+      onSearchChange={setSearch}
+      onSortChange={setSort}
+      search={search}
+      sort={sort}
+    />
   );
 };
 export default Memberships;
