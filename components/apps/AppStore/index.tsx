@@ -72,7 +72,7 @@ const messages = {
     provisional:
       "Third-party research proposal: URL manifests. Code packages and site publication remain open decisions.",
     readonly:
-      "No code package is installed and no site administration access is granted.",
+      "Only this browser is affected. No code package is installed and site content is unchanged.",
     remove: "Remove",
     save: "Add to this browser",
     saved: "Saved in this browser",
@@ -127,7 +127,7 @@ const messages = {
     origin: "目标网站",
     process: "daedalOS 原生窗口",
     provisional: "第三方接入研究方案：URL 清单；代码包运行与站点发布待确认。",
-    readonly: "不会安装代码包或授予站点管理权限。",
+    readonly: "仅影响此浏览器，不会安装代码包或改变站点内容。",
     remove: "移除",
     save: "添加到本机",
     saved: "已保存到此浏览器",
