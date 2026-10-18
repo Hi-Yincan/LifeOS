@@ -29,6 +29,15 @@
 
 ## LifeOS 与发布仓库
 
-原仓库改名为 `Hi-Yincan/LifeOS`，本地 origin 随之更新。源码目录保留现有路径，避免活动原型与运行数据迁移；目录名不决定远程仓库名。
+2026-10-18 已按职责分开本地目录：
 
-`Hi-Yincan/Hi-Yincan.github.io` 是独立的轻量发布仓库，仅维护版本锁定、发布流程和说明，不是源码 worktree，也不使用 submodule。临时检出位于 `/private/tmp/lifeos-publisher`，日常开发仍只操作 LifeOS。详见 [职责与验收](../specs/deployment/repository-split.md)。
+| 本地目录 | origin | 用途 |
+| --- | --- | --- |
+| `/Users/acccan/Repos/Hi-Yincan/LifeOS` | `Hi-Yincan/LifeOS` | 唯一产品源码；新 Agent 从这里继续开发 |
+| `/Users/acccan/Repos/Hi-Yincan/hi-yincan.github.io` | `Hi-Yincan/Hi-Yincan.github.io` | 轻量发布配置；只在准备发布、调整发布流程或回退时使用 |
+
+两个目录是独立 Git 仓库，均使用 main；不是彼此的 worktree，也不使用 submodule。发布配置原先在 `/private/tmp/lifeos-publisher`，已整体移至上述固定目录。
+
+LifeOS 的 Git 历史、node_modules、out 和被忽略的运行数据随原目录整体迁移。4391 原型和 4392 产品本地服务从 LifeOS 新路径恢复；端口和运行数据保持。旧路径现在属于发布仓库，不能继续把它当作产品源码目录。
+
+源码更新不会自动部署。发布仓库仍通过 deployment.json 固定 LifeOS 的完整 SHA；本次本地目录整理不改变线上版本或 DNS。详见 [职责与验收](../specs/deployment/repository-split.md)。

@@ -28,7 +28,7 @@
 
 ## 本地工作区
 
-现有源码目录暂保留原路径，origin 改为 LifeOS，避免中断活动原型和本地服务。发布配置的临时检出在 `/private/tmp/lifeos-publisher`，不增加源码 worktree；它不保存运行数据，可重新克隆恢复。
+2026-10-18 已按用户要求分开本地目录：源码位于 `/Users/acccan/Repos/Hi-Yincan/LifeOS`，轻量发布仓库位于 `/Users/acccan/Repos/Hi-Yincan/hi-yincan.github.io`。两者是独立仓库，origin 分别对应各自远程。源码从旧目录整体迁移，保留原型、依赖和运行数据，并从新路径恢复本地预览；发布配置从原临时目录整体迁入固定位置。日常开发只打开 LifeOS，发布时才操作 hi-yincan.github.io。2026-10-17 验收 JSON 中的路径保留为当日历史快照，当前路径以本文和 maintenance/workspace.md 为准。
 
 ## 验收
 
