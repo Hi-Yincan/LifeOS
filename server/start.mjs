@@ -6,8 +6,8 @@ import { createDevelopmentServer } from './service.mjs';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const runtime = resolve(root, '.runtime');
-const port = Number(process.env.PERSONAL_OS_PORT || 4392);
-if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Invalid PERSONAL_OS_PORT');
+const port = Number(process.env.LIFEOS_PORT || 4392);
+if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Invalid LIFEOS_PORT');
 const staticDir = resolve(root, '../out');
 if (!existsSync(resolve(staticDir, 'index.html'))) throw new Error('Run yarn build first');
 mkdirSync(runtime, { recursive: true });

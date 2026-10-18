@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
 import {
   type Session,
-  usePersonalOS,
-} from "components/system/PersonalOS/context";
-import { STATIC_CONTENT } from "components/system/PersonalOS/deployment";
-import Icon from "components/system/PersonalOS/Icon";
-import Surface from "components/system/PersonalOS/Surface";
-import useLaunch from "components/system/PersonalOS/useLaunch";
+  useLifeOS,
+} from "components/system/LifeOS/context";
+import { STATIC_CONTENT } from "components/system/LifeOS/deployment";
+import Icon from "components/system/LifeOS/Icon";
+import Surface from "components/system/LifeOS/Surface";
+import useLaunch from "components/system/LifeOS/useLaunch";
 import { useProcessesActions } from "contexts/process";
 
 const Settings = ({ id }: ComponentProcessProps): React.ReactNode => {
@@ -19,7 +19,7 @@ const Settings = ({ id }: ComponentProcessProps): React.ReactNode => {
     session,
     setPreference,
     t,
-  } = usePersonalOS();
+  } = useLifeOS();
   const open = useLaunch();
   const { title } = useProcessesActions();
   useEffect(() => {
@@ -40,7 +40,7 @@ const Settings = ({ id }: ComponentProcessProps): React.ReactNode => {
         </span>
         <div>
           <h1>{t("settings")}</h1>
-          <p>Personal OS</p>
+          <p>LifeOS</p>
         </div>
       </div>
       <section className="hyc-setting-group">

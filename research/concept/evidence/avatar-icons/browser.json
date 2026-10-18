@@ -1,6 +1,7 @@
 {
+  "namingNote": "2026-10-18：名称和路径已统一为 LifeOS；其余数据为历史观察，未重新验证。",
   "initial": {
-    "href": "/System/PersonalOS/avatar.png",
+    "href": "/System/LifeOS/avatar.png",
     "type": "image/png",
     "count": 1,
     "title": "个人作品集 - daedalOS"
@@ -18,29 +19,29 @@
   },
   "portfolioSurfaces": [
     {
-      "src": "/System/PersonalOS/portfolio.svg",
+      "src": "/System/LifeOS/portfolio.svg",
       "loaded": true
     },
     {
-      "src": "/System/PersonalOS/portfolio.svg",
+      "src": "/System/LifeOS/portfolio.svg",
       "loaded": true
     },
     {
-      "src": "/System/PersonalOS/portfolio.svg",
+      "src": "/System/LifeOS/portfolio.svg",
       "loaded": true
     },
     {
-      "src": "/System/PersonalOS/portfolio.svg",
+      "src": "/System/LifeOS/portfolio.svg",
       "loaded": true
     }
   ],
   "store": {
-    "favicon": "/System/PersonalOS/avatar.png",
+    "favicon": "/System/LifeOS/avatar.png",
     "title": "应用商店 - daedalOS",
-    "portfolioCatalogIcon": "/System/PersonalOS/portfolio.svg"
+    "portfolioCatalogIcon": "/System/LifeOS/portfolio.svg"
   },
   "desktop": {
-    "favicon": "/System/PersonalOS/avatar.png",
+    "favicon": "/System/LifeOS/avatar.png",
     "title": "daedalOS"
   }
 }

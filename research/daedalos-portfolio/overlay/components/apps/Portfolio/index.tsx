@@ -4,12 +4,12 @@ import StyledAddressBar from "components/apps/FileExplorer/StyledAddressBar";
 import { Back } from "components/apps/FileExplorer/NavigationIcons";
 import StyledStatusBar from "components/system/Files/FileManager/StyledStatusBar";
 import Button from "styles/common/Button";
-import Surface from "components/system/PersonalOS/Surface";
+import Surface from "components/system/LifeOS/Surface";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
 import { useProcessesActions } from "contexts/process";
-import { type Project, type Profile, type ProjectText, type Locale, usePersonalOS } from "components/system/PersonalOS/context";
-import Icon from "components/system/PersonalOS/Icon";
-import { registerCloseGuard } from "components/system/PersonalOS/closeGuards";
+import { type Project, type Profile, type ProjectText, type Locale, useLifeOS } from "components/system/LifeOS/context";
+import Icon from "components/system/LifeOS/Icon";
+import { registerCloseGuard } from "components/system/LifeOS/closeGuards";
 
 const coverSymbols: Record<string, string> = { aipm: "book", videonote: "play", agentero: "spark", multica: "code" };
 const projectText = (item: Project, locale: Locale): ProjectText => item.translations[locale] || item.translations.en || item.translations.zh;
@@ -20,7 +20,7 @@ function Cover({ item, large = false }: { item: Project; large?: boolean }): Rea
 }
 
 function Editor({ item, processId, onClose, onChange }: { item: Project; processId: string; onClose: () => void; onChange: () => void }): React.ReactNode {
-  const { locale, t, request, errorText } = usePersonalOS();
+  const { locale, t, request, errorText } = useLifeOS();
   const [form, setForm] = useState(item), [dirty, setDirty] = useState(false), [busy, setBusy] = useState(false), [notice, setNotice] = useState(""), [error, setError] = useState("");
   useEffect(() => registerCloseGuard(processId, () => !dirty || confirm(t("leaveConfirm"))), [processId, dirty, t("leaveConfirm")]);
   useEffect(() => { const guard = (event: BeforeUnloadEvent): void => { if (dirty) { event.preventDefault(); event.returnValue = ""; } }; addEventListener("beforeunload", guard); return () => removeEventListener("beforeunload", guard); }, [dirty]);
@@ -54,7 +54,7 @@ function Editor({ item, processId, onClose, onChange }: { item: Project; process
 }
 
 export default function Portfolio({ id }: ComponentProcessProps): React.ReactNode {
-  const { t, locale, session, request, route, navigate, errorText } = usePersonalOS();
+  const { t, locale, session, request, route, navigate, errorText } = useLifeOS();
   const { title: setTitle } = useProcessesActions();
   const [items, setItems] = useState<Project[]>([]), [profile, setProfile] = useState<Profile | null>(null), [loading, setLoading] = useState(true), [error, setError] = useState("");
   const [revision, setRevision] = useState(0), [filter, setFilter] = useState("all"), [search, setSearch] = useState(""), [editing, setEditing] = useState(false);
@@ -76,7 +76,7 @@ export default function Portfolio({ id }: ComponentProcessProps): React.ReactNod
     <div className="hyc-workspace">
       <main className="hyc-main" key={editing ? "editing" : route}>
         {error ? <div className="hyc-empty" role="alert"><Icon name="globe" size={38}/><h2>{t("offline")}</h2><p>{error}</p><button onClick={() => setRevision(x => x + 1)}>{t("retry")}</button></div> : loading && !items.length ? <div className="hyc-skeleton" role="status"><div/><div/><div/><span>{t("loading")}</span></div> : editing && selected && admin ? <Editor key={selected.id} item={selected} processId={id} onClose={() => setEditing(false)} onChange={() => setRevision(x => x + 1)}/> : route.startsWith("project/") ? selected ? <article className="hyc-detail"><div className="hyc-heading-line"><button className="hyc-text-button" onClick={() => go("projects")}><Icon name="back" size={16}/>{t("back")}</button>{admin && <button onClick={() => setEditing(true)}><Icon name="edit" size={16}/>{t("edit")}</button>}</div><Cover item={selected} large/><div className="hyc-detail-heading"><div><span className="hyc-eyebrow">{selected.kind === "project" ? t("myProjects") : t("contributed")}</span><h1>{projectText(selected, locale).title}</h1><p className="hyc-detail-summary">{projectText(selected, locale).summary}</p></div></div><div className="hyc-actions">{selected.repository && <a className="hyc-primary" href={selected.repository} target="_blank" rel="noopener noreferrer"><Icon name="code" size={18}/>{t("source")}</a>}{selected.website && <a href={selected.website} target="_blank" rel="noopener noreferrer"><Icon name="link" size={17}/>{t("visit")}</a>}</div><div className="hyc-detail-columns"><div>{(['background','contribution','detail'] as const).map(field => projectText(selected, locale)[field] && <section key={field}><h2>{t(field)}</h2><p>{projectText(selected, locale)[field]}</p></section>)}{selected.video && <section><h2>{t("media")}</h2><a href={selected.video} target="_blank" rel="noopener noreferrer"><Icon name="play" size={18}/>{t("video")}</a></section>}</div><aside><h2>{t("stack")}</h2><div className="hyc-tags">{selected.technology.map(tag => <span key={tag}>{tag}</span>)}</div><p className="hyc-source-note">Open source<br/>GitHub</p></aside></div></article> : <div className="hyc-empty"><Icon name="code" size={40}/><h2>{t("missing")}</h2><p>{t("missingHint")}</p><button onClick={() => go("projects")}>{t("back")}</button></div> : active === "about" ? <article className="hyc-about"><div className="hyc-about-avatar">YH<span/></div><h1>{profile?.name}</h1><p className="hyc-about-lead">{profile?.bio[locale]}</p><div className="hyc-about-grid"><section><Icon name="book"/><h2>{t("education")}</h2><p>{profile?.education[locale]}</p></section><section><Icon name="spark"/><h2>AI Efficiency</h2><p>{t("aboutHint")}</p></section></div><section className="hyc-about-stack"><h2>{t("stack")}</h2><p className="hyc-muted">{t("skillHint")}</p><div className="hyc-tags">{[...new Set(items.flatMap(item => item.technology))].map(tag => <span key={tag}>{tag}</span>)}</div></section><section className="hyc-contact"><div><h2>{t("contact")}</h2><p>{profile?.email}</p></div><div className="hyc-actions"><a className="hyc-primary" href={`mailto:${profile?.email}`}><Icon name="mail" size={17}/>{t("email")}</a><a href={profile?.github} target="_blank" rel="noopener noreferrer"><Icon name="code" size={17}/>GitHub</a></div></section></article> : <>
-          {active === "overview" && <section className="hyc-hero"><img src="/System/PersonalOS/portfolio.svg" alt=""/><div><h1>{profile?.name}</h1><p>{profile?.bio[locale]}</p><div className="hyc-actions"><button onClick={() => go("projects")}>{t("browse")}</button><a href={profile?.github} target="_blank" rel="noopener noreferrer"><Icon name="code" size={16}/>GitHub</a></div></div></section>}
+          {active === "overview" && <section className="hyc-hero"><img src="/System/LifeOS/portfolio.svg" alt=""/><div><h1>{profile?.name}</h1><p>{profile?.bio[locale]}</p><div className="hyc-actions"><button onClick={() => go("projects")}>{t("browse")}</button><a href={profile?.github} target="_blank" rel="noopener noreferrer"><Icon name="code" size={16}/>GitHub</a></div></div></section>}
           <section className="hyc-collection"><div className="hyc-heading-line"><div><h2>{active === "overview" ? t("collection") : t("projects")}<span className="hyc-count">{items.length.toString().padStart(2,"0")}</span></h2></div>{admin ? <button className="hyc-primary" onClick={() => void create()}><Icon name="plus" size={16}/>{t("newProject")}</button> : active === "overview" && <button className="hyc-text-button" onClick={() => go("projects")}>{t("viewAll")}<Icon name="arrow" size={16}/></button>}</div>{active === "projects" && <div className="hyc-filterbar"><div className="hyc-segments">{([['all','all'],['project','myProjects'],['contribution','contributed']] as const).map(([value, label]) => <button key={value} aria-pressed={filter === value} onClick={() => setFilter(value)}>{t(label)}</button>)}</div><label className="hyc-search"><Icon name="search" size={17}/><input name="project-search" aria-label={t("search")} placeholder={t("search")} value={search} onChange={event => setSearch(event.target.value)}/></label></div>}<div className="hyc-project-grid">{(active === "overview" ? items : visible).map(item => <Card key={item.id} item={item}/>)}</div>{active === "projects" && !visible.length && <div className="hyc-empty"><Icon name="search" size={32}/><h2>{t("empty")}</h2><p>{t("emptyHint")}</p><button onClick={() => { setSearch(""); setFilter("all"); }}>{t("all")}</button></div>}</section>
         </>}
       </main>

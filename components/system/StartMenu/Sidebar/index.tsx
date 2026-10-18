@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { usePersonalOS } from "components/system/PersonalOS/context";
-import StartSettingsIcon from "components/system/PersonalOS/StartSettingsIcon";
-import useLaunch from "components/system/PersonalOS/useLaunch";
+import { useLifeOS } from "components/system/LifeOS/context";
+import StartSettingsIcon from "components/system/LifeOS/StartSettingsIcon";
+import useLaunch from "components/system/LifeOS/useLaunch";
 import SidebarButton, {
   type SidebarButtons,
 } from "components/system/StartMenu/Sidebar/SidebarButton";
@@ -35,7 +35,7 @@ type SidebarProps = {
 
 const Sidebar: FC<SidebarProps> = ({ height }) => {
   const rootFs = useRootFs();
-  const { t } = usePersonalOS();
+  const { t } = useLifeOS();
   const launch = useLaunch();
   const { setHaltSession } = useSessionActions();
   const [collapsed, setCollapsed] = useState(true);

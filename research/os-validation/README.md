@@ -1,4 +1,4 @@
-# 展示型个人 OS：选型实验
+# LifeOS：选型实验
 
 2026-10-16，关联 Issue #1 的 R12 / [R13 实测报告](https://github.com/Hi-Yincan/LifeOS/issues/1#issuecomment-6208862064)。这里是隔离的研究原型，不是已批准的生产实现。根目录站点未改动，全部内容为合成样例。
 

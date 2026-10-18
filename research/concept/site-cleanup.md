@@ -6,14 +6,14 @@
 
 之前只替换了标签页名称和头像，上游 `PACKAGE_DATA`、包作者字段、Open Graph URL/图片、默认书签，以及 robots/RSS 构建脚本仍使用旧作者身份。直接删生成文件会在下次构建恢复。本轮从配置、引用和生成链路同时修正。
 
-`overlay/personal-site.json` 统一提供 Yincan Huang、`https://hyc.ac`、头像、描述与站点索引入口。canonical、Open Graph、应用标题/终端站点身份、浏览器本站书签、包元信息和 robots/sitemap 均读取该配置。当前 sitemap 只列根入口、作品集和商店，不列管理设置及上游演示资料；没有修改 DNS。
+`overlay/lifeos.json` 统一提供 Yincan Huang、`https://hyc.ac`、头像、描述与站点索引入口。canonical、Open Graph、应用标题/终端站点身份、浏览器本站书签、包元信息和 robots/sitemap 均读取该配置。当前 sitemap 只列根入口、作品集和商店，不列管理设置及上游演示资料；没有修改 DNS。
 
 ## 已清理
 
 - 旧 `public/favicon.ico`、`public/screenshot.png`：分享图片与 favicon 都改用圆形头像；旧 URL 返回 404。
-- 旧 `System/PersonalOS/settings.svg`：设置窗口与开始菜单共用代码内的齿轮路径，窗口图标为 SVG data URL，不留下失效引用。
+- 旧 `System/LifeOS/settings.svg`：设置窗口与开始菜单共用代码内的齿轮路径，窗口图标为 SVG data URL，不留下失效引用。
 - 旧 `rss.xml`、`scripts/rssBuilder.js` 和 `scripts/robots.js`：本站生成器只提供现阶段真实存在的站点入口；未实现博客订阅前不声明 RSS。
-- 重复 `System/PersonalOS/capture.js`：研究截图工具复用原生已有的 html-to-image 文件。
+- 重复 `System/LifeOS/capture.js`：研究截图工具复用原生已有的 html-to-image 文件。
 - 重复 `site.ts` 名称配置：归并到 JSON 单一来源。
 - 上游作者默认浏览器书签、未提供内容的 OldSite 特判与预置 Nostr 联系人。保留浏览器、Dino 游戏和 Messenger 本身。Webamp 不因更改域名就假设 `hyc.ac` 获得第三方 CORS 许可，随机皮肤入口沿用仅本地可用的限制。
 - 两个 `.DS_Store`，历史 ProzillaOS 样机的 `dist` 和 `node_modules`（43,512,342 字节可重建内容）。

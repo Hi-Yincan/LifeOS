@@ -1,5 +1,5 @@
 const guards = new Map<string, () => boolean>();
-export const canClosePersonalApp = (id: string): boolean =>
+export const canCloseLifeOSApp = (id: string): boolean =>
   guards.get(id)?.() ?? true;
 export const registerCloseGuard = (
   id: string,
