@@ -28,6 +28,7 @@ import {
   useMessageContext,
 } from "components/apps/Messenger/MessageContext";
 import { NostrProvider } from "components/apps/Messenger/NostrContext";
+import PictureEditor from "components/apps/Messenger/PictureEditor";
 import ProfileBanner from "components/apps/Messenger/ProfileBanner";
 import SendMessage from "components/apps/Messenger/SendMessage";
 import StyledChatContainer from "components/apps/Messenger/StyledChatContainer";
@@ -64,6 +65,21 @@ const NostrChat: FC<NostrChatProps> = ({
   const { setBlockedKeys, setDeletedChats, setSeenEventIds } =
     useHistoryContext();
   const [selectedRecipientKey, setSelectedRecipientKey] = useState("");
+  const [editingPicture, setEditingPicture] = useState(false);
+  const messengerRef = useRef<HTMLDivElement>(null);
+  const pictureWasOpen = useRef(false);
+  const closePictureEditor = (): void => {
+    setEditingPicture(false);
+  };
+
+  useEffect(() => {
+    if (!editingPicture && pictureWasOpen.current) {
+      messengerRef.current
+        ?.querySelector<HTMLButtonElement>('button[aria-label="Profile"]')
+        ?.focus();
+    }
+    pictureWasOpen.current = editingPicture;
+  }, [editingPicture]);
   const [hideReadMessages, setHideReadMessages] = useState(false);
   const [view, setView] = useState<View>("chats");
   const [selectedKeys, setSelectedKeys] = useState<string[]>();
@@ -135,11 +151,20 @@ const NostrChat: FC<NostrChatProps> = ({
     if (selectedRecipientKey) markRead([selectedRecipientKey]);
   }, [markRead, selectedRecipientKey]);
 
+  if (editingPicture) {
+    return (
+      <StyledMessenger ref={messengerRef}>
+        <PictureEditor onClose={closePictureEditor} />
+      </StyledMessenger>
+    );
+  }
+
   return (
-    <StyledMessenger>
+    <StyledMessenger ref={messengerRef}>
       <ProfileBanner
         block={(key) => blockKeys([key])}
         deleteChat={(key) => deleteChats([key])}
+        editPicture={() => setEditingPicture(true)}
         goBack={
           selectedRecipientKey || view !== "chats"
             ? () =>

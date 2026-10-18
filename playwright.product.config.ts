@@ -6,7 +6,7 @@ export default defineConfig({
   reporter: [["list"], ["html", { open: "never" }]],
   retries: process.env.CI ? 1 : 0,
   testDir: "e2e",
-  testMatch: "product.spec.ts",
+  testMatch: ["product.spec.ts", "messenger-picture.spec.ts"],
   use: {
     baseURL: "http://127.0.0.1:4392",
     locale: "en-US",

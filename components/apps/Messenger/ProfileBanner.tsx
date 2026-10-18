@@ -1,4 +1,3 @@
-import { Metadata } from "nostr-tools/kinds";
 import {
   BASE_RW_RELAYS,
   UNKNOWN_PUBLIC_KEY,
@@ -6,20 +5,21 @@ import {
 } from "components/apps/Messenger/constants";
 import {
   copyKeyMenuItems,
-  createProfileEvent,
-  dataToProfile,
-  descCreatedAt,
   getSigner,
   getWebSocketStatusIcon,
   importSecretKey,
 } from "components/apps/Messenger/functions";
 import { useHistoryContext } from "components/apps/Messenger/HistoryContext";
-import { useNostrProfile } from "components/apps/Messenger/hooks";
+import {
+  useNostrProfile,
+  useUpdateProfile,
+} from "components/apps/Messenger/hooks";
 import { Back, Write } from "components/apps/Messenger/Icons";
 import { useNostr } from "components/apps/Messenger/NostrContext";
 import Profile, { PROFILE } from "components/apps/Messenger/Profile";
 import StyledProfileBanner from "components/apps/Messenger/StyledProfileBanner";
 import { type ProfileData, type Signer } from "components/apps/Messenger/types";
+import { usePersonalOS } from "components/system/PersonalOS/context";
 import { useMenu, useMenuActions } from "contexts/menu";
 import Button from "styles/common/Button";
 import { MENU_SEPERATOR } from "utils/constants";
@@ -32,6 +32,7 @@ const STYLING =
 type ProfileBannerProps = {
   block: (key: string) => void;
   deleteChat: (key: string) => void;
+  editPicture: () => void;
   goBack?: () => void;
   hideReadMessages: boolean;
   newChat: () => void;
@@ -43,6 +44,7 @@ type ProfileBannerProps = {
 const ProfileBanner: FC<ProfileBannerProps> = ({
   block,
   deleteChat,
+  editPicture,
   goBack,
   hideReadMessages,
   newChat,
@@ -50,7 +52,9 @@ const ProfileBanner: FC<ProfileBannerProps> = ({
   setHideReadMessages,
   setSigner,
 }) => {
-  const { connectToRelay, publish, query, relayStatus, signer } = useNostr();
+  const { connectToRelay, relayStatus, signer } = useNostr();
+  const { locale } = usePersonalOS();
+  const saveProfile = useUpdateProfile();
   const { publicKey, secretKey } = signer;
   const isOwnProfile = !selectedRecipientKey;
   const pubkey =
@@ -59,7 +63,6 @@ const ProfileBanner: FC<ProfileBannerProps> = ({
       : selectedRecipientKey || publicKey;
   const {
     banner,
-    data,
     nip05,
     picture,
     userName = "New message",
@@ -69,32 +72,21 @@ const ProfileBanner: FC<ProfileBannerProps> = ({
     : {};
   const { contextMenu } = useMenuActions();
   const { label: openMenu } = useMenu();
-  const { blockedKeys, setBlockedKeys, setProfiles } = useHistoryContext();
+  const { blockedKeys, setBlockedKeys } = useHistoryContext();
+  /* eslint-disable no-alert */
   const updateProfile = async (
     newProfile: Partial<ProfileData>
   ): Promise<void> => {
     if (Object.values(newProfile).filter(Boolean).length === 0) return;
 
     try {
-      // Merge onto the latest published profile so no fields are lost
-      const [latest] = toSorted(
-        await query({ authors: [publicKey], kinds: [Metadata] }),
-        descCreatedAt
-      );
-      let profile = data;
-
-      if (latest) profile = JSON.parse(latest.content) as ProfileData;
-
-      const content = { ...profile, ...newProfile };
-      const event = await createProfileEvent(signer, content);
-
-      publish(event);
-      setProfiles((currentProfiles) => ({
-        ...currentProfiles,
-        [publicKey]: dataToProfile(publicKey, content, event.created_at),
-      }));
+      await saveProfile(newProfile);
     } catch {
-      // Ignore errors publishing profile data
+      alert(
+        locale === "zh"
+          ? "资料保存失败，请检查中继连接后重试。"
+          : "Profile could not be saved. Check your relay connection and try again."
+      );
     }
   };
   const switchSigner = (useExtension: boolean): void => {
@@ -106,7 +98,6 @@ const ProfileBanner: FC<ProfileBannerProps> = ({
 
     getSigner().then(setSigner);
   };
-  /* eslint-disable no-alert */
   const { onContextMenuCapture } = contextMenu(() => {
     if (!pubkey) return [];
     if (!isOwnProfile) {
@@ -131,8 +122,8 @@ const ProfileBanner: FC<ProfileBannerProps> = ({
       },
       MENU_SEPERATOR,
       {
-        action: () => updateProfile({ picture: prompt("Picture URL") || "" }),
-        label: "Edit Picture",
+        action: editPicture,
+        label: locale === "zh" ? "修改头像" : "Edit Picture",
       },
       {
         action: () => updateProfile({ banner: prompt("Banner URL") || "" }),

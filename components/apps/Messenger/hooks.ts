@@ -8,6 +8,7 @@ import {
   NOTIFICATION_SOUND,
 } from "components/apps/Messenger/constants";
 import {
+  createProfileEvent,
   dataToProfile,
   decodePublicKey,
   descCreatedAt,
@@ -146,6 +147,38 @@ export const useWellKnownNames = (): Record<string, string> => {
   return names;
 };
 
+export const useUpdateProfile = (): ((
+  changes: Partial<ProfileData>
+) => Promise<void>) => {
+  const { publish, query, signer } = useNostr();
+  const { profiles, setProfiles } = useHistoryContext();
+
+  return async (changes) => {
+    const [latest] = toSorted(
+      await query({ authors: [signer.publicKey], kinds: [Metadata] }),
+      descCreatedAt
+    );
+    const previous = latest
+      ? (JSON.parse(latest.content) as ProfileData)
+      : profiles[signer.publicKey]?.data;
+    const content = { ...previous, ...changes };
+    const event = await createProfileEvent(signer, content);
+
+    if (!(await publish(event))) {
+      throw new Error("No relay accepted the profile");
+    }
+
+    setProfiles((current) => ({
+      ...current,
+      [signer.publicKey]: dataToProfile(
+        signer.publicKey,
+        content,
+        event.created_at
+      ),
+    }));
+  };
+};
+
 export const useNostrContacts = (
   publicKey: string,
   wellKnownNames: Record<string, string>
@@ -153,11 +186,7 @@ export const useNostrContacts = (
   const { messages } = useMessageContext();
   const { blockedKeys, seenEventIds } = useHistoryContext();
   const globalKeys = [
-    ...new Set(
-      Object.values(wellKnownNames).map(
-        decodePublicKey
-      )
-    ),
+    ...new Set(Object.values(wellKnownNames).map(decodePublicKey)),
   ].filter((key) => key && key !== publicKey && !blockedKeys.includes(key));
   const lastMessages: Record<string, DirectMessage> = {};
   const repliedKeys = new Set<string>();
