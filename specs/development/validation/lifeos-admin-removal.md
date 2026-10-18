@@ -28,7 +28,7 @@
 }
 ```
 
-后续仅补充本报告并格式化测试配置，不改变其行为、不重新构建或修改公开产物。本地产物在公开构建前以 APFS 克隆保留到 `.parallel/lifeos-admin-removal-20261018/validation-local-out`，本地浏览器截图保存在同批次 `validation-local-test-results`。当前公开产物位于 validation worktree 的 `out/`，公开自动截图位于该 worktree 的 `test-results/`。
+后续仅调整验证文件并补充本报告，不修改产品源码、不重新构建或修改公开产物。本地产物在公开构建前以 APFS 克隆保留到 `.parallel/lifeos-admin-removal-20261018/validation-local-out`，本地浏览器截图保存在同批次 `validation-local-test-results`。当前公开产物位于 validation worktree 的 `out/`，公开自动截图位于该 worktree 的 `test-results/`。
 
 ## 已执行检查
 
@@ -55,6 +55,14 @@ PUBLIC_DEPLOYMENT=1 node node_modules/@playwright/test/cli.js test --config=play
 本地配置新增 `LIFEOS_PORT`，与 `server/test/serve.mjs` 共用端口，默认仍为 4392；本轮在确认空闲后使用 4494。产品配置也纳入 Dashboard，避免本地模式遗漏看板回归。公开静态测试使用确认闲置的 4393，两项测试服务结束后均已退出。未操作现有 4392、4497 服务，4498 已由协调者切换到本轮公开产物。
 
 原始日志位于 `.parallel/lifeos-admin-removal-20261018/`：`validation-local-build.log`、`validation-public-build.log`、`validation-{lint,unit,tsc,server}.log`、`validation-public-{lint,unit,tsc}.log`、`validation-local-browser-first.log` 和 `validation-public-browser-first.log`。
+
+### 独立审查后的针对性复验
+
+独立审查发现禁止管理入口的测试正则遗漏部分旧文案。修正提交 `d126f0d360d8825affbd552a887be5da3ee78623` 按 `1736ea8c` 的 Settings、Portfolio 和 context 确切词条补齐 `New project / 新建作品`、`Sign out / 退出管理`、`Manage content / 内容管理`、`Management / 管理模式`，并断言旧维护容器和管理模式文字不存在。同时检查实际内容请求路径，明确本地使用 `/api/profile`、`/api/projects`，公开使用 `/content/profile.json`、`/content/projects.json`。
+
+该修正只影响测试覆盖，没有产品改动。保留上述 47/49 项完整套件记录，另外只重跑受影响的 `retired browser identity` 用例：本地 1/1 通过（4.7 秒），公开 1/1 通过（4.4 秒），均无跳过。日志为同批次 `validation-local-identity-review.log` 和 `validation-public-identity-review.log`。
+
+本地复验使用忽略目录中的临时 harness，导入当前 `createDevelopmentServer`，以保留的 `validation-local-out` 为静态目录、种子为只读 API 来源，在 4494 启动；临时 Playwright 配置保持 `reuseExistingServer: false`，由测试独立启停。公开复验继续使用现有产物和 4393。两项服务均已退出；没有替换正在服务的 `out/`，也没有操作 4392、4497 或 4498。
 
 ## 退役边界的实际证据
 
