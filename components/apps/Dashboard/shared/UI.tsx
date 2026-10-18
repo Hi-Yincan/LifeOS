@@ -21,7 +21,10 @@ const StyledBadge = styled.span<{ $tone: BadgeTone }>`
   color: ${({ $tone }) => ({ danger: "#ecadad", neutral: "var(--hyc-muted)", success: "#a2d4af", warning: "#e9c67a" })[$tone]};
   display: inline-block;
   font-size: 11px;
+  justify-self: start;
+  max-width: 100%;
   padding: 1px 5px;
+  width: fit-content;
 `;
 export const StatusBadge = ({
   label,
@@ -55,6 +58,7 @@ const MetricValue = styled.div`
   flex-wrap: wrap;
   gap: 5px;
   margin: 6px 0;
+
   strong {
     font-size: 22px;
     font-variant-numeric: tabular-nums;
@@ -86,20 +90,24 @@ const Chart = styled.figure`
   gap: 6px;
   margin: 0;
   min-width: 0;
+
   svg {
     height: 90px;
     overflow: visible;
     width: 100%;
   }
+
   figcaption {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     justify-content: space-between;
   }
+
   details {
     color: var(--hyc-muted);
   }
+
   summary {
     cursor: pointer;
     width: fit-content;
@@ -129,17 +137,31 @@ export const MiniChart = ({
         <Muted>{range}</Muted>
       </figcaption>
       {geometry.segments.length > 0 ? (
-        <svg aria-label={`${label}: ${range}`} role="img" viewBox="0 0 300 80">
+        <svg
+          aria-label={`${label}: ${range}`}
+          preserveAspectRatio="none"
+          role="img"
+          viewBox="0 0 300 80"
+        >
           <title>{label}</title>
-          <path d="M8 72H292" fill="none" stroke="var(--hyc-line)" />
+          <path
+            d="M8 72H292"
+            fill="none"
+            stroke="var(--hyc-line)"
+            vectorEffect="non-scaling-stroke"
+          />
           {geometry.segments.map((segment) =>
             segment.length === 1 ? (
-              <circle
+              <line
                 key={segment[0].at}
-                cx={segment[0].x}
-                cy={segment[0].y}
-                fill="var(--hyc-accent)"
-                r="2"
+                stroke="var(--hyc-accent)"
+                strokeLinecap="round"
+                strokeWidth="4"
+                vectorEffect="non-scaling-stroke"
+                x1={segment[0].x}
+                x2={segment[0].x}
+                y1={segment[0].y}
+                y2={segment[0].y}
               />
             ) : (
               <polyline
@@ -148,6 +170,7 @@ export const MiniChart = ({
                 points={segment.map(({ x, y }) => `${x},${y}`).join(" ")}
                 stroke="var(--hyc-accent)"
                 strokeWidth="1.5"
+                vectorEffect="non-scaling-stroke"
               />
             )
           )}
