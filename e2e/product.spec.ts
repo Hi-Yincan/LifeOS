@@ -3,19 +3,21 @@ import { expect, type Locator, type Request, test } from "@playwright/test";
 const expectNoManagement = async (scope: Locator): Promise<void> => {
   await expect(
     scope.getByRole("button", {
-      name: /^(?:Enter management|Create project|Edit project|Save draft|Publish saved|Unpublish|Log out|管理|进入管理|新增作品|编辑作品|保存草稿|发布|下架|退出管理)/,
+      name: /^(?:Enter management|New project|Edit project|Save draft|Publish saved version|Unpublish|Sign out|Manage content|Management|进入管理|新建作品|编辑作品|保存草稿|发布已保存版本|下架|退出管理|内容管理|管理模式)$/,
     })
   ).toHaveCount(0);
   await expect(
     scope.locator(
-      'input[type="password"], input[name="administrator-key"], .hyc-editor, input[name="project-title"]'
+      'input[type="password"], input[name="administrator-key"], .hyc-editor, .hyc-maintenance, input[name="project-title"]'
     )
   ).toHaveCount(0);
   await expect(
     scope.locator("summary").filter({ hasText: /Site maintenance|站点维护/ })
   ).toHaveCount(0);
   await expect(
-    scope.getByText(/^(?:Administrator|Visitor|管理员|访客)$/)
+    scope.getByText(
+      /^(?:Administrator|Visitor|Management|管理员|访客|管理模式)$/
+    )
   ).toHaveCount(0);
 };
 
@@ -296,6 +298,17 @@ test("retired browser identity keeps the same portfolio and cannot reveal manage
     )
   );
   expect(contentReads.length).toBeGreaterThanOrEqual(4);
+  expect(
+    [
+      ...new Set(
+        contentReads.map((request) => new URL(request.url()).pathname)
+      ),
+    ].sort()
+  ).toEqual(
+    process.env.PUBLIC_DEPLOYMENT
+      ? ["/content/profile.json", "/content/projects.json"]
+      : ["/api/profile", "/api/projects"]
+  );
   const headers = await Promise.all(
     contentReads.map((request) => request.allHeaders())
   );
