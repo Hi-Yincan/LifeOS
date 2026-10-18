@@ -100,7 +100,7 @@ test("saving directory edits updates shared memory without changing observations
   expect(container.textContent).toContain("示例已保存在本窗口");
 });
 
-test("visitor preview cannot edit and source failure does not establish a target outage", () => {
+test("read-only browsing cannot edit and source failure does not establish a target outage", () => {
   const data = makeDemoData();
   const original = data.services.find(({ id }) => id === "demo-notebook");
 
@@ -111,7 +111,7 @@ test("visitor preview cannot edit and source failure does not establish a target
     "监测来源不可用，不能据此判断目标服务宕机"
   );
   expect(container.textContent).toContain("上次观测状态: 正常");
-  expect(container.textContent).toContain("访客预览为只读");
+  expect(container.textContent).toContain("只读浏览");
   expect(container.textContent).not.toContain("编辑示例");
   expect(container.querySelector("a")).toBeNull();
 });
