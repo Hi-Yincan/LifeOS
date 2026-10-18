@@ -2,6 +2,8 @@
 
 核验日期：2026-10-16。本文件记录初始内容的依据，不把网站的营销描述当作已经独立验证的产品能力。
 
+2026-10-18 根据用户要求扩展核验公开仓库并自动归类；当前 16 项内容、上游归属、排除依据与精选规则见 [GitHub 作品归类记录](../development/github-portfolio-classification.md)。下表保留初始四项内容的来源记录。
+
 | 来源 | 用途 | 事实边界 |
 | --- | --- | --- |
 | [HuangYincan 个人 README](https://github.com/HuangYincan/HuangYincan) | 姓名、ZJU 2023 本科生、AI Efficiency、邮箱、项目归属 | Projects：AIPM、VideoNote-MCP；Contributed To：Agentero、Multica；未提供专业/工作经历/具体贡献 |

@@ -38,6 +38,7 @@ export const publicSnapshot = (source) => {
         ])
       );
       project.imageUrl = null;
+      project.featured = item.featured === true;
       return project;
     })
     .sort((a, b) => a.order - b.order);

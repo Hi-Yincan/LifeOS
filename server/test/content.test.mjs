@@ -22,10 +22,14 @@ async function fixture(t, options = {}) {
   return { call, login, server, dataDir };
 }
 
-test('visitor sees four bilingual published works with contribution attribution, no management fields', async t => {
+test('visitor sees classified bilingual works and curated highlights without management fields', async t => {
   const { call } = await fixture(t); const result = await call('/api/projects');
-  assert.equal(result.status, 200); assert.equal(result.data.length, 4);
-  assert.equal(result.data.filter(x => x.kind === 'contribution').length, 2);
+  assert.equal(result.status, 200); assert.equal(result.data.length, 16);
+  assert.equal(result.data.find(x => x.id === 'aipm').kind, 'project');
+  assert.equal(result.data.find(x => x.id === 'videonote').kind, 'tool');
+  assert.deepEqual(['project', 'tool', 'contribution', 'other'].map(kind => result.data.filter(x => x.kind === kind).length), [2, 5, 5, 4]);
+  assert.deepEqual(result.data.filter(x => x.featured).map(x => x.id), ['aipm', 'videonote', 'agentero']);
+  assert.equal(result.data.find(x => x.id === 'multica').featured, false);
   for (const p of result.data) { assert.ok(p.translations.zh.title && p.translations.en.title); assert.ok(!('privateNote' in p)); assert.ok(!('version' in p)); }
 });
 
@@ -35,7 +39,7 @@ test('single-key session has no account requirement; anonymous role spoofing can
   assert.equal((await call('/api/admin/projects')).status, 401);
   assert.equal((await call('/api/admin/projects', { method: 'POST', body: { role: 'admin' }, headers: { 'X-Role': 'admin' } })).status, 401);
   const auth = await login(); assert.equal((await call('/api/session', { auth })).data.role, 'admin');
-  assert.equal((await call('/api/admin/projects', { auth })).data.length, 4);
+  assert.equal((await call('/api/admin/projects', { auth })).data.length, 16);
 });
 
 test('draft, bilingual edit, publish snapshot, concurrent edit and unpublish behave independently', async t => {
@@ -56,6 +60,18 @@ test('draft, bilingual edit, publish snapshot, concurrent edit and unpublish beh
   assert.equal((await call(`/api/projects/${item.id}`)).status, 404);
 });
 
+test('featured selection changes only after publishing and does not unpublish the work', async t => {
+  const { call, login } = await fixture(t); const auth = await login();
+  let item = (await call('/api/admin/projects', { auth })).data.find(x => x.id === 'aipm');
+  assert.equal((await call('/api/admin/projects/aipm', { method: 'PATCH', auth, body: { version: item.version, featured: 'false' } })).status, 400);
+  const saved = await call('/api/admin/projects/aipm', { method: 'PATCH', auth, body: { version: item.version, featured: false } });
+  assert.equal(saved.status, 200); item = saved.data;
+  assert.equal((await call('/api/projects/aipm')).data.featured, true);
+  assert.equal((await call('/api/admin/projects/aipm/publish', { method: 'POST', auth, body: { version: item.version } })).status, 200);
+  const result = await call('/api/projects/aipm');
+  assert.equal(result.status, 200); assert.equal(result.data.featured, false);
+});
+
 test('draft media is private, becomes public on publish and is revoked on unpublish', async t => {
   const { call, login } = await fixture(t); const auth = await login();
   let item = (await call('/api/admin/projects', { auth })).data[0];
@@ -66,6 +82,23 @@ test('draft media is private, becomes public on publish and is revoked on unpubl
   assert.equal((await call(image)).status, 200); assert.equal((await call(image)).headers.get('cache-control'), 'no-store');
   await call(`/api/admin/projects/${item.id}/unpublish`, { method: 'POST', auth, body: { version: item.version } });
   assert.equal((await call(image)).status, 404);
+});
+
+test('category edits remain private until published and reject unknown categories', async t => {
+  const { call, login } = await fixture(t); const auth = await login();
+  let item = (await call('/api/admin/projects', { auth })).data.find(x => x.id === 'aipm');
+  for (const kind of ['tool', 'contribution', 'other', 'project']) {
+    const previousKind = item.kind;
+    const saved = await call('/api/admin/projects/aipm', { method: 'PATCH', auth, body: { version: item.version, kind } });
+    assert.equal(saved.status, 200); item = saved.data;
+    assert.equal(item.kind, kind);
+    assert.equal((await call('/api/projects/aipm')).data.kind, previousKind);
+    const published = await call('/api/admin/projects/aipm/publish', { method: 'POST', auth, body: { version: item.version } });
+    assert.equal(published.status, 200); item = published.data;
+    assert.equal((await call('/api/projects/aipm')).data.kind, kind);
+  }
+  assert.equal((await call('/api/admin/projects/aipm', { method: 'PATCH', auth, body: { version: item.version, kind: 'unknown' } })).status, 400);
+  assert.equal((await call('/api/projects/aipm')).data.kind, 'project');
 });
 
 test('missing CSRF and foreign origins cannot change content or authenticate', async t => {

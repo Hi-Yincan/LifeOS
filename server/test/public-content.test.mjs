@@ -18,6 +18,8 @@ test('public snapshot excludes unpublished records and private fields at each le
   assert.equal(JSON.stringify(snapshot).includes(secret), false);
   assert.equal(snapshot.projects[0].id, 'aipm');
   assert.equal(snapshot.profile.name, source.profile.name);
+  assert.deepEqual(snapshot.projects.filter(item => item.featured).map(item => item.id), ['aipm', 'videonote', 'agentero']);
+  assert.equal(snapshot.projects.find(item => item.id === 'multica').featured, false);
 });
 test('public snapshot refuses unpublished local media references', () => {
   const source = fixture();

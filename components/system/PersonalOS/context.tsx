@@ -20,9 +20,10 @@ export type ProjectText = {
 };
 export type Project = {
   accent: string;
+  featured?: boolean;
   id: string;
   imageUrl?: string;
-  kind: "contribution" | "project";
+  kind: "contribution" | "other" | "project" | "tool";
   order: number;
   privateNote?: string;
   published?: boolean;
@@ -53,7 +54,7 @@ export const messages = {
     back: "Back to projects",
     background: "Background",
     browse: "Explore work",
-    category: "Project relationship",
+    category: "Project category",
     close: "Close",
     collection: "Selected work",
     collectionHint:
@@ -94,18 +95,19 @@ export const messages = {
     minimize: "Minimize",
     missing: "This project is not available",
     missingHint: "It may be unpublished or no longer shared.",
-    myProjects: "My projects",
     newProject: "New project",
     note: "Private note",
     offline: "The content service is currently unavailable",
     openSource: "Open source",
     order: "Display order",
+    other: "Other",
     overview: "Overview",
     portfolio: "Portfolio",
     preferenceHint:
       "Your language preference stays in this browser. Language changes do not alter schedule time zones.",
     preview: "Preview",
     privateHint: "For site maintenance. Visitors do not need to sign in.",
+    products: "Products",
     profile: "About me",
     projects: "Projects",
     publish: "Publish saved version",
@@ -127,6 +129,7 @@ export const messages = {
     summary: "Short description",
     timezone: "Current time zone",
     title: "Project name",
+    tools: "Tools",
     unpublish: "Unpublish",
     unpublishedNotice: "Unpublished. Public access is closed.",
     unsaved: "Unsaved changes",
@@ -148,13 +151,13 @@ export const messages = {
     back: "返回作品",
     background: "项目背景",
     browse: "浏览作品",
-    category: "作品归属",
+    category: "作品分类",
     close: "关闭",
     collection: "精选作品",
     collectionHint: "从项目背景到开源实现，每项作品都有自己的起点。",
     conflict: "内容已被更新，请重新打开后编辑",
     contact: "联系我",
-    contributed: "参与贡献",
+    contributed: "贡献",
     contribution: "我的贡献",
     contributions: "开源贡献",
     detail: "项目介绍",
@@ -186,17 +189,18 @@ export const messages = {
     minimize: "最小化",
     missing: "作品不存在或尚未公开",
     missingHint: "这项作品可能已下架，也可能尚未发布。",
-    myProjects: "我的项目",
     newProject: "新建作品",
     note: "私有备注",
     offline: "暂时无法连接内容服务",
     openSource: "开源项目",
     order: "展示排序",
+    other: "其他",
     overview: "概览",
     portfolio: "个人作品集",
     preferenceHint: "语言选择会保存在此浏览器，切换不会改变日程的时区。",
     preview: "预览",
     privateHint: "此处仅用于作者维护，访客无需登录。",
+    products: "产品",
     profile: "个人简介",
     projects: "作品",
     publish: "发布已保存版本",
@@ -218,6 +222,7 @@ export const messages = {
     summary: "简短介绍",
     timezone: "当前时区",
     title: "作品名称",
+    tools: "工具",
     unpublish: "下架",
     unpublishedNotice: "已下架，公开访问已关闭",
     unsaved: "尚有未保存修改",

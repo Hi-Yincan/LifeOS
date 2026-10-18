@@ -30,6 +30,80 @@ test("portfolio project links load public content", async ({ page }) => {
   );
 });
 
+test("portfolio categories toggle independently of search", async ({
+  page,
+}) => {
+  await page.goto("/?app=Portfolio");
+  await expect(page.locator(".hyc-project-card h3")).toHaveText([
+    "AIPM",
+    "VideoNote-MCP",
+    "Agentero",
+  ]);
+  await expect(
+    page.locator('.hyc-project-card[href$="project=multica"]')
+  ).toHaveCount(0);
+  await expect(page.locator(".hyc-collection h2 .hyc-count")).toHaveText("03");
+  await page.getByRole("button", { exact: true, name: "Explore work" }).click();
+  const cards = page.locator(".hyc-project-card");
+  const categories = page.locator(".hyc-segments button");
+  const selected = page.locator('.hyc-segments [aria-pressed="true"]');
+  await expect(categories).toHaveText([
+    "Products",
+    "Tools",
+    "Contributions",
+    "Other",
+  ]);
+  await expect(selected).toHaveCount(0);
+  await expect(cards).toHaveCount(16);
+  /* eslint-disable no-await-in-loop -- 同一页面的筛选与取消操作必须顺序验证。 */
+  for (const [index, titles] of [
+    [0, ["AIPM", "JobMap"]],
+    [
+      1,
+      [
+        "VideoNote-MCP",
+        "ocrsnip",
+        "BililiveRecorder GUI",
+        "EPay Observer Android",
+        "Neptune Aircon Client",
+      ],
+    ],
+    [
+      2,
+      [
+        "Agentero",
+        "Multica",
+        "FanFan",
+        "epay-go",
+        "ARIS · Geoscience extensions",
+      ],
+    ],
+    [3, ["Vertical HDD Power Mount", "idea", "AGENTS.md", "GitHub Stats"]],
+  ] as const) {
+    await categories.nth(index).click();
+    await expect(selected).toHaveCount(1);
+    await expect(cards.locator("h3")).toHaveText([...titles]);
+    await categories.nth(index).press("Enter");
+    await expect(selected).toHaveCount(0);
+    await expect(cards).toHaveCount(16);
+  }
+  /* eslint-enable no-await-in-loop */
+  await categories.nth(0).click();
+  await categories.nth(1).click();
+  await expect(selected).toHaveCount(1);
+  await expect(cards).toHaveCount(5);
+  await page
+    .getByRole("textbox", { name: "Search projects or technology" })
+    .fill("AIPM");
+  await expect(cards).toHaveCount(0);
+  await categories.nth(1).click();
+  await expect(cards.locator("h3")).toHaveText(["AIPM"]);
+  await categories.nth(1).click();
+  await page.getByRole("button", { exact: true, name: "All work" }).click();
+  await expect(selected).toHaveCount(0);
+  await expect(cards).toHaveCount(16);
+});
+
 test("store defaults to all and toggles its three categories", async ({
   page,
 }) => {
@@ -143,6 +217,14 @@ test("author can save a private draft, publish it and unpublish it", async ({
   await portfolio
     .locator('input[name="project-title"]')
     .fill("AIPM integration test");
+  const category = portfolio.locator('select[name="project-kind"]');
+  await expect(category.locator("option")).toHaveText([
+    "Products",
+    "Tools",
+    "Contributions",
+    "Other",
+  ]);
+  await category.selectOption("other");
   await portfolio
     .getByRole("button", { exact: true, name: "Save draft" })
     .click();
@@ -151,6 +233,7 @@ test("author can save a private draft, publish it and unpublish it", async ({
   expect(((await draftPublic.json()) as Project).translations.en.title).toBe(
     "AIPM"
   );
+  expect(((await draftPublic.json()) as Project).kind).toBe("project");
   await portfolio
     .getByRole("button", { exact: true, name: "Publish saved version" })
     .click();
@@ -159,6 +242,7 @@ test("author can save a private draft, publish it and unpublish it", async ({
   expect(((await published.json()) as Project).translations.en.title).toBe(
     "AIPM integration test"
   );
+  expect(((await published.json()) as Project).kind).toBe("other");
   await portfolio
     .getByRole("button", { exact: true, name: "Unpublish" })
     .click();

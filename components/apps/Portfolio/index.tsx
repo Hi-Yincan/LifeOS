@@ -18,6 +18,15 @@ import Surface from "components/system/PersonalOS/Surface";
 import { useProcessesActions } from "contexts/process";
 import Button from "styles/common/Button";
 
+/* eslint-disable perfectionist/sort-objects -- 分类按产品、工具、贡献、其他的界面顺序显示。 */
+const projectCategories = {
+  project: "products",
+  tool: "tools",
+  contribution: "contributed",
+  other: "other",
+} as const;
+/* eslint-enable perfectionist/sort-objects */
+
 const coverSymbols: Record<string, string> = {
   agentero: "spark",
   aipm: "book",
@@ -210,17 +219,15 @@ const Editor = ({
             <select
               name="project-kind"
               onChange={(event) =>
-                update(
-                  "kind",
-                  event.target.value === "contribution"
-                    ? "contribution"
-                    : "project"
-                )
+                update("kind", event.target.value as Project["kind"])
               }
               value={form.kind}
             >
-              <option value="project">{t("myProjects")}</option>
-              <option value="contribution">{t("contributions")}</option>
+              {Object.entries(projectCategories).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {t(label)}
+                </option>
+              ))}
             </select>
           </label>
         </div>
@@ -447,9 +454,7 @@ const Card = ({
       <Cover item={item} />
       <div className="hyc-card-body">
         <div className="hyc-card-kicker">
-          <span>
-            {item.kind === "project" ? t("myProjects") : t("contributed")}
-          </span>
+          <span>{t(projectCategories[item.kind])}</span>
           {admin && (
             <span
               className={`hyc-status-chip ${item.published ? "" : "hyc-is-dirty"}`}
@@ -482,7 +487,7 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<Profile>();
   const [editing, setEditing] = useState(false);
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState<"" | Project["kind"]>("");
   const [revision, setRevision] = useState(0);
   const [search, setSearch] = useState("");
   const admin = session.role === "admin";
@@ -528,9 +533,10 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
     navigate(next);
   };
   const active = route.startsWith("project/") ? "projects" : route;
+  const featured = items.filter((item) => item.featured === true);
   const visible = items.filter(
     (item) =>
-      (filter === "all" || item.kind === filter) &&
+      (!filter || item.kind === filter) &&
       [
         projectText(item, locale).title,
         projectText(item, locale).summary,
@@ -653,9 +659,7 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
                 <div className="hyc-detail-heading">
                   <div>
                     <span className="hyc-eyebrow">
-                      {selected.kind === "project"
-                        ? t("myProjects")
-                        : t("contributed")}
+                      {t(projectCategories[selected.kind])}
                     </span>
                     <h1>{projectText(selected, locale).title}</h1>
                     <p className="hyc-detail-summary">
@@ -818,7 +822,12 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
                     <h2>
                       {active === "overview" ? t("collection") : t("projects")}
                       <span className="hyc-count">
-                        {items.length.toString().padStart(2, "0")}
+                        {(active === "overview"
+                          ? featured.length
+                          : items.length
+                        )
+                          .toString()
+                          .padStart(2, "0")}
                       </span>
                     </h2>
                   </div>
@@ -847,22 +856,24 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
                 {active === "projects" && (
                   <div className="hyc-filterbar">
                     <div className="hyc-segments">
-                      {(
-                        [
-                          ["all", "all"],
-                          ["project", "myProjects"],
-                          ["contribution", "contributed"],
-                        ] as const
-                      ).map(([value, label]) => (
-                        <button
-                          key={value}
-                          aria-pressed={filter === value}
-                          onClick={() => setFilter(value)}
-                          type="button"
-                        >
-                          {t(label)}
-                        </button>
-                      ))}
+                      {Object.entries(projectCategories).map(
+                        ([value, label]) => (
+                          <button
+                            key={value}
+                            aria-pressed={filter === value}
+                            onClick={() =>
+                              setFilter((current) =>
+                                current === value
+                                  ? ""
+                                  : (value as Project["kind"])
+                              )
+                            }
+                            type="button"
+                          >
+                            {t(label)}
+                          </button>
+                        )
+                      )}
                     </div>
                     <label className="hyc-search">
                       <Icon name="search" size={17} />
@@ -877,7 +888,7 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
                   </div>
                 )}
                 <div className="hyc-project-grid">
-                  {(active === "overview" ? items : visible).map((item) => (
+                  {(active === "overview" ? featured : visible).map((item) => (
                     <Card
                       key={item.id}
                       admin={admin}
@@ -896,7 +907,7 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
                     <button
                       onClick={() => {
                         setSearch("");
-                        setFilter("all");
+                        setFilter("");
                       }}
                       type="button"
                     >

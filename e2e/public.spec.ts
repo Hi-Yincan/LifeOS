@@ -5,13 +5,31 @@ test("public snapshot excludes management fields and local service data", async 
 }) => {
   const response = await request.get("/content/projects.json");
   expect(response.ok()).toBe(true);
-  const projects = (await response.json()) as { id: string }[];
+  const projects = (await response.json()) as {
+    featured: boolean;
+    id: string;
+  }[];
   expect(projects.map(({ id }) => id)).toEqual([
     "aipm",
     "videonote",
     "agentero",
     "multica",
+    "jobmap",
+    "ocrsnip",
+    "bililive-recorder-gui",
+    "epay-observer-android",
+    "neptune-aircon-client",
+    "fanfan",
+    "epay-go",
+    "aris-geo",
+    "vertical-hdd-power-mount",
+    "idea",
+    "agents-guidelines",
+    "github-stats",
   ]);
+  expect(
+    projects.filter(({ featured }) => featured).map(({ id }) => id)
+  ).toEqual(["aipm", "videonote", "agentero"]);
   expect(await response.text()).not.toMatch(
     /privateNote|updatedAt|"draft"|"version"|"published"/
   );
