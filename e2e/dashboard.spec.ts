@@ -33,22 +33,6 @@ const navigate = async (app: Locator, name: string): Promise<void> => {
     .getByRole("button", { exact: true, name })
     .click();
 };
-const answerDialog = async (
-  page: Page,
-  accept: boolean,
-  action: () => Promise<unknown>
-): Promise<void> => {
-  const event = page.waitForEvent("dialog");
-  const pending = action();
-  const dialog = await event;
-  expect(dialog.type()).toBe("confirm");
-  await (accept ? dialog.accept() : dialog.dismiss());
-  await pending;
-};
-const editActivity = async (app: Locator, title: string): Promise<void> => {
-  await app.getByRole("button", { name: "Edit sample activity" }).click();
-  await app.getByRole("textbox", { exact: true, name: "Title" }).fill(title);
-};
 const setLocale = async (page: Page, locale: "en" | "zh"): Promise<void> => {
   await page.locator('button[aria-label="Start"]').click();
   await page
@@ -62,6 +46,60 @@ const setLocale = async (page: Page, locale: "en" | "zh"): Promise<void> => {
   await settings
     .getByRole("button", { exact: true, name: /Close|关闭/ })
     .click();
+};
+const expectReadOnly = async (app: Locator): Promise<void> => {
+  await expect(
+    app.getByRole("button", {
+      name: /^(?:Add sample|Edit|Save|Record sample payment|Review sample payment|Confirm sample|Cancel renewal|Pause renewal|Plan to renew|Reset samples|新增|编辑|保存|记录示例付款|确认示例|取消续费|暂停续费|计划继续续费|重置示例)/,
+    })
+  ).toHaveCount(0);
+  await expect(
+    app.getByRole("combobox", {
+      name: /Preview|Visibility|预览范围|访客可见性|公开范围/,
+    })
+  ).toHaveCount(0);
+  await expect(
+    app
+      .locator("summary")
+      .filter({ hasText: /Per-item visibility|逐项公开预览/ })
+  ).toHaveCount(0);
+  await expect(app.getByRole("form")).toHaveCount(0);
+};
+const expectHealthMetrics = async (
+  app: Locator,
+  locale: "en" | "zh" = "en"
+): Promise<void> => {
+  await expect(app.getByRole("article")).toHaveCount(4);
+  await expect(app.locator("article h3")).toHaveText(
+    locale === "zh"
+      ? ["步数", "心率", "睡眠时长", "体重"]
+      : ["Steps", "Heart rate", "Sleep duration", "Weight"]
+  );
+  expect(
+    await app
+      .getByRole("article")
+      .evaluateAll((cards) => cards.map((card) => card.dataset.healthMetric))
+  ).toEqual(["steps", "heartRate", "sleep", "weight"]);
+  await expect(
+    app.getByRole("combobox", { name: /Health metric|健康指标/ })
+  ).toHaveCount(0);
+};
+const expectWorkspaceFits = async (app: Locator): Promise<void> => {
+  const gap = await app.evaluate((node) => {
+    const workspace = node.querySelector(".dashboard-workspace");
+    const footer = node.querySelector(":scope > footer");
+    if (!workspace || !footer) throw new Error("Dashboard regions missing");
+    return (
+      footer.getBoundingClientRect().top -
+      workspace.getBoundingClientRect().bottom
+    );
+  });
+  expect(Math.abs(gap)).toBeLessThanOrEqual(1);
+  expect(
+    await app
+      .locator(".dashboard-content")
+      .evaluate((node) => node.scrollWidth <= node.clientWidth + 1)
+  ).toBe(true);
 };
 
 test("Dashboard uses desktop, Start and store entries as a single native window", async ({
@@ -89,31 +127,33 @@ test("Dashboard uses desktop, Start and store entries as a single native window"
     .getByRole("list", { name: "Desktop" })
     .getByRole("button", { exact: true, name: "App Store" })
     .dblclick();
-  const card = page.locator('.hyc-store-card[data-app="Dashboard"]');
-  await card.locator(".hyc-store-launch").click();
+  await page
+    .locator('.hyc-store-card[data-app="Dashboard"] .hyc-store-launch')
+    .click();
   await expect(window).toHaveCount(1);
-  await expect(app).toBeVisible();
   await window.getByRole("button", { exact: true, name: "Maximize" }).click();
   await expect(
     window.getByRole("button", { exact: true, name: "Restore" })
   ).toBeVisible();
   await window.getByRole("button", { exact: true, name: "Restore" }).click();
+  await expectReadOnly(app);
 });
 
-test("overview filters and links preserve independent Dashboard and Portfolio query fields", async ({
+test("overview links, history and missing records preserve independent query fields", async ({
   page,
 }) => {
   const app = await openDashboard(page);
   await app.locator("summary").filter({ hasText: "Sample details" }).click();
-  await expect(app.getByText(/All records are fictional/)).toBeVisible();
+  await expect(
+    app.getByText(
+      "All records are fictional. All samples are available to read."
+    )
+  ).toBeVisible();
   await app.locator("summary").filter({ hasText: "Sample details" }).click();
   const actions = app.getByRole("region", { name: "Upcoming actions" });
   await actions
     .getByRole("button", { exact: true, name: "Memberships" })
     .click();
-  await expect(
-    actions.getByRole("button", { exact: true, name: "Demo Cinema" })
-  ).toBeVisible();
   await actions
     .getByRole("button", { exact: true, name: "Demo Cinema" })
     .click();
@@ -143,7 +183,7 @@ test("overview filters and links preserve independent Dashboard and Portfolio qu
   ).toBeVisible();
   await page.goto("/?app=Dashboard&dashboard=services&dashboardItem=missing");
   await expect(
-    app.getByText("This record is not available in the current preview.")
+    app.getByText("This sample record does not exist.")
   ).toBeVisible();
   await app.getByRole("button", { name: "Back to list" }).click();
   await expect(
@@ -151,10 +191,12 @@ test("overview filters and links preserve independent Dashboard and Portfolio qu
   ).toBeVisible();
 });
 
-test("membership filters, sample edits and explicit payment/renewal decisions remain separate", async ({
+test("membership filters and all access, renewal and payment records remain readable", async ({
   page,
 }) => {
   const app = await openDashboard(page, "memberships");
+  const table = app.getByRole("table", { name: "Membership list" });
+  await expect(table.locator("tbody tr")).toHaveCount(6);
   await app
     .getByRole("searchbox", { name: "Search memberships" })
     .fill("not-a-member");
@@ -166,21 +208,14 @@ test("membership filters, sample edits and explicit payment/renewal decisions re
   await app
     .getByRole("combobox", { exact: true, name: "Category" })
     .selectOption("cloud");
-  await expect(
-    app.getByRole("button", { name: "Details: Demo Cloud" })
-  ).toBeVisible();
-  await expect(
-    app.getByRole("button", { name: "Details: Demo Cinema" })
-  ).toHaveCount(0);
+  await expect(table.getByRole("button")).toHaveText(["Demo Cloud"]);
   await app
     .getByRole("combobox", { exact: true, name: "Category" })
     .selectOption("");
   await app
     .getByRole("combobox", { name: "Sort memberships" })
     .selectOption("name");
-  await expect(
-    app.getByRole("table", { name: "Membership list" }).getByRole("button")
-  ).toHaveText([
+  await expect(table.getByRole("button")).toHaveText([
     "Demo Archive",
     "Demo Cinema",
     "Demo Cloud",
@@ -191,76 +226,31 @@ test("membership filters, sample edits and explicit payment/renewal decisions re
   await app
     .getByRole("button", { exact: true, name: "Details: Demo Cinema" })
     .click();
-  await app.getByRole("button", { exact: true, name: "Edit sample" }).click();
-  await app
-    .getByRole("textbox", { exact: true, name: "Name (English)" })
-    .fill("Discarded cinema");
-  await app.getByRole("button", { exact: true, name: "Cancel" }).click();
-  await app.getByRole("button", { name: "Keep editing" }).click();
+  await expect(app.getByText("Access active", { exact: true })).toBeVisible();
   await expect(
-    app.getByRole("textbox", { exact: true, name: "Name (English)" })
-  ).toHaveValue("Discarded cinema");
-  await app.getByRole("button", { exact: true, name: "Cancel" }).click();
-  await app.getByRole("button", { name: "Discard changes" }).click();
-  await expect(app.getByRole("heading", { name: "Demo Cinema" })).toBeVisible();
+    app.getByText("Renewal planned", { exact: true }).first()
+  ).toBeVisible();
   const payments = app.getByRole("table", {
     name: "Confirmed sample payments",
   });
   await expect(payments.locator("tbody tr")).toHaveCount(1);
+  await expect(payments).toContainText("CNY 25.00");
+  await expectReadOnly(app);
+  await app.getByRole("button", { name: "Back to memberships" }).click();
   await app
-    .getByRole("button", { exact: true, name: "Cancel renewal" })
+    .getByRole("button", { exact: true, name: "Details: Demo Design" })
     .click();
-  await app.getByRole("button", { name: "Confirm sample change" }).click();
-  await expect(app.getByText("Access active", { exact: true })).toBeVisible();
-  await expect(
-    app.getByText("Renewal cancelled", { exact: true }).first()
-  ).toBeVisible();
-  await expect(payments.locator("tbody tr")).toHaveCount(1);
-  await app.getByRole("button", { name: "Record sample payment" }).click();
-  await app.getByRole("textbox", { name: "Amount per payment" }).fill("12.34");
-  await app.getByRole("button", { name: "Review sample payment" }).click();
-  await expect(
-    app.getByRole("button", { name: "Confirm sample payment" })
-  ).toBeVisible();
-  await app.getByRole("button", { name: "Confirm sample payment" }).click();
-  await expect(payments.locator("tbody tr")).toHaveCount(2);
-  await expect(payments).toContainText("12.34");
-  await expect(app.getByText("Access active", { exact: true })).toBeVisible();
-  await app.getByRole("button", { exact: true, name: "Edit sample" }).click();
-  await app
-    .getByRole("textbox", { exact: true, name: "Name (English)" })
-    .fill("Window cinema");
-  await app.getByRole("button", { exact: true, name: "Save sample" }).click();
-  await expect(
-    app.getByRole("heading", { name: "Window cinema" })
-  ).toBeVisible();
-  await navigate(app, "Overview");
-  await navigate(app, "Memberships");
-  await expect(
-    app.getByRole("button", { name: "Details: Window cinema" })
-  ).toBeVisible();
-  await app.getByRole("button", { name: "Add sample membership" }).click();
-  await app.getByRole("button", { exact: true, name: "Save sample" }).click();
-  await expect(app.getByRole("alert")).toContainText(
-    "Enter a name in both Chinese and English."
-  );
-  await app
-    .getByRole("textbox", { exact: true, name: "Name (English)" })
-    .fill("New demo");
-  await app
-    .getByRole("textbox", { exact: true, name: "Name (Chinese)" })
-    .fill("新增演示");
-  await app.getByRole("button", { exact: true, name: "Save sample" }).click();
-  await app
-    .getByRole("button", { exact: true, name: "Details: New demo" })
-    .click();
-  await expect(app.getByRole("heading", { name: "New demo" })).toBeVisible();
+  await expect(app.getByRole("heading", { name: "Demo Design" })).toBeVisible();
+  await expectReadOnly(app);
 });
 
-test("personal records, local route sketch, health gaps and visibility rules work in memory", async ({
+test("personal activity, schedules, location and checkups are all available to read", async ({
   page,
 }) => {
   const app = await openDashboard(page, "personal");
+  await expect(
+    app.getByRole("button", { name: "Completing a sample task" })
+  ).toBeVisible();
   await app
     .getByRole("combobox", { exact: true, name: "Show" })
     .selectOption("today");
@@ -268,33 +258,30 @@ test("personal records, local route sketch, health gaps and visibility rules wor
     app.getByRole("button", { name: "Completing a sample task" })
   ).toHaveCount(0);
   await app
+    .getByRole("combobox", { exact: true, name: "Show" })
+    .selectOption("all");
+  await app
     .getByRole("button", { exact: true, name: "Organizing project notes" })
     .click();
-  await editActivity(app, "Edited activity");
-  await app.getByRole("button", { exact: true, name: "Save sample" }).click();
   await expect(
-    app.getByRole("heading", { name: "Edited activity" })
+    app.getByRole("heading", { name: "Organizing project notes" })
   ).toBeVisible();
-  await app.getByRole("button", { name: "Edit sample activity" }).click();
+  await expectReadOnly(app);
   await app
-    .getByRole("textbox", { exact: true, name: "Title" })
-    .fill("Discard activity");
-  await app.getByRole("button", { name: "Discard changes" }).click();
+    .getByRole("button", { exact: true, name: "Walk and break" })
+    .click();
   await expect(
-    app.getByRole("heading", { name: "Edited activity" })
+    app.getByRole("heading", { name: "Walk and break" })
   ).toBeVisible();
+  await expectReadOnly(app);
   await app.getByRole("button", { name: "Location & route" }).click();
   await expect(
-    app.getByRole("heading", { name: "Route sketch" })
+    app.getByRole("img", { name: "Synthetic location sequence" })
   ).toBeVisible();
-  await expect(app.locator("svg[role=img]")).toBeVisible();
-  await app.getByRole("button", { exact: true, name: "Daily health" }).click();
-  await app
-    .getByRole("combobox", { name: "Health metric" })
-    .selectOption("heartRate");
-  await app.getByRole("combobox", { name: "Trend range" }).selectOption("all");
-  await app.locator("summary").filter({ hasText: "View samples" }).click();
-  await expect(app.getByRole("table")).toContainText("Missing sample");
+  await expect(
+    app.getByText("Demo space B", { exact: true }).first()
+  ).toBeVisible();
+  await expectReadOnly(app);
   await app
     .getByRole("button", { exact: true, name: "Checkup records" })
     .click();
@@ -302,122 +289,119 @@ test("personal records, local route sketch, health gaps and visibility rules wor
   await expect(
     app.getByRole("heading", { name: "Sample blood test" })
   ).toBeVisible();
-  await app.getByRole("button", { name: "Activity & schedule" }).click();
-  await app
-    .locator("summary")
-    .filter({ hasText: "Per-item visibility rules (demo)" })
-    .click();
-  await app
-    .getByRole("combobox", { exact: true, name: "Visitor visibility" })
-    .selectOption("public");
-  await app
-    .getByRole("combobox", { name: "History window" })
-    .selectOption("day");
-  await app
-    .getByRole("combobox", { name: "Visibility delay" })
-    .selectOption("0");
-  await app
-    .getByRole("combobox", { exact: true, name: "Preview" })
-    .selectOption("visitor");
-  await expect(
-    app.getByRole("button", { exact: true, name: "Edited activity" })
-  ).toBeVisible();
-  await expect(
-    app.getByRole("button", { name: "Completing a sample task" })
-  ).toHaveCount(0);
-  await expect(app.getByText(/Read-only visitor preview/)).toBeVisible();
-  await app
-    .getByRole("button", { exact: true, name: "Edited activity" })
-    .click();
-  await expect(
-    app.getByRole("heading", { exact: true, name: "Edited activity" })
-  ).toBeVisible();
-  await expect(
-    app.getByRole("button", { exact: true, name: "Edit sample activity" })
-  ).toHaveCount(0);
-  await app.getByRole("button", { name: "Activity & schedule" }).click();
-  await app
-    .getByRole("combobox", { exact: true, name: "Preview" })
-    .selectOption("all");
-  await app
-    .locator("summary")
-    .filter({ hasText: "Per-item visibility rules (demo)" })
-    .click();
-  await app
-    .getByRole("combobox", { name: "Visibility delay" })
-    .selectOption("1");
-  await app
-    .getByRole("combobox", { exact: true, name: "Preview" })
-    .selectOption("visitor");
-  await expect(
-    app.getByRole("button", { name: "Completing a sample task" })
-  ).toBeVisible();
-  await expect(
-    app.getByRole("button", { exact: true, name: "Edited activity" })
-  ).toHaveCount(0);
-  await app
-    .getByRole("combobox", { exact: true, name: "Preview" })
-    .selectOption("all");
-  await app
-    .locator("summary")
-    .filter({ hasText: "Per-item visibility rules (demo)" })
-    .click();
-  await app
-    .getByRole("combobox", { name: "History window" })
-    .selectOption("month");
-  await app
-    .getByRole("combobox", { name: "Visibility delay" })
-    .selectOption("0");
-  await app
-    .getByRole("combobox", { exact: true, name: "Preview" })
-    .selectOption("visitor");
-  await expect(
-    app.getByRole("button", { name: "Completing a sample task" })
-  ).toBeVisible();
-  await expect(
-    app.getByRole("button", { exact: true, name: "Edited activity" })
-  ).toBeVisible();
-  await app
-    .getByRole("combobox", { exact: true, name: "Preview" })
-    .selectOption("all");
-  await app
-    .locator("summary")
-    .filter({ hasText: "Per-item visibility rules (demo)" })
-    .click();
-  await app
-    .getByRole("combobox", { exact: true, name: "Visitor visibility" })
-    .selectOption("private");
-  await app
-    .getByRole("combobox", { exact: true, name: "Preview" })
-    .selectOption("visitor");
-  await expect(app.getByText("No activity in this range")).toBeVisible();
-  await navigate(app, "Memberships");
-  await expect(
-    app.getByRole("button", { name: "Add sample membership" })
-  ).toHaveCount(0);
-  await app
-    .getByRole("button", { exact: true, name: "Details: Demo Cinema" })
-    .click();
-  await expect(
-    app.getByRole("button", {
-      name: /Edit sample|Record sample payment|Cancel renewal/,
-    })
-  ).toHaveCount(0);
-  await navigate(app, "Services");
-  await app.getByRole("button", { exact: true, name: "Demo notebook" }).click();
-  await expect(
-    app.getByRole("button", { exact: true, name: "Edit sample" })
-  ).toHaveCount(0);
-  await navigate(app, "Personal");
-  await app
-    .getByRole("combobox", { exact: true, name: "Preview" })
-    .selectOption("all");
-  await expect(
-    app.getByRole("button", { exact: true, name: "Edited activity" })
-  ).toBeVisible();
+  await expectReadOnly(app);
 });
 
-test("services distinguish pending, stale and unmonitored and edit directory samples", async ({
+test("all four health articles share the trend range and retain missing values and source details", async ({
+  page,
+}) => {
+  const app = await openDashboard(page, "personal", "health");
+  await expectHealthMetrics(app);
+  const steps = app.getByRole("article", { exact: true, name: "Steps" });
+  const heart = app.getByRole("article", { exact: true, name: "Heart rate" });
+  const sleep = app.getByRole("article", {
+    exact: true,
+    name: "Sleep duration",
+  });
+  const weight = app.getByRole("article", { exact: true, name: "Weight" });
+  await expect(steps.locator("strong").first()).toHaveText("6,420");
+  await expect(heart.locator("strong").first()).toHaveText("72");
+  await expect(sleep.locator("strong").first()).toHaveText("7.4");
+  await expect(weight.locator("strong").first()).toHaveText("—");
+  await expect(weight.getByText("kg", { exact: true })).toBeVisible();
+  await expect(
+    weight.getByText("No samples in this range; an absent record is not zero.")
+  ).toBeVisible();
+  await expect(weight.getByRole("img")).toHaveCount(0);
+  await steps.locator("summary").filter({ hasText: "View samples" }).click();
+  await heart.locator("summary").filter({ hasText: "View samples" }).click();
+  await sleep.locator("summary").filter({ hasText: "View samples" }).click();
+  await weight.locator("summary").filter({ hasText: "View samples" }).click();
+  const stepRows = steps.getByRole("table").locator("tbody tr");
+  const heartRows = heart.getByRole("table").locator("tbody tr");
+  const sleepRows = sleep.getByRole("table").locator("tbody tr");
+  const weightRows = weight.getByRole("table").locator("tbody tr");
+  await expect(stepRows).toHaveCount(12);
+  await expect(heartRows).toHaveCount(24);
+  await expect(sleepRows).toHaveCount(7);
+  await expect(weightRows).toHaveCount(0);
+  await expect(
+    heart.getByRole("table").getByText("Missing sample", { exact: true })
+  ).toHaveCount(2);
+  await expect(
+    steps.getByRole("table").getByText("Missing sample", { exact: true })
+  ).toHaveCount(1);
+  await app.getByRole("combobox", { name: "Trend range" }).selectOption("day");
+  await expectHealthMetrics(app);
+  await expect(stepRows).toHaveCount(12);
+  await expect(heartRows).toHaveCount(24);
+  await expect(sleepRows).toHaveCount(1);
+  await expect(weightRows).toHaveCount(0);
+  await expect(sleepRows).toContainText("Oct 18, 06:34");
+  await app.getByRole("combobox", { name: "Trend range" }).selectOption("all");
+  await expect(sleepRows).toHaveCount(7);
+  await expect(heartRows).toHaveCount(24);
+  await steps
+    .locator("summary")
+    .filter({ hasText: "Record notes and source" })
+    .click();
+  await expect(steps.getByText(/Sample goal: 8,000 steps/)).toBeVisible();
+  await expect(steps.getByText(/Demo wearable data/)).toBeVisible();
+  await expectReadOnly(app);
+  await page.goto("/?app=Dashboard&dashboard=personal&dashboardItem=heartRate");
+  await expectHealthMetrics(app);
+  await page.reload();
+  await expectHealthMetrics(app);
+});
+
+test("the default visitor reads every domain without visibility or mutation controls", async ({
+  page,
+}) => {
+  const app = await openDashboard(page, "services");
+  await expect(app.getByRole("slider")).toHaveCount(6);
+  await app
+    .getByRole("button", { exact: true, name: "Demo internal service" })
+    .click();
+  await expect(
+    app.getByRole("heading", { name: "Demo internal service" })
+  ).toBeVisible();
+  await expectReadOnly(app);
+  await navigate(app, "Servers");
+  await expect(
+    app
+      .getByRole("table", { name: "Host resources and status" })
+      .locator("tbody tr")
+  ).toHaveCount(4);
+  await app.getByRole("button", { name: "View Demo node C details" }).click();
+  await expect(app.getByRole("heading", { name: "Demo node C" })).toBeVisible();
+  await expectReadOnly(app);
+  await navigate(app, "Memberships");
+  await expect(
+    app.getByRole("table", { name: "Membership list" }).locator("tbody tr")
+  ).toHaveCount(6);
+  await expectReadOnly(app);
+  await navigate(app, "Personal");
+  await app.getByRole("button", { exact: true, name: "Daily health" }).click();
+  await expectHealthMetrics(app);
+  await expectReadOnly(app);
+  await app.getByRole("button", { name: "Location & route" }).click();
+  await expect(
+    app.getByRole("heading", { name: "Route sketch" })
+  ).toBeVisible();
+  await expectReadOnly(app);
+  await app
+    .getByRole("button", { exact: true, name: "Checkup records" })
+    .click();
+  await expect(
+    app.getByRole("button", { name: /^Sample blood test ·/ })
+  ).toBeVisible();
+  await expect(
+    app.getByRole("button", { name: /^Sample vision check ·/ })
+  ).toBeVisible();
+  await expectReadOnly(app);
+});
+
+test("service statuses, maintenance records, latency and linked hosts remain readable", async ({
   page,
 }) => {
   const app = await openDashboard(page, "services");
@@ -458,35 +442,20 @@ test("services distinguish pending, stale and unmonitored and edit directory sam
   await expect(
     app.getByRole("combobox", { exact: true, name: "Status" })
   ).toHaveValue("unmonitored");
-  await expect(
-    app.getByRole("button", { exact: true, name: "Demo notebook" })
-  ).toHaveCount(0);
   await app
     .getByRole("combobox", { exact: true, name: "Status" })
     .selectOption("all");
   await app.getByRole("button", { exact: true, name: "Demo notebook" }).click();
   await app.getByRole("button", { name: "Last 6 sample hours" }).click();
   await app.locator("summary").filter({ hasText: "View samples" }).click();
-  await expect(app.getByRole("table")).toBeVisible();
-  await app.getByRole("button", { exact: true, name: "Edit sample" }).click();
+  await expect(app.getByRole("table").locator("tbody tr")).toHaveCount(6);
   await app
-    .getByRole("textbox", { exact: true, name: "Name (English)" })
-    .fill("Discard service");
-  await app.getByRole("button", { exact: true, name: "Cancel" }).click();
-  await app.getByRole("button", { name: "Discard changes" }).click();
-  await expect(
-    app.getByRole("heading", { name: "Demo notebook" })
-  ).toBeVisible();
-  await app.getByRole("button", { exact: true, name: "Edit sample" }).click();
-  await app
-    .getByRole("textbox", { exact: true, name: "Name (English)" })
-    .fill("Edited notebook");
-  await app.getByRole("button", { exact: true, name: "Save sample" }).click();
-  await expect(
-    app.getByRole("heading", { name: "Edited notebook" })
-  ).toBeVisible();
-  await expect(app.getByText("Sample saved in this window.")).toBeVisible();
+    .getByRole("region", { name: "Events and maintenance" })
+    .locator("summary")
+    .click();
+  await expect(app.getByText("Sample recovery event")).toBeVisible();
   await expect(app.getByText("No live URL configured")).toBeVisible();
+  await expectReadOnly(app);
   await app.getByRole("button", { exact: true, name: "Demo node A" }).click();
   await expect(app.getByRole("heading", { name: "Demo node A" })).toBeVisible();
 });
@@ -497,9 +466,6 @@ test("server filtering, metric windows and missing observations keep units and l
   const app = await openDashboard(page, "servers");
   await app.getByRole("searchbox", { name: "Search hosts" }).fill("no-host");
   await expect(app.getByText("No matching hosts")).toBeVisible();
-  await expect(app.getByRole("button", { name: "Clear filters" })).toHaveCount(
-    0
-  );
   await app.getByRole("searchbox", { name: "Search hosts" }).fill("");
   await app
     .getByRole("combobox", { name: "Data status" })
@@ -533,113 +499,13 @@ test("server filtering, metric windows and missing observations keep units and l
   await expect(app.getByRole("table").locator("tbody tr").last()).toContainText(
     "11:59"
   );
-  await expect(
-    app.getByText(/valid samples · .* missing samples/)
-  ).toBeVisible();
   await app.getByRole("button", { exact: true, name: "Demo notebook" }).click();
   await expect(
     app.getByRole("heading", { name: "Demo notebook" })
   ).toBeVisible();
 });
 
-test("dirty forms guard module, preview, history, reset and native close without losing saved samples", async ({
-  page,
-}) => {
-  const app = await openDashboard(page, "personal", "demo-focus");
-  await editActivity(app, "Unsaved activity");
-  await answerDialog(page, false, () => navigate(app, "Memberships"));
-  await expect(
-    app.getByRole("textbox", { exact: true, name: "Title" })
-  ).toHaveValue("Unsaved activity");
-  await answerDialog(page, false, () =>
-    app
-      .getByRole("combobox", { exact: true, name: "Preview" })
-      .selectOption("visitor")
-  );
-  await expect(
-    app.getByRole("combobox", { exact: true, name: "Preview" })
-  ).toHaveValue("all");
-  await answerDialog(page, true, () =>
-    app
-      .getByRole("combobox", { exact: true, name: "Preview" })
-      .selectOption("visitor")
-  );
-  await expect(
-    app.getByRole("textbox", { exact: true, name: "Title" })
-  ).toHaveCount(0);
-  await app
-    .getByRole("combobox", { exact: true, name: "Preview" })
-    .selectOption("all");
-  await editActivity(app, "Unsaved activity");
-  await answerDialog(page, false, () =>
-    page
-      .getByRole("dialog", { exact: true, name: "Dashboard" })
-      .getByRole("button", { exact: true, name: "Close" })
-      .click()
-  );
-  await expect(
-    app.getByRole("textbox", { exact: true, name: "Title" })
-  ).toHaveValue("Unsaved activity");
-  await answerDialog(page, true, () => navigate(app, "Memberships"));
-  await expect(
-    app.getByRole("textbox", { exact: true, name: "Title" })
-  ).toHaveCount(0);
-  await page.goBack();
-  await editActivity(app, "Saved activity");
-  await app.getByRole("button", { exact: true, name: "Save sample" }).click();
-  await answerDialog(page, false, () =>
-    app.getByRole("button", { name: "Reset samples" }).click()
-  );
-  await expect(
-    app.getByRole("heading", { name: "Saved activity" })
-  ).toBeVisible();
-  await answerDialog(page, true, () =>
-    app.getByRole("button", { name: "Reset samples" }).click()
-  );
-  await expect(
-    app.getByRole("button", { exact: true, name: "Organizing project notes" })
-  ).toBeVisible();
-  await app
-    .getByRole("button", { exact: true, name: "Organizing project notes" })
-    .click();
-  await editActivity(app, "Close discarded");
-  await answerDialog(page, true, () =>
-    page
-      .getByRole("dialog", { exact: true, name: "Dashboard" })
-      .getByRole("button", { exact: true, name: "Close" })
-      .click()
-  );
-  await expect(app).toHaveCount(0);
-  await page.getByRole("button", { exact: true, name: "Dashboard" }).dblclick();
-  await expect(
-    app.getByRole("button", { exact: true, name: "Organizing project notes" })
-  ).toBeVisible();
-  await app
-    .getByRole("button", { exact: true, name: "Organizing project notes" })
-    .click();
-  await editActivity(app, "Saved until close");
-  await app.getByRole("button", { exact: true, name: "Save sample" }).click();
-  await expect(
-    app.getByRole("heading", { name: "Saved until close" })
-  ).toBeVisible();
-  await page
-    .getByRole("dialog", { exact: true, name: "Dashboard" })
-    .getByRole("button", { exact: true, name: "Close" })
-    .click();
-  await expect(app).toHaveCount(0);
-  await page
-    .getByRole("list", { name: "Desktop" })
-    .getByRole("button", { exact: true, name: "Dashboard" })
-    .dblclick();
-  await expect(
-    app.getByRole("button", { exact: true, name: "Organizing project notes" })
-  ).toBeVisible();
-  await expect(
-    app.getByRole("button", { exact: true, name: "Saved until close" })
-  ).toHaveCount(0);
-});
-
-test("history cancellation restores the draft route across a closed instance and Portfolio entries", async ({
+test("read-only routes survive native close and Portfolio history entries", async ({
   page,
 }) => {
   const app = await openDashboard(page);
@@ -648,51 +514,55 @@ test("history cancellation restores the draft route across a closed instance and
     .getByRole("dialog", { exact: true, name: "Dashboard" })
     .getByRole("button", { exact: true, name: "Close" })
     .click();
-  await page.getByRole("button", { exact: true, name: "Portfolio" }).dblclick();
+  await expect(app).toHaveCount(0);
+  await page
+    .getByRole("list", { name: "Desktop" })
+    .getByRole("button", { exact: true, name: "Portfolio" })
+    .dblclick();
   await page.getByRole("button", { exact: true, name: "Explore work" }).click();
   await page
     .getByRole("dialog", { exact: true, name: "Portfolio" })
     .getByRole("button", { exact: true, name: "Minimize" })
     .click();
-  await page.getByRole("button", { exact: true, name: "Dashboard" }).dblclick();
+  await page
+    .getByRole("list", { name: "Desktop" })
+    .getByRole("button", { exact: true, name: "Dashboard" })
+    .dblclick();
   await app
     .getByRole("button", { exact: true, name: "Organizing project notes" })
     .click();
-  await editActivity(app, "History draft");
-  const draftURL = page.url();
   await page.goBack();
   await expect(
-    app.getByRole("textbox", { exact: true, name: "Title" })
-  ).toHaveValue("History draft");
-  await answerDialog(page, false, () => page.goBack());
-  await expect(page).toHaveURL(draftURL);
-  await expect(
-    app.getByRole("textbox", { exact: true, name: "Title" })
-  ).toHaveValue("History draft");
-  await answerDialog(page, true, () => page.goBack());
+    app.getByRole("heading", { name: "Organizing project notes" })
+  ).toBeVisible();
+  await page.goBack();
   await expect(
     app.getByRole("heading", { exact: true, name: "Memberships" })
   ).toBeVisible();
+  await page.goForward();
+  await page.goForward();
+  await expect(
+    app.getByRole("heading", { name: "Organizing project notes" })
+  ).toBeVisible();
+  await expectReadOnly(app);
 });
 
-test("language changes preserve a draft's editing language and keyboard navigation", async ({
+test("language changes and keyboard navigation preserve all readable health records", async ({
   page,
 }) => {
-  const app = await openDashboard(page, "personal", "demo-focus");
-  await editActivity(app, "English draft preserved");
+  const app = await openDashboard(page, "personal", "heartRate");
+  await expectHealthMetrics(app);
   await setLocale(page, "zh");
+  await expectHealthMetrics(app, "zh");
+  await expectReadOnly(app);
   await expect(
-    app.getByRole("textbox", { exact: true, name: "标题" })
-  ).toHaveValue("English draft preserved");
-  await expect(app.getByText(/当前编辑文字语言：英文/)).toBeVisible();
-  await app.getByRole("button", { exact: true, name: "保存示例" }).click();
-  await expect(
-    app.getByRole("heading", { name: "整理项目笔记" })
-  ).toBeVisible();
+    app
+      .getByRole("article", { exact: true, name: "心率" })
+      .locator("strong")
+      .first()
+  ).toHaveText("72");
   await setLocale(page, "en");
-  await expect(
-    app.getByRole("heading", { name: "English draft preserved" })
-  ).toBeVisible();
+  await expectHealthMetrics(app);
   const memberships = app
     .getByRole("navigation", { name: "Dashboard views" })
     .getByRole("button", { exact: true, name: "Memberships" });
@@ -700,8 +570,8 @@ test("language changes preserve a draft's editing language and keyboard navigati
   await expect(memberships).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(
-    app.getByRole("heading", { exact: true, name: "Memberships" })
-  ).toBeVisible();
+    app.getByRole("table", { name: "Membership list" }).locator("tbody tr")
+  ).toHaveCount(6);
   await setLocale(page, "zh");
   expect(
     await app
@@ -711,59 +581,33 @@ test("language changes preserve a draft's editing language and keyboard navigati
         buttons.map((button) => button.getAttribute("aria-label"))
       )
   ).toEqual(["总览", "个人", "会员", "服务", "服务器"]);
-  await expect(
-    app.getByText("示例数据", { exact: true }).first()
-  ).toBeVisible();
-  await setLocale(page, "en");
-  await app
-    .getByRole("button", { exact: true, name: "Details: Demo Cinema" })
-    .click();
-  await app.getByRole("button", { exact: true, name: "Edit sample" }).click();
-  await app
-    .getByRole("textbox", { exact: true, name: "Name (English)" })
-    .fill("Bilingual cinema");
-  await setLocale(page, "zh");
-  await expect(
-    app.getByRole("textbox", { exact: true, name: "名称（英文）" })
-  ).toHaveValue("Bilingual cinema");
-  await app.getByRole("button", { exact: true, name: "保存示例" }).click();
-  await expect(app.getByRole("heading", { name: "演示影音" })).toBeVisible();
-  await setLocale(page, "en");
-  await expect(
-    app.getByRole("heading", { name: "Bilingual cinema" })
-  ).toBeVisible();
+  await expectReadOnly(app);
 });
 
-test("Dashboard interactions issue no data requests or sockets and do not persist sample edits", async ({
+test("reading every domain makes no business data requests, sockets or sample storage writes", async ({
   page,
 }) => {
-  const errors: string[] = [];
   const sockets: string[] = [];
   const requests: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
   page.on("websocket", (socket) => sockets.push(socket.url()));
   page.on("request", (request) => {
     if (["fetch", "xhr"].includes(request.resourceType())) {
       requests.push(new URL(request.url()).pathname);
     }
   });
-  const app = await openDashboard(page, "personal", "demo-focus");
+  const app = await openDashboard(page, "personal", "health");
   const stored = await page.evaluate(() => ({
     local: { ...localStorage },
     session: { ...sessionStorage },
   }));
-  await editActivity(app, "Memory only");
-  await app.getByRole("button", { exact: true, name: "Save sample" }).click();
+  await app.getByRole("combobox", { name: "Trend range" }).selectOption("day");
+  await app.getByRole("button", { name: "Location & route" }).click();
+  await app
+    .getByRole("button", { exact: true, name: "Checkup records" })
+    .click();
   await navigate(app, "Memberships");
   await navigate(app, "Services");
   await navigate(app, "Servers");
-  await app
-    .getByRole("combobox", { exact: true, name: "Preview" })
-    .selectOption("visitor");
-  await app.locator("summary").filter({ hasText: "Sample details" }).click();
-  await expect(
-    app.getByText(/not a security control or a publication/)
-  ).toBeVisible();
   expect(
     requests.filter(
       (path) =>
@@ -775,7 +619,6 @@ test("Dashboard interactions issue no data requests or sockets and do not persis
     )
   ).toEqual([]);
   expect(sockets).toEqual([]);
-  expect(errors).toEqual([]);
   expect(
     await page.evaluate(() => ({
       local: { ...localStorage },
@@ -784,15 +627,11 @@ test("Dashboard interactions issue no data requests or sockets and do not persis
   ).toEqual(stored);
   await page.reload();
   await navigate(app, "Personal");
-  await expect(
-    app.getByRole("button", { exact: true, name: "Organizing project notes" })
-  ).toBeVisible();
-  await expect(
-    app.getByRole("button", { exact: true, name: "Memory only" })
-  ).toHaveCount(0);
+  await app.getByRole("button", { exact: true, name: "Daily health" }).click();
+  await expectHealthMetrics(app);
 });
 
-test("list filters survive detail navigation and confirmed abandonment clears membership drafts", async ({
+test("membership, service and host combined filters survive detail round trips", async ({
   page,
 }) => {
   const app = await openDashboard(page, "memberships");
@@ -821,67 +660,7 @@ test("list filters survive detail navigation and confirmed abandonment clears me
   await expect(
     app.getByRole("table", { name: "Membership list" }).locator("tbody tr")
   ).toHaveCount(1);
-  await app
-    .getByRole("button", { exact: true, name: "Details: Demo Cinema" })
-    .click();
-  await app.getByRole("button", { exact: true, name: "Edit sample" }).click();
-  await app
-    .getByRole("textbox", { exact: true, name: "Name (English)" })
-    .fill("Abandoned cinema");
-  await answerDialog(page, false, () => navigate(app, "Memberships"));
-  await expect(
-    app.getByRole("textbox", { exact: true, name: "Name (English)" })
-  ).toHaveValue("Abandoned cinema");
-  await answerDialog(page, true, () => navigate(app, "Memberships"));
-  await expect(
-    app.getByRole("searchbox", { name: "Search memberships" })
-  ).toHaveValue("Cinema");
-  await app
-    .getByRole("button", { exact: true, name: "Details: Demo Cinema" })
-    .click();
-  await expect(
-    app.getByRole("heading", { exact: true, name: "Demo Cinema" })
-  ).toBeVisible();
-  await expect(
-    app.getByRole("form", { name: "Edit sample membership" })
-  ).toHaveCount(0);
-  await app.getByRole("button", { name: "Record sample payment" }).click();
-  await app.getByRole("textbox", { name: "Amount per payment" }).fill("48.50");
-  await app.getByRole("button", { name: "Review sample payment" }).click();
-  await answerDialog(page, true, () => navigate(app, "Memberships"));
-  await app
-    .getByRole("button", { exact: true, name: "Details: Demo Cinema" })
-    .click();
-  await expect(
-    app.getByRole("form", { name: "Record sample payment" })
-  ).toHaveCount(0);
-  await expect(
-    app
-      .getByRole("table", { name: "Confirmed sample payments" })
-      .locator("tbody tr")
-  ).toHaveCount(1);
-  await app
-    .getByRole("button", { exact: true, name: "Cancel renewal" })
-    .click();
-  await expect(
-    app.getByRole("button", { name: "Confirm sample change" })
-  ).toBeVisible();
-  await navigate(app, "Memberships");
-  await app
-    .getByRole("button", { exact: true, name: "Details: Demo Cinema" })
-    .click();
-  await expect(
-    app.getByRole("button", { name: "Confirm sample change" })
-  ).toHaveCount(0);
-  await expect(
-    app.getByText("Renewal planned", { exact: true }).first()
-  ).toBeVisible();
-});
-
-test("service and host detail round trips preserve combined filters", async ({
-  page,
-}) => {
-  const app = await openDashboard(page, "services");
+  await navigate(app, "Services");
   await app
     .getByRole("searchbox", { name: "Search service names" })
     .fill("notebook");
@@ -903,22 +682,6 @@ test("service and host detail round trips preserve combined filters", async ({
   await expect(
     app.getByRole("button", { exact: true, name: "Productivity" })
   ).toHaveAttribute("aria-pressed", "true");
-  await app.getByRole("button", { exact: true, name: "Demo notebook" }).click();
-  await app.getByRole("button", { exact: true, name: "Edit sample" }).click();
-  await app
-    .getByRole("textbox", { exact: true, name: "Name (English)" })
-    .fill("Abandoned notebook");
-  await answerDialog(page, true, () => navigate(app, "Services"));
-  await expect(
-    app.getByRole("searchbox", { name: "Search service names" })
-  ).toHaveValue("notebook");
-  await app.getByRole("button", { exact: true, name: "Demo notebook" }).click();
-  await expect(
-    app.getByRole("form", { name: "Edit service sample" })
-  ).toHaveCount(0);
-  await expect(
-    app.getByRole("heading", { exact: true, name: "Demo notebook" })
-  ).toBeVisible();
   await navigate(app, "Servers");
   await app.getByRole("searchbox", { name: "Search hosts" }).fill("node B");
   await app
@@ -957,7 +720,7 @@ test("service and host detail round trips preserve combined filters", async ({
   ).toHaveCount(4);
 });
 
-test("overview disclosures retain complete costs, actions and source evidence", async ({
+test("overview disclosures retain complete costs, actions and source timestamps", async ({
   page,
 }) => {
   const app = await openDashboard(page);
@@ -990,26 +753,25 @@ test("overview disclosures retain complete costs, actions and source evidence", 
   ).toBeVisible();
 });
 
-test("service health rows preserve 90 UTC days, observed uptime and accessible day inspection", async ({
+test("service health rows preserve 90 UTC days, observed uptime and accessible inspection", async ({
   page,
 }) => {
   const app = await openDashboard(page, "services");
-  const sliders = app.getByRole("slider");
-  await expect(sliders).toHaveCount(6);
+  await expect(app.getByRole("slider")).toHaveCount(6);
   const drive = app.getByRole("listitem").filter({
     has: page.getByRole("button", { exact: true, name: "Demo drive" }),
   });
-  const driveSlider = drive.getByRole("slider", {
+  const slider = drive.getByRole("slider", {
     name: "Demo drive · 90-day health history",
   });
-  const days = driveSlider.locator("[data-date]");
+  const days = slider.locator("[data-date]");
   await expect(days).toHaveCount(90);
   await expect(days.first()).toHaveAttribute("data-date", "2026-07-20");
   await expect(days.last()).toHaveAttribute("data-date", "2026-10-17");
-  await expect(driveSlider.locator('[data-date="2026-10-18"]')).toHaveCount(0);
-  await expect(driveSlider.locator('[data-health="degraded"]')).toHaveCount(3);
-  await expect(driveSlider.locator('[data-health="down"]')).toHaveCount(1);
-  await expect(driveSlider.locator('[data-health="up"]')).toHaveCount(86);
+  await expect(slider.locator('[data-date="2026-10-18"]')).toHaveCount(0);
+  await expect(slider.locator('[data-health="degraded"]')).toHaveCount(3);
+  await expect(slider.locator('[data-health="down"]')).toHaveCount(1);
+  await expect(slider.locator('[data-health="up"]')).toHaveCount(86);
   const rate = drive.locator('[aria-label="90-day uptime"]');
   await expect(rate).toContainText("Uptime 99.50%");
   await expect(rate).toContainText("Coverage 100.00%");
@@ -1017,22 +779,22 @@ test("service health rows preserve 90 UTC days, observed uptime and accessible d
     "title",
     "129600 / 129600 observed / expected checks"
   );
-  await expect(driveSlider).toHaveAttribute("tabindex", "0");
-  await expect(driveSlider.locator("[tabindex], button")).toHaveCount(0);
-  await driveSlider.focus();
-  await driveSlider.press("Home");
-  await expect(driveSlider).toHaveAttribute("aria-valuenow", "1");
-  await expect(driveSlider).toHaveAttribute("aria-valuetext", /2026-07-20 UTC/);
-  await driveSlider.press("ArrowRight");
-  await expect(driveSlider).toHaveAttribute("aria-valuetext", /2026-07-21 UTC/);
-  await driveSlider.press("End");
-  await expect(driveSlider).toHaveAttribute("aria-valuenow", "90");
-  await expect(driveSlider).toHaveAttribute("aria-valuetext", /2026-10-17 UTC/);
-  await expect(driveSlider.locator("..").getByRole("status")).toBeVisible();
-  await driveSlider.press("Escape");
-  await expect(driveSlider.locator("..").getByRole("status")).toHaveCount(0);
-  await driveSlider.press("ArrowLeft");
-  await expect(driveSlider.locator("..").getByRole("status")).toContainText(
+  await expect(slider).toHaveAttribute("tabindex", "0");
+  await expect(slider.locator("[tabindex], button")).toHaveCount(0);
+  await slider.focus();
+  await slider.press("Home");
+  await expect(slider).toHaveAttribute("aria-valuenow", "1");
+  await expect(slider).toHaveAttribute("aria-valuetext", /2026-07-20 UTC/);
+  await slider.press("ArrowRight");
+  await expect(slider).toHaveAttribute("aria-valuetext", /2026-07-21 UTC/);
+  await slider.press("End");
+  await expect(slider).toHaveAttribute("aria-valuenow", "90");
+  await expect(slider).toHaveAttribute("aria-valuetext", /2026-10-17 UTC/);
+  await expect(slider.locator("..").getByRole("status")).toBeVisible();
+  await slider.press("Escape");
+  await expect(slider.locator("..").getByRole("status")).toHaveCount(0);
+  await slider.press("ArrowLeft");
+  await expect(slider.locator("..").getByRole("status")).toContainText(
     "2026-10-16"
   );
   await page.keyboard.press("Tab");
@@ -1125,12 +887,8 @@ test.describe("service health touch inspection", () => {
     await expect(row.locator('[aria-label="90 日可用率"]')).toContainText(
       "可用率 99.50%"
     );
-    expect(
-      await app
-        .locator(".dashboard-content")
-        .evaluate((node) => node.scrollWidth <= node.clientWidth + 1)
-    ).toBe(true);
-    await expect(app.getByRole("button", { name: /清除筛选/ })).toHaveCount(0);
+    await expectWorkspaceFits(app);
+    await expectReadOnly(app);
     await page.screenshot({
       path: testInfo.outputPath("services-health-touch-390-zh.png"),
     });
@@ -1169,16 +927,16 @@ test("checkup filters recover through the original selector without clear button
   await expect(
     app.getByRole("button", { name: /^血常规示例 ·/ })
   ).toBeVisible();
+  await expectReadOnly(app);
 });
 
-test("vertical navigation adapts to the actual native window width in both languages", async ({
+test("vertical navigation and all health articles adapt to a native 520px window", async ({
   page,
 }, testInfo) => {
   await page.setViewportSize({ height: 900, width: 1440 });
   const app = await openDashboard(page, "personal");
   const window = page.locator(".react-draggable").filter({ has: app });
   const before = await window.boundingBox();
-  expect(before).not.toBeNull();
   if (!before) throw new Error("Dashboard window bounds missing");
   await page.mouse.move(
     before.x + before.width - 1,
@@ -1196,25 +954,16 @@ test("vertical navigation adapts to the actual native window width in both langu
     .poll(async () => (await window.boundingBox())?.width)
     .toBeLessThanOrEqual(525);
   expect(await page.evaluate(() => innerWidth)).toBe(1440);
-  const nativeGap = await app.evaluate((node) => {
-    const workspace = node.querySelector(".dashboard-workspace");
-    const footer = node.querySelector(":scope > footer");
-    if (!workspace || !footer) throw new Error("Dashboard regions missing");
-    return (
-      footer.getBoundingClientRect().top -
-      workspace.getBoundingClientRect().bottom
-    );
-  });
-  expect(Math.abs(nativeGap)).toBeLessThanOrEqual(1);
-  const mainButtons = app
+  await expectWorkspaceFits(app);
+  const boxes = await app
     .getByRole("navigation", { exact: true, name: "Dashboard views" })
-    .locator(":scope > button");
-  const boxes = await mainButtons.evaluateAll((buttons) =>
-    buttons.map((button) => {
-      const { x, y } = button.getBoundingClientRect();
-      return { x, y };
-    })
-  );
+    .locator(":scope > button")
+    .evaluateAll((buttons) =>
+      buttons.map((button) => {
+        const { x, y } = button.getBoundingClientRect();
+        return { x, y };
+      })
+    );
   expect(boxes).toHaveLength(5);
   expect(
     boxes.every(
@@ -1235,40 +984,28 @@ test("vertical navigation adapts to the actual native window width in both langu
   await health.focus();
   await expect(health).toBeFocused();
   await page.keyboard.press("Enter");
-  await expect(
-    app.getByRole("combobox", { name: "Health metric" })
-  ).toBeVisible();
+  await expectHealthMetrics(app);
   await expect(health).toHaveAttribute("aria-current", "page");
-  const content = app.locator(".dashboard-content");
-  expect(
-    await content.evaluate((node) => node.scrollWidth <= node.clientWidth + 1)
-  ).toBe(true);
-  await navigate(app, "Memberships");
-  await app
-    .getByRole("button", { exact: true, name: "Details: Demo Cinema" })
-    .click();
-  await expect(
-    app.getByRole("heading", { exact: true, name: "Demo Cinema" })
-  ).toBeVisible();
+  const cards = await app.getByRole("article").evaluateAll((nodes) =>
+    nodes.map((node) => ({
+      x: node.getBoundingClientRect().x,
+      y: node.getBoundingClientRect().y,
+    }))
+  );
+  expect(cards[0].x).toBe(cards[1].x);
+  expect(cards[1].y).toBeGreaterThan(cards[0].y);
+  await expectWorkspaceFits(app);
   await setLocale(page, "zh");
-  const personal = app
-    .getByRole("navigation", { exact: true, name: "看板视图" })
-    .getByRole("button", { exact: true, name: "个人" });
-  await personal.focus();
-  await page.keyboard.press("Enter");
-  await expect(
-    app
-      .getByRole("navigation", { exact: true, name: "个人状况视图" })
-      .getByRole("button")
-  ).toHaveCount(4);
+  await expectHealthMetrics(app, "zh");
+  await app
+    .getByRole("article", { exact: true, name: "体重" })
+    .scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: testInfo.outputPath("all-health-native-520-zh.png"),
+  });
   await app.getByRole("button", { exact: true, name: "位置与轨迹" }).click();
   await expect(app.getByRole("heading", { name: "路线示意" })).toBeVisible();
-  expect(
-    await content.evaluate((node) => node.scrollWidth <= node.clientWidth + 1)
-  ).toBe(true);
-  await page.screenshot({
-    path: testInfo.outputPath("dashboard-native-window-520-zh.png"),
-  });
+  await expectWorkspaceFits(app);
   await setLocale(page, "en");
   await expect(
     app.getByRole("button", { exact: true, name: "Location & route" })
@@ -1280,47 +1017,47 @@ for (const viewport of [
   { height: 768, width: 1024 },
   { height: 900, width: 1440 },
 ]) {
-  test(`Dashboard retains native layout and readable charts at ${viewport.width}px`, async ({
+  test(`readable metrics and charts fit the native layout at ${viewport.width}px`, async ({
     page,
   }, testInfo) => {
     await page.setViewportSize(viewport);
     const app = await openDashboard(page, "servers", "demo-node-a");
-    await expect(
-      app.getByRole("combobox", { name: "Trend metric" })
-    ).toBeVisible();
     await app
       .getByRole("combobox", { name: "Trend metric" })
       .selectOption("memory");
-    const content = app.locator(".dashboard-content");
-    const gap = await app.evaluate((node) => {
-      const workspace = node.querySelector(".dashboard-workspace");
-      const footer = node.querySelector(":scope > footer");
-      if (!workspace || !footer) throw new Error("Dashboard regions missing");
-      return (
-        footer.getBoundingClientRect().top -
-        workspace.getBoundingClientRect().bottom
-      );
-    });
-    expect(Math.abs(gap)).toBeLessThanOrEqual(1);
-    expect(
-      await content.evaluate((node) => node.scrollWidth <= node.clientWidth + 1)
-    ).toBe(true);
+    await expectWorkspaceFits(app);
     const chart = app.locator("svg[role=img]");
     await chart.scrollIntoViewIfNeeded();
     await expect(chart).toBeVisible();
     expect(
       await chart.evaluate((node) => node.getBoundingClientRect().width)
     ).toBeGreaterThan(viewport.width === 390 ? 200 : 500);
-    await page.screenshot({
-      path: testInfo.outputPath(`dashboard-${viewport.width}.png`),
-    });
     await navigate(app, "Memberships");
-    await app.getByRole("button", { name: "Add sample membership" }).click();
     await expect(
-      app.getByRole("textbox", { exact: true, name: "Name (English)" })
-    ).toBeVisible();
-    expect(
-      await content.evaluate((node) => node.scrollWidth <= node.clientWidth + 1)
-    ).toBe(true);
+      app.getByRole("table", { name: "Membership list" }).locator("tbody tr")
+    ).toHaveCount(6);
+    await expectWorkspaceFits(app);
+    await navigate(app, "Personal");
+    await app
+      .getByRole("button", { exact: true, name: "Daily health" })
+      .click();
+    await expectHealthMetrics(app);
+    await expectWorkspaceFits(app);
+    const cards = await app.getByRole("article").evaluateAll((nodes) =>
+      nodes.map((node) => ({
+        x: node.getBoundingClientRect().x,
+        y: node.getBoundingClientRect().y,
+      }))
+    );
+    expect(cards[1].x === cards[0].x).toBe(viewport.width === 390);
+    expect(cards[1].x > cards[0].x).toBe(viewport.width !== 390);
+    expect(cards[1].y > cards[0].y).toBe(viewport.width === 390);
+    expect(cards[1].y === cards[0].y).toBe(viewport.width !== 390);
+    if (viewport.width === 390) await setLocale(page, "zh");
+    await expectHealthMetrics(app, viewport.width === 390 ? "zh" : "en");
+    await expectReadOnly(app);
+    await page.screenshot({
+      path: testInfo.outputPath(`all-health-${viewport.width}.png`),
+    });
   });
 }
