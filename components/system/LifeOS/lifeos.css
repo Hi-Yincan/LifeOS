@@ -90,24 +90,11 @@
 .hyc-skeleton { display:grid;gap:12px;color:var(--hyc-muted); }
 .hyc-skeleton div { height:70px;background:#292929; }
 .hyc-muted { color:var(--hyc-muted); }
-.hyc-status-chip { border:1px solid var(--hyc-line);padding:0 5px;color:var(--hyc-muted);font-size:11px; }
-.hyc-is-dirty { color:#e9c67a; }
-.hyc-editor { max-width:760px;margin:0 auto;padding-bottom:12px; }
-.hyc-editor-top { display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:12px; }
-.hyc-editor-language { font-size:12px;color:var(--hyc-muted); }
-.hyc-editor form { display:grid;gap:14px;margin-top:16px; }
-.hyc-form-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px; }
-.hyc-editor-actions { position:sticky;bottom:0;display:flex;flex-wrap:wrap;gap:8px;background:var(--hyc-bg);border-top:1px solid #383838;padding:10px 0; }
-.hyc-surface .hyc-danger { color:#ffb3b3; }
-.hyc-upload { padding:12px;border:1px solid var(--hyc-line); }
-.hyc-upload img { max-width:100%;width:200px;max-height:120px;object-fit:contain; }
-.hyc-upload small { color:var(--hyc-muted); }
 .hyc-notice,.hyc-error { display:flex;gap:8px;align-items:center;padding:8px 10px;border:1px solid var(--hyc-line);margin-top:12px; }
 .hyc-notice { color:#b6dfc5; }
 .hyc-error { color:#ffb3b3; }
 .hyc-statusbar { grid-column:1/-1;position:static!important;gap:12px;overflow:hidden; }
 .hyc-statusbar>span { white-space:nowrap; }
-.hyc-admin-chip { display:inline-flex;gap:5px;align-items:center;margin-left:auto; }
 .hyc-settings { width:100%;height:100%;padding:18px; }
 .hyc-settings-heading { display:flex;align-items:center;gap:12px;margin-bottom:20px; }
 .hyc-settings-heading h1 { font-size:20px; }
@@ -119,12 +106,6 @@
 .hyc-setting-group select { max-width:180px; }
 .hyc-setting-group p { color:var(--hyc-muted);margin-top:12px; }
 .hyc-setting-meta { display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;color:var(--hyc-muted);margin-top:12px; }
-.hyc-maintenance { margin-top:20px; }
-.hyc-maintenance summary { display:flex;align-items:center;gap:8px; }
-.hyc-maintenance p { margin:12px 0;color:var(--hyc-muted); }
-.hyc-maintenance form { display:grid;gap:12px; }
-.hyc-maintenance form button { justify-self:start; }
-.hyc-maintenance[open] { padding:12px;border:1px solid var(--hyc-line); }
 
 /* Store uses upstream window geometry and shared native controls. */
 .hyc-store { display:grid;grid-template-rows:35px auto minmax(0,1fr) 23px;width:100%;height:100%;overflow:hidden; }
