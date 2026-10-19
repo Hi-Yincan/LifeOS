@@ -1,5 +1,5 @@
 import { type ProxyState } from "components/apps/Browser/useProxyMenu";
-import { FAVICON_BASE_PATH, PACKAGE_DATA } from "utils/constants";
+import { FAVICON_BASE_PATH } from "utils/constants";
 
 type Bookmark = {
   icon: string;
@@ -21,40 +21,29 @@ export const DINO_GAME = {
 
 export const bookmarks: Bookmark[] = [
   {
-    icon: FAVICON_BASE_PATH,
-    name: PACKAGE_DATA.alias,
-    url: PACKAGE_DATA.author.url,
-  },
-  {
     icon: "/System/Icons/Favicons/dir.webp",
-    name: "Index of /",
+    name: "localhost",
     url: "http://localhost/",
   },
-  DINO_GAME,
   {
     icon: "/System/Icons/Favicons/google.webp",
     name: "Google",
     url: "https://www.google.com/webhp?igu=1",
   },
   {
-    icon: "/System/Icons/Favicons/wikipedia.webp",
-    name: "Wikipedia",
-    url: "https://www.wikipedia.org/",
+    icon: FAVICON_BASE_PATH,
+    name: "hyc.ac",
+    url: "https://hyc.ac/",
   },
   {
-    icon: "/System/Icons/Favicons/archive.webp",
-    name: "Internet Archive",
-    url: "https://archive.org/",
+    icon: "/System/Icons/photos.webp",
+    name: "hyc.ac/gallery",
+    url: "https://hyc.ac/gallery",
   },
   {
-    icon: "/System/Icons/webamp.webp",
-    name: "Winamp Skin Museum",
-    url: "https://skins.webamp.org/",
-  },
-  {
-    icon: "/System/Icons/Favicons/aos.webp",
-    name: "AaronOS",
-    url: "https://aaronos.dev/",
+    icon: "/System/LifeOS/aipm.svg",
+    name: "aipm.ac",
+    url: "https://aipm.ac/",
   },
 ];
 
