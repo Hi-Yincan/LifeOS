@@ -1,1 +1,28 @@
-{}
+{
+  "iconPositions": {
+    "/Users/Public/Desktop/My PC.url": {
+      "gridColumnStart": 1,
+      "gridRowStart": 1
+    },
+    "/Users/Public/Desktop/Public.url": {
+      "gridColumnStart": 1,
+      "gridRowStart": 2
+    },
+    "/Users/Public/Desktop/App Store.url": {
+      "gridColumnStart": 1,
+      "gridRowStart": 3
+    },
+    "/Users/Public/Desktop/Dashboard.url": {
+      "gridColumnStart": 1,
+      "gridRowStart": 4
+    },
+    "/Users/Public/Desktop/Browser.url": {
+      "gridColumnStart": 2,
+      "gridRowStart": 1
+    },
+    "/Users/Public/Desktop/Portfolio.url": {
+      "gridColumnStart": 2,
+      "gridRowStart": 2
+    }
+  }
+}

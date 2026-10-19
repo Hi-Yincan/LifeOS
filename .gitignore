@@ -49,6 +49,7 @@ public/Users/Public/**
 .cache/
 server/.runtime/
 !public/Users/Public/Desktop/App Store.url
+!public/Users/Public/Desktop/Browser.url
 !public/Users/Public/Desktop/Portfolio.url
 
 # Generated public snapshots for visitor-only releases
