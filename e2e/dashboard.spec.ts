@@ -28,10 +28,22 @@ const openDashboard = async (
   return app;
 };
 const navigate = async (app: Locator, name: string): Promise<void> => {
-  await app
-    .getByRole("navigation", { name: "Dashboard views" })
-    .getByRole("button", { exact: true, name })
-    .click();
+  const navigation = app.getByRole("navigation", {
+    exact: true,
+    name: "Dashboard views",
+  });
+  if (
+    ["Membership dashboard", "Self-hosted services", "Servers"].includes(name)
+  ) {
+    const group = navigation.getByRole("button", {
+      exact: true,
+      name: "Services",
+    });
+    if ((await group.getAttribute("aria-expanded")) !== "true") {
+      await group.click();
+    }
+  }
+  await navigation.getByRole("button", { exact: true, name }).click();
 };
 const setLocale = async (page: Page, locale: "en" | "zh"): Promise<void> => {
   await page.locator('button[aria-label="Start"]').click();
@@ -418,7 +430,7 @@ test("every domain is readable without visibility or mutation controls", async (
   await app.getByRole("button", { name: "View Demo node C details" }).click();
   await expect(app.getByRole("heading", { name: "Demo node C" })).toBeVisible();
   await expectReadOnly(app);
-  await navigate(app, "Memberships");
+  await navigate(app, "Membership dashboard");
   await expect(
     app.getByRole("table", { name: "Membership list" }).locator("tbody tr")
   ).toHaveCount(6);
@@ -450,13 +462,13 @@ test("retired identity cookies cannot change dashboard content or expose editors
 }) => {
   const app = await openDashboard(page, "memberships");
   const readContent = async (): Promise<Record<string, string[]>> => {
-    await navigate(app, "Memberships");
+    await navigate(app, "Membership dashboard");
     const memberships = await app
       .getByRole("table", { name: "Membership list" })
       .locator("tbody tr")
       .allTextContents();
     await expectReadOnly(app);
-    await navigate(app, "Services");
+    await navigate(app, "Self-hosted services");
     const services = await app
       .getByRole("slider")
       .evaluateAll((nodes) =>
@@ -616,7 +628,7 @@ test("read-only routes survive native close and Portfolio history entries", asyn
   page,
 }) => {
   const app = await openDashboard(page);
-  await navigate(app, "Memberships");
+  await navigate(app, "Membership dashboard");
   await page
     .getByRole("dialog", { exact: true, name: "Dashboard" })
     .getByRole("button", { exact: true, name: "Close" })
@@ -644,7 +656,7 @@ test("read-only routes survive native close and Portfolio history entries", asyn
   ).toBeVisible();
   await page.goBack();
   await expect(
-    app.getByRole("heading", { exact: true, name: "Memberships" })
+    app.getByRole("heading", { exact: true, name: "Membership dashboard" })
   ).toBeVisible();
   await page.goForward();
   await page.goForward();
@@ -670,9 +682,21 @@ test("language changes and keyboard navigation preserve all readable health reco
   ).toHaveText("72");
   await setLocale(page, "en");
   await expectHealthMetrics(app);
+  const navigation = app.getByRole("navigation", {
+    exact: true,
+    name: "Dashboard views",
+  });
+  const services = navigation.getByRole("button", {
+    exact: true,
+    name: "Services",
+  });
+  await services.focus();
+  await expect(services).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(services).toHaveAttribute("aria-expanded", "true");
   const memberships = app
-    .getByRole("navigation", { name: "Dashboard views" })
-    .getByRole("button", { exact: true, name: "Memberships" });
+    .getByRole("navigation", { exact: true, name: "Service views" })
+    .getByRole("button", { exact: true, name: "Membership dashboard" });
   await memberships.focus();
   await expect(memberships).toBeFocused();
   await page.keyboard.press("Enter");
@@ -687,7 +711,37 @@ test("language changes and keyboard navigation preserve all readable health reco
       .evaluateAll((buttons) =>
         buttons.map((button) => button.getAttribute("aria-label"))
       )
-  ).toEqual(["总览", "个人", "会员", "服务", "服务器"]);
+  ).toEqual(["总览", "个人", "服务"]);
+  const serviceViews = app.getByRole("navigation", {
+    exact: true,
+    name: "服务视图",
+  });
+  await expect(serviceViews.getByRole("button")).toHaveCount(3);
+  expect(
+    await serviceViews
+      .getByRole("button")
+      .evaluateAll((buttons) =>
+        buttons.map((button) => button.getAttribute("aria-label"))
+      )
+  ).toEqual(["自建服务", "服务器", "会员看板"]);
+  await serviceViews
+    .getByRole("button", { exact: true, name: "服务器" })
+    .click();
+  await expect(page).toHaveURL(/dashboard=servers/);
+  await serviceViews
+    .getByRole("button", { exact: true, name: "自建服务" })
+    .click();
+  await expect(page).toHaveURL(/dashboard=services/);
+  await expect(
+    app.getByRole("heading", { exact: true, name: "自建服务" })
+  ).toBeVisible();
+  await expect(app.locator(".dashboard-address")).toContainText(
+    "综合看板 › 服务 › 自建服务"
+  );
+  await page.goBack();
+  await expect(
+    app.getByRole("heading", { exact: true, name: "服务器" })
+  ).toBeVisible();
   await expectReadOnly(app);
 });
 
@@ -712,8 +766,8 @@ test("reading every domain makes no business data requests, sockets or sample st
   await app
     .getByRole("button", { exact: true, name: "Checkup records" })
     .click();
-  await navigate(app, "Memberships");
-  await navigate(app, "Services");
+  await navigate(app, "Membership dashboard");
+  await navigate(app, "Self-hosted services");
   await navigate(app, "Servers");
   expect(
     requests.filter(
@@ -767,7 +821,7 @@ test("membership, service and host combined filters survive detail round trips",
   await expect(
     app.getByRole("table", { name: "Membership list" }).locator("tbody tr")
   ).toHaveCount(1);
-  await navigate(app, "Services");
+  await navigate(app, "Self-hosted services");
   await app
     .getByRole("searchbox", { name: "Search service names" })
     .fill("notebook");
@@ -1071,7 +1125,7 @@ test("vertical navigation and all health articles adapt to a native 520px window
         return { x, y };
       })
     );
-  expect(boxes).toHaveLength(5);
+  expect(boxes).toHaveLength(3);
   expect(
     boxes.every(
       (box, index) =>
@@ -1139,7 +1193,7 @@ for (const viewport of [
     expect(
       await chart.evaluate((node) => node.getBoundingClientRect().width)
     ).toBeGreaterThan(viewport.width === 390 ? 200 : 500);
-    await navigate(app, "Memberships");
+    await navigate(app, "Membership dashboard");
     await expect(
       app.getByRole("table", { name: "Membership list" }).locator("tbody tr")
     ).toHaveCount(6);

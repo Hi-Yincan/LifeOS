@@ -49,6 +49,8 @@ const moduleOrder: DashboardModule[] = [
   "services",
   "servers",
 ];
+const primaryModules = ["overview", "personal"] as const;
+const serviceModules = ["services", "servers", "memberships"] as const;
 const views = {
   memberships: Memberships,
   overview: Overview,
@@ -57,11 +59,8 @@ const views = {
   services: Services,
 };
 const icons = {
-  memberships: "book",
   overview: "grid",
   personal: "user",
-  servers: "code",
-  services: "link",
 };
 type Route = {
   invalidModule: boolean;
@@ -386,6 +385,9 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
     writeRoute({ invalidModule: false, module, selectedId });
   };
   const View = views[route.module];
+  const inServiceGroup = serviceModules.some(
+    (module) => module === route.module
+  );
   const recordExists = hasSelectedRecord(data, route);
   // 列表视图在实体间切换时保留筛选。
   const entityKey = route.module === "personal" ? route.selectedId || "" : "";
@@ -422,7 +424,8 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
         <StyledAddressBar className="dashboard-address">
           <Icon name="grid" size={16} />
           <span>
-            {t.title} › {t.modules[route.module]}
+            {t.title} › {inServiceGroup && `${t.serviceGroup} › `}
+            {t.modules[route.module]}
             {route.module === "personal" &&
               selectedPersonalTab &&
               ` › ${selectedPersonalTab.label[locale]}`}
@@ -433,7 +436,7 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
       <div className="dashboard-workspace">
         <aside className="dashboard-sidebar">
           <nav aria-label={t.navigation} className="dashboard-modules">
-            {moduleOrder.map((module) => (
+            {primaryModules.map((module) => (
               <Fragment key={module}>
                 <ActionButton
                   aria-current={module === route.module ? "page" : undefined}
@@ -478,6 +481,43 @@ const Dashboard = ({ id }: ComponentProcessProps): React.ReactNode => {
                 )}
               </Fragment>
             ))}
+            <ActionButton
+              aria-current={inServiceGroup ? "page" : undefined}
+              aria-expanded={inServiceGroup}
+              aria-label={t.serviceGroup}
+              onClick={() =>
+                onNavigate(inServiceGroup ? route.module : "memberships")
+              }
+              title={t.serviceGroup}
+              type="button"
+            >
+              <Icon name="link" size={15} />
+              <span>{t.serviceGroup}</span>
+            </ActionButton>
+            {inServiceGroup && (
+              <nav
+                aria-label={t.serviceNavigation}
+                className="dashboard-submodules"
+              >
+                {serviceModules.map((module) => (
+                  <ActionButton
+                    key={module}
+                    aria-current={module === route.module ? "page" : undefined}
+                    aria-label={t.modules[module]}
+                    onClick={() => onNavigate(module)}
+                    title={t.modules[module]}
+                    type="button"
+                  >
+                    <span className="dashboard-nav-full">
+                      {t.modules[module]}
+                    </span>
+                    <span className="dashboard-nav-short">
+                      {t.navigationShort[module]}
+                    </span>
+                  </ActionButton>
+                ))}
+              </nav>
+            )}
           </nav>
         </aside>
         <main ref={contentRef} className="dashboard-content" tabIndex={-1}>
