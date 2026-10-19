@@ -12,7 +12,12 @@ export default defineConfig({
   reporter: [["list"], ["html", { open: "never" }]],
   retries: process.env.CI ? 1 : 0,
   testDir: "e2e",
-  testMatch: ["dashboard.spec.ts", "product.spec.ts", "messenger-*.spec.ts"],
+  testMatch: [
+    "dashboard.spec.ts",
+    "desktop-drag.spec.ts",
+    "product.spec.ts",
+    "messenger-*.spec.ts",
+  ],
   use: {
     baseURL,
     locale: "en-US",

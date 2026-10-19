@@ -7,6 +7,7 @@ export default defineConfig({
   testDir: "e2e",
   testMatch: [
     "dashboard.spec.ts",
+    "desktop-drag.spec.ts",
     "product.spec.ts",
     "public.spec.ts",
     "messenger-*.spec.ts",

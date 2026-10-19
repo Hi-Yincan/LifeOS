@@ -100,6 +100,8 @@ const useDraggableEntries = (
               // Injected into the capture, overriding the cloned inline styles
               fontEmbedCSS: DRAG_IMAGE_CSS,
               imagePlaceholder: UNKNOWN_ICON,
+              // 拖动预览和鼠标偏移都使用 CSS 像素，避免高分屏放大截图。
+              pixelRatio: 1,
               skipAutoScale: true,
             }
           );
