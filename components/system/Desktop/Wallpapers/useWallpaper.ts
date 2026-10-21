@@ -1,6 +1,7 @@
 import { join } from "path";
 import { useEffect, useRef } from "react";
 import { useTheme } from "styled-components";
+import { completeBootStage } from "components/system/Boot/bootstrap";
 import {
   BASE_CANVAS_SELECTOR,
   BASE_VIDEO_SELECTOR,
@@ -114,6 +115,7 @@ const useWallpaper = (
       window.DEBUG_DISABLE_WALLPAPER ||
       getSearchParam("disableWallpaper") === "true"
     ) {
+      completeBootStage("wallpaper");
       return;
     }
 
@@ -186,6 +188,19 @@ const useWallpaper = (
       if (keepCanvas) {
         wallpaperWorker.current.postMessage(workerConfig);
       } else {
+        wallpaperWorker.current.addEventListener(
+          "message",
+          ({ data }: { data: WallpaperMessage }) => {
+            if (data.type === "[ready]") completeBootStage("wallpaper");
+          }
+        );
+        wallpaperWorker.current.addEventListener(
+          "error",
+          () => {
+            window.LifeOSBoot?.fail();
+          },
+          { once: true }
+        );
         const offscreen = createOffscreenCanvas(
           desktopRef.current,
           canvasScale
@@ -218,6 +233,7 @@ const useWallpaper = (
               } else if (data.type) {
                 loadingStatus.textContent = data.message || "";
               } else if (!data.message) {
+                completeBootStage("wallpaper");
                 wallpaperTimerRef.current = window.setTimeout(
                   () => loadWallpaper(true),
                   MILLISECONDS_IN_MINUTE *
@@ -271,6 +287,9 @@ const useWallpaper = (
         .then(({ default: wallpaper }) =>
           wallpaper?.(desktopRef.current, config, fallbackWallpaper)
         )
+        .then(() => {
+          if (wallpaperName !== "GALAXY") completeBootStage("wallpaper");
+        })
         .catch(fallbackWallpaper);
     } else {
       setWallpaper(DEFAULT_WALLPAPER);
@@ -431,6 +450,14 @@ const useWallpaper = (
         video.style.zIndex = "-1";
 
         video.setAttribute("aria-hidden", "true");
+        video.addEventListener(
+          "loadeddata",
+          () => completeBootStage("wallpaper"),
+          { once: true }
+        );
+        video.addEventListener("error", () => window.LifeOSBoot?.fail(), {
+          once: true,
+        });
 
         desktopRef.current?.append(video);
       } else {
@@ -447,7 +474,10 @@ const useWallpaper = (
           }
         }
 
-        const applyWallpaper = (url: string): void => {
+        const applyWallpaper = async (url: string): Promise<void> => {
+          const image = new Image();
+          image.src = url;
+          await image.decode();
           const repeat = newWallpaperFit === "tile" ? "repeat" : "no-repeat";
           const isTopWindow = window === window.top;
           const isAfterNextBackground = isBeforeBg();
@@ -479,6 +509,7 @@ const useWallpaper = (
               "difference"
             );
           }
+          completeBootStage("wallpaper");
         };
 
         if (fallbackBackground) {
@@ -487,11 +518,21 @@ const useWallpaper = (
             PRELOAD_ID,
             true,
             "high",
-            () => fitImageToDecodeLimit(wallpaperUrl).then(applyWallpaper),
-            () => applyWallpaper(fallbackBackground)
+            () =>
+              fitImageToDecodeLimit(wallpaperUrl)
+                .then(applyWallpaper)
+                .catch(() =>
+                  applyWallpaper(fallbackBackground).catch(() =>
+                    window.LifeOSBoot?.fail()
+                  )
+                ),
+            () =>
+              applyWallpaper(fallbackBackground).catch(() =>
+                window.LifeOSBoot?.fail()
+              )
           );
         } else {
-          applyWallpaper(await fitImageToDecodeLimit(wallpaperUrl));
+          await applyWallpaper(await fitImageToDecodeLimit(wallpaperUrl));
 
           if (isSlideshow) {
             // Preload the next slide mid-interval, keeping it off initial load

@@ -17,7 +17,9 @@ const attachRenderer = (): void => {
   if (!activeCanvas) return;
 
   try {
-    renderer = createGalaxyRenderer(activeCanvas, activeConfig);
+    renderer = createGalaxyRenderer(activeCanvas, activeConfig, () => {
+      globalThis.postMessage({ message: "", type: "[ready]" });
+    });
 
     if (pendingSize) {
       renderer.resize(pendingSize.width, pendingSize.height);
@@ -50,10 +52,15 @@ globalThis.addEventListener(
   }) => {
     // The "init" string needs no work: the canvas message is queued right
     // behind it, and the renderer overlaps generation with shader compiles
-    if (
-      typeof WebGLRenderingContext === "undefined" ||
-      typeof data === "string"
-    ) {
+    if (typeof data === "string") {
+      return;
+    }
+
+    if (typeof WebGLRenderingContext === "undefined") {
+      globalThis.postMessage({
+        message: "getContext unavailable",
+        type: "[error]",
+      });
       return;
     }
 

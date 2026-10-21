@@ -368,7 +368,8 @@ const checkProgram = (
 
 export const createGalaxyRenderer = (
   canvas: GalaxyCanvas,
-  config?: Partial<GalaxyConfig>
+  config?: Partial<GalaxyConfig>,
+  onFirstFrame?: () => void
 ): GalaxyRenderer => {
   const { faceOn, speed } = { ...defaultConfig, ...config };
   const isMobile = isMobileDevice();
@@ -892,6 +893,7 @@ export const createGalaxyRenderer = (
     }
   };
 
+  let firstFrameRendered = false;
   const renderFrame = (now: number): void => {
     if (destroyed || !visible) return;
 
@@ -1100,6 +1102,10 @@ export const createGalaxyRenderer = (
     }
 
     drawGroup("foreground", 1, width, height);
+    if (!firstFrameRendered) {
+      firstFrameRendered = true;
+      onFirstFrame?.();
+    }
   };
 
   const start = (): void => {

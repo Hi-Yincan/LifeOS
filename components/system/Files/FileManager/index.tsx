@@ -265,7 +265,7 @@ const FileManager: FC<FileManagerProps> = ({
         ref={fileManagerRef}
         $isEmptyFolder={isEmptyFolder}
         $scrollable={!hideScrolling}
-        aria-busy={loading || undefined}
+        aria-busy={(isDesktop ? isLoading : loading) || undefined}
         aria-label={
           isDesktop
             ? "Desktop"

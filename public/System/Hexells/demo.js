@@ -303,6 +303,10 @@ class Demo {
 
     twgl.bindFramebufferInfo(this.gl);
     this.ca.draw(this.getViewSize(), "color");
+    if (!this.firstFrameRendered) {
+      this.firstFrameRendered = true;
+      canvas.dispatchEvent(new Event("wallpaper-ready"));
+    }
     requestAnimationFrame(() => this.render());
   }
 }

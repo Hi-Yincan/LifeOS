@@ -13,6 +13,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   testDir: "e2e",
   testMatch: [
+    "boot.spec.ts",
     "dashboard.spec.ts",
     "desktop-drag.spec.ts",
     "product.spec.ts",

@@ -51,6 +51,9 @@ globalThis.addEventListener(
           canvas,
           devicePixelRatio,
         });
+        requestAnimationFrame(() =>
+          globalThis.postMessage({ message: "", type: "[ready]" })
+        );
       } catch (error) {
         globalThis.postMessage({
           message: (error as Error)?.message,

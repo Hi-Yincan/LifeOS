@@ -560,6 +560,9 @@ const FileEntry: FC<FileEntryProps> = ({
         aria-describedby={showColumn ? columnRowId : undefined}
         aria-label={name}
         aria-pressed={listView ? undefined : focusedEntries.includes(fileName)}
+        data-boot-icon-ready={
+          isDesktop ? Boolean(icon && loadedIcon === icon) : undefined
+        }
         onFocusCapture={() => {
           // Keyboard focus gets what hovering gives, like the tooltip
           if (isKeyboardNavigating()) onMouseOverButton();

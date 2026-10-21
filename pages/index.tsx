@@ -1,4 +1,5 @@
 import AppsLoader from "components/system/Apps/AppsLoader";
+import Boot from "components/system/Boot";
 import Desktop from "components/system/Desktop";
 import LifeOSShell from "components/system/LifeOS/Shell";
 import Taskbar from "components/system/Taskbar";
@@ -19,6 +20,7 @@ const Index: FC = () => {
 
   return (
     <Desktop>
+      <Boot />
       <Taskbar />
       <AppsLoader />
       <LifeOSShell />

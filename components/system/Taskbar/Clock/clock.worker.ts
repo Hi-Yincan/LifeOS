@@ -16,6 +16,7 @@ const textColor = "rgba(255, 255, 255, 90%)";
 let mode: ClockSource;
 let offscreenCanvas: OffscreenCanvas;
 let offscreenContext: OffscreenCanvasRenderingContext2D;
+let firstFrameRendered = false;
 
 const getNow = (): Date =>
   !mode || mode === "local" ? new Date() : getNtpAdjustedTime();
@@ -58,6 +59,10 @@ const drawClockText = (dateTime: LocaleTimeDate): void => {
     offscreenCanvas.height
   );
   offscreenContext.fillText(dateTime.time, textPosition.x, textPosition.y);
+  if (!firstFrameRendered) {
+    firstFrameRendered = true;
+    globalThis.postMessage("ready");
+  }
 };
 
 const sendTick = (): void => {

@@ -27,9 +27,11 @@ const hexells = async (el?: HTMLElement | null): Promise<void> => {
   canvas.width = window.innerWidth;
   canvas.setAttribute("aria-hidden", "true");
 
-  window.Hexells = new window.Demo(canvas, ROOT_PATH);
-
   el.append(canvas);
+  await new Promise<void>((resolve) => {
+    canvas.addEventListener("wallpaper-ready", () => resolve(), { once: true });
+    window.Hexells = new window.Demo(canvas, ROOT_PATH);
+  });
 };
 
 export default hexells;

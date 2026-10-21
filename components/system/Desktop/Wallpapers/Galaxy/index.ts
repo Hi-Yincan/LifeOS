@@ -1,3 +1,4 @@
+import { completeBootStage } from "components/system/Boot/bootstrap";
 import { type GalaxyConfig } from "components/system/Desktop/Wallpapers/Galaxy/config";
 import { listenGalaxyInput } from "components/system/Desktop/Wallpapers/Galaxy/input";
 import { type WallpaperConfig } from "components/system/Desktop/Wallpapers/types";
@@ -33,7 +34,8 @@ const Galaxy = async (
     // `let`, as the renderer is replaced when a lost context is restored
     let renderer = createGalaxyRenderer(
       canvas,
-      config as Partial<GalaxyConfig>
+      config as Partial<GalaxyConfig>,
+      () => completeBootStage("wallpaper")
     );
     const stopInput = listenGalaxyInput({
       onTilt: (x, y) => renderer.setTilt(x, y),

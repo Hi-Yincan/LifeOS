@@ -23,6 +23,13 @@ globalThis.addEventListener(
       globalThis.devicePixelRatio = devicePixelRatio;
 
       try {
+        canvas.addEventListener(
+          "wallpaper-ready",
+          () => {
+            globalThis.postMessage({ message: "", type: "[ready]" });
+          },
+          { once: true }
+        );
         globalThis.Hexells = new globalThis.Demo(canvas, ROOT_PATH);
       } catch (error) {
         globalThis.postMessage({

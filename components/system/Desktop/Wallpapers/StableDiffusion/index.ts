@@ -52,10 +52,10 @@ export const runStableDiffusion = async (
   await globalThis.tvmjsGlobalEnv.asyncOnGenerate();
 };
 
-const StableDiffusion = (
+const StableDiffusion = async (
   el?: HTMLElement | null,
   config: WallpaperConfig = {}
-): void => {
+): Promise<void> => {
   if (!el) return;
 
   const canvas = document.createElement("canvas");
@@ -66,7 +66,7 @@ const StableDiffusion = (
 
   el.append(canvas);
 
-  runStableDiffusion(config as StableDiffusionConfig, canvas);
+  await runStableDiffusion(config as StableDiffusionConfig, canvas);
 };
 
 export default StableDiffusion;
