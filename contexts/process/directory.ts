@@ -1,3 +1,4 @@
+import site from "lifeos.json";
 import dynamic from "next/dynamic";
 import { SETTINGS_ICON } from "components/system/LifeOS/settingsIcon";
 import { type Processes } from "contexts/process/types";
@@ -242,7 +243,7 @@ const directory: Processes = {
     backgroundColor: "#202020",
     Component: dynamic(() => import("components/apps/Portfolio")),
     defaultSize: { height: 640, width: 960 },
-    icon: "/System/LifeOS/portfolio.svg",
+    icon: site.appIcon,
     singleton: true,
     title: "Portfolio",
   },

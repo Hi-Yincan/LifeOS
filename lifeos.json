@@ -3,6 +3,8 @@
   "url": "https://hyc.ac",
   "description": "Yincan Huang — open-source projects and contributions.",
   "icon": "/System/LifeOS/avatar.png",
+  "appIcon": "/System/Icons/lifeos-avatar.webp",
+  "favicon": "/System/LifeOS/favicon-48.png",
   "messenger": {
     "publicKey": "npub1yj9pfnut7kzr2g6fxck3qtp0tkkym55skd9xhwph8ef2j6wd69rsluu6mc"
   },

@@ -7,6 +7,7 @@ export default defineConfig({
   testDir: "e2e",
   testMatch: [
     "boot.spec.ts",
+    "startup-assets.spec.ts",
     "dashboard.spec.ts",
     "desktop-drag.spec.ts",
     "product.spec.ts",
