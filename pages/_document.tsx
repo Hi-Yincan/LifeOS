@@ -7,6 +7,9 @@ import NextDocument, {
   NextScript,
 } from "next/document";
 import { ServerStyleSheet } from "styled-components";
+import BootHead from "components/system/Boot/BootHead";
+import BootScreen, { bootStyles } from "components/system/Boot/BootScreen";
+import { bootScript } from "components/system/Boot/bootstrap";
 import { DEFAULT_LOCALE } from "utils/constants";
 
 const withStyledComponents = async (
@@ -41,11 +44,27 @@ class Document extends NextDocument {
   }
 
   public override render(): React.JSX.Element {
+    const hasBootScreen = this.props.__NEXT_DATA__.page === "/";
+    const DocumentHead = hasBootScreen ? BootHead : Head;
+
     return (
       <Html lang={DEFAULT_LOCALE}>
-        <Head />
+        <DocumentHead>
+          {hasBootScreen && <style>{bootStyles}</style>}
+        </DocumentHead>
         <body>
-          <Main />
+          {hasBootScreen ? (
+            <>
+              <BootScreen />
+              <div aria-hidden="true" id="lifeos-root" inert>
+                <Main />
+              </div>
+              {/* eslint-disable-next-line react/no-danger -- 仅注入仓库内固定启动脚本，不包含用户输入。 */}
+              <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+            </>
+          ) : (
+            <Main />
+          )}
           <NextScript />
         </body>
       </Html>

@@ -24,6 +24,13 @@ globalThis.addEventListener(
       globalThis.devicePixelRatio = devicePixelRatio;
 
       try {
+        canvas.addEventListener(
+          "wallpaper-ready",
+          () => {
+            globalThis.postMessage({ message: "", type: "[ready]" });
+          },
+          { once: true }
+        );
         globalThis.effectInit(canvas);
       } catch (error) {
         globalThis.postMessage({

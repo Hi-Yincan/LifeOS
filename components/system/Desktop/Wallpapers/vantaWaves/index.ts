@@ -11,11 +11,11 @@ export const libs = [
   "/System/Vanta.js/vanta.waves.min.js",
 ];
 
-const vantaWaves = (
+const vantaWaves = async (
   el: HTMLElement | null,
   config?: WallpaperConfig,
   fallback?: () => void
-): void => {
+): Promise<void> => {
   const { VANTA: { current: currentEffect } = {} } = window;
 
   try {
@@ -30,7 +30,7 @@ const vantaWaves = (
     return;
   }
 
-  loadFiles(libs, true).then(() => {
+  await loadFiles(libs, true).then(() => {
     const { VANTA: { WAVES } = {} } = window;
 
     if (WAVES) {

@@ -23,9 +23,11 @@ const CoastalLandscape = async (el?: HTMLElement | null): Promise<void> => {
   canvas.width = window.innerWidth;
   canvas.setAttribute("aria-hidden", "true");
 
-  window.effectInit(canvas);
-
   el.append(canvas);
+  await new Promise<void>((resolve) => {
+    canvas.addEventListener("wallpaper-ready", () => resolve(), { once: true });
+    window.effectInit(canvas);
+  });
 };
 
 export default CoastalLandscape;

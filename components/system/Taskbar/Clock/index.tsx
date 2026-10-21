@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTheme } from "styled-components";
+import { completeBootStage } from "components/system/Boot/bootstrap";
 import { measureText } from "components/system/Files/FileEntry/functions";
 import { type LocaleTimeDate } from "components/system/Taskbar/Clock/functions";
 import StyledClock from "components/system/Taskbar/Clock/StyledClock";
@@ -20,7 +21,7 @@ import {
   hasOffscreenCanvasSupport,
 } from "utils/functions";
 
-type ClockWorkerResponse = "source" | LocaleTimeDate;
+type ClockWorkerResponse = "ready" | "source" | LocaleTimeDate;
 
 const EASTER_EGG_CLICK_COUNT = 7;
 
@@ -99,7 +100,9 @@ const Clock: FC<ClockProps> = ({
     data,
     target: clockWorker,
   }: MessageEvent<ClockWorkerResponse>): void => {
-    if (data === "source") {
+    if (data === "ready") {
+      completeBootStage("taskbar");
+    } else if (data === "source") {
       (clockWorker as Worker).postMessage(clockSource);
     } else {
       // The offscreen canvas path skips re-rendering on time changes, so
@@ -140,6 +143,18 @@ const Clock: FC<ClockProps> = ({
     toggleCalendar();
   };
   const menuPreloadHandler = useMenuPreload(importCalendar);
+
+  useEffect(() => {
+    if (time && !supportsOffscreenCanvas) completeBootStage("taskbar");
+  }, [supportsOffscreenCanvas, time]);
+
+  useEffect(() => {
+    const worker = currentWorker.current;
+    const onError = (): void => window.LifeOSBoot?.fail();
+    worker?.addEventListener("error", onError, { once: true });
+    return () => worker?.removeEventListener("error", onError);
+    // eslint-disable-next-line react/exhaustive-effect-dependencies -- 切换时钟源会重建 worker，需要重新挂载错误处理。
+  }, [clockSource, currentWorker]);
 
   // Runs on each tick so the canvas is recreated after a clock source change
   useLayoutEffect(() => {

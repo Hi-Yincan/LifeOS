@@ -80,6 +80,10 @@ globalThis.effectInit = (canvas) => {
         me.mMousePosY,
         me.mIsPaused
       );
+      if (!me.firstFrameRendered) {
+        me.firstFrameRendered = true;
+        canvas.dispatchEvent(new Event("wallpaper-ready"));
+      }
 
       me.mFpsFrame++;
 
