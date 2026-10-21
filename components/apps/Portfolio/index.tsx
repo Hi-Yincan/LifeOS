@@ -16,6 +16,7 @@ import Icon from "components/system/LifeOS/Icon";
 import Surface from "components/system/LifeOS/Surface";
 import { useProcessesActions } from "contexts/process";
 import Button from "styles/common/Button";
+import Avatar from "styles/common/Icon";
 
 /* eslint-disable perfectionist/sort-objects -- 分类按产品、工具、贡献、其他的界面顺序显示。 */
 const projectCategories = {
@@ -329,12 +330,11 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
             )
           ) : active === "about" ? (
             <article className="hyc-about">
-              <img
+              <Avatar
                 alt={site.name}
                 className="hyc-about-avatar"
-                height={48}
-                src={site.icon}
-                width={48}
+                imgSize={48}
+                src={site.appIcon}
               />
               <h1>{profile?.name}</h1>
               <p className="hyc-about-lead">{profile?.bio[locale]}</p>
@@ -386,7 +386,7 @@ const Portfolio = ({ id }: ComponentProcessProps): React.ReactNode => {
             <>
               {active === "overview" && (
                 <section className="hyc-hero">
-                  <img alt="" src="/System/LifeOS/portfolio.svg" />
+                  <Avatar imgSize={48} src={site.appIcon} />
                   <div>
                     <h1>{profile?.name}</h1>
                     <p>{profile?.bio[locale]}</p>

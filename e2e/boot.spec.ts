@@ -49,7 +49,7 @@ test("startup stays within an iPad viewport and enters as soon as resources arri
 
 test("startup waits for the desktop icon download", async ({ page }) => {
   const { promise: blocked, resolve: release } = Promise.withResolvers<void>();
-  await page.route("**/System/LifeOS/avatar.png", async (route) => {
+  await page.route("**/System/Icons/*/lifeos-avatar.webp", async (route) => {
     await blocked;
     await route.continue();
   });

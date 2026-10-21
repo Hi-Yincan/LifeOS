@@ -230,7 +230,7 @@ test("site metadata uses the owner identity and old assets stay absent", async (
   await page.goto("/");
   await expect(page.locator('link[rel="icon"]')).toHaveAttribute(
     "href",
-    "/System/LifeOS/avatar.png"
+    "/System/LifeOS/favicon-48.png"
   );
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
     "content",
